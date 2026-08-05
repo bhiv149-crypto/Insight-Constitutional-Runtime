@@ -1,5 +1,10 @@
 """
 InsightFlow Constitutional Runtime Participant.
+
+InsightFlow is responsible for workflow orchestration inside the
+Insight Stack. Platform concerns such as registration, capability
+discovery, invocation and runtime health are delegated to the
+Platform Runtime Adapter through BaseParticipant.
 """
 
 from src.common.base_participant import BaseParticipant
@@ -16,6 +21,9 @@ from .lifecycle import InsightFlowLifecycle
 
 
 class InsightFlowParticipant(BaseParticipant):
+    """
+    Constitutional Runtime Participant representing InsightFlow.
+    """
 
     def __init__(self):
 
@@ -25,52 +33,53 @@ class InsightFlowParticipant(BaseParticipant):
             version=PROJECT_VERSION,
             constitutional_layer=CONSTITUTIONAL_LAYER,
             runtime_type=RUNTIME_TYPE,
-            capabilities=[
+            capabilities=(
                 "workflow_orchestration",
                 "capability_invocation",
                 "trace_generation",
                 "evidence_generation",
-            ],
-            dependencies=[
+            ),
+            dependencies=(
                 "PlatformCapabilitySDK",
                 "PlatformDiscovery",
                 "PlatformRegistry",
                 "RuntimeCore",
-            ],
+            ),
         )
 
         super().__init__(participant)
 
         self.lifecycle = InsightFlowLifecycle()
 
-    def register(self):
-        """
-        Registration is delegated to the Platform Registry Adapter.
-        """
-        raise NotImplementedError(
-            "Registration must be performed using PlatformRegistryAdapter."
-        )
-
-    def publish_capability(self):
-        """
-        Capability publication is delegated to Platform SDK.
-        """
-        raise NotImplementedError(
-            "Capability publication must be performed using PlatformSDKAdapter."
-        )
+    # ------------------------------------------------------------------
+    # Participant Behaviour
+    # ------------------------------------------------------------------
 
     def execute(self, payload):
         """
-        Executes InsightFlow business logic.
+        Execute InsightFlow business logic.
+
+        Runtime responsibilities such as capability invocation,
+        tracing and replay are delegated through BaseParticipant.
         """
+
         return {
-            "participant": self.participant.participant_name,
+            "participant": self.name,
+            "runtime_identity": self.identity,
+            "version": self.version,
             "status": "accepted",
             "payload": payload,
         }
 
     def health(self):
+        """
+        Participant runtime state.
+
+        This is participant health, not Platform Runtime health.
+        """
+
         return {
-            "participant": self.participant.participant_name,
+            "participant": self.name,
+            "runtime_identity": self.identity,
             "state": self.lifecycle.state.value,
         }

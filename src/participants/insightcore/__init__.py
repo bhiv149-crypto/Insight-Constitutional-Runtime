@@ -1,3 +1,3 @@
 from .participant import InsightCoreParticipant
 
-__all__ = ["InsightCoreParticipant"]
+__all__ = ["InsightCoreParticipant"]    

@@ -1,5 +1,8 @@
 """
 InsightCore Runtime Lifecycle.
+
+Maintains the constitutional lifecycle state of the
+InsightCore Runtime Participant.
 """
 
 from enum import Enum
@@ -13,6 +16,9 @@ class LifecycleState(str, Enum):
 
 
 class InsightCoreLifecycle:
+    """
+    Lifecycle manager for the InsightCore participant.
+    """
 
     def __init__(self):
         self._state = LifecycleState.DRAFT

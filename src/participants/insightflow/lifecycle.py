@@ -1,7 +1,8 @@
 """
 InsightFlow Runtime Lifecycle.
 
-Lifecycle implementation aligned with the Constitutional Runtime.
+Maintains the constitutional lifecycle state of the
+InsightFlow Runtime Participant.
 """
 
 from enum import Enum
@@ -16,7 +17,7 @@ class LifecycleState(str, Enum):
 
 class InsightFlowLifecycle:
     """
-    Maintains the lifecycle state of the InsightFlow participant.
+    Lifecycle manager for the InsightFlow participant.
     """
 
     def __init__(self):

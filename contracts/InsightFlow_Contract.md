@@ -80,4 +80,13 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 
 # Certification Status
 
-Pending runtime integration and validation.
+Pending runtime integration and validation.Repository implementation has been completed.
+
+The participant is ready for deployment into the Constitutional Runtime.
+
+Remaining work depends on:
+
+- Platform Runtime deployment
+- Runtime validation
+- Replay validation
+- Production certification

@@ -15,6 +15,6 @@ class RuntimeParticipant:
     version: str
     constitutional_layer: str
     runtime_type: str
-    capabilities: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    capabilities: tuple[str,...] = field(default_factory=list)
+    dependencies: tuple[str,...] = field(default_factory=list)
     metadata: Dict[str, str] = field(default_factory=dict)

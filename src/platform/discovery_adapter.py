@@ -1,39 +1,47 @@
 """
-Platform Discovery Adapter.
+Platform Discovery Adapter
 
-Defines discovery operations required by Insight participants.
+Thin wrapper around PlatformCapabilitySDK discovery interfaces.
+
+Responsibility:
+    Provide discovery services to Insight participants.
+
+Does NOT implement:
+    - Discovery protocol
+    - Registry queries
+    - Networking
 """
 
-from typing import Protocol
-
-
-class DiscoveryClient(Protocol):
-    def discover_services(self):
-        ...
-
-    def fetch_metadata(self, service_id: str):
-        ...
-
-    def fetch_contracts(self, service_id: str):
-        ...
-
-    def fetch_health(self, service_id: str):
-        ...
+from src.platform.sdk_adapter import PlatformSDKAdapter
 
 
 class PlatformDiscoveryAdapter:
 
-    def __init__(self, client: DiscoveryClient):
-        self.client = client
+    def __init__(self, sdk_adapter=None):
+        self.sdk = sdk_adapter or PlatformSDKAdapter()
 
-    def services(self):
-        return self.client.discover_services()
+    def discover_services(self, filters=None):
+        """Discover all available platform services."""
+        return self.sdk.discover_services(filters)
 
-    def metadata(self, service_id: str):
-        return self.client.fetch_metadata(service_id)
+    def get_service(self, service_id):
+        """Fetch a single platform service."""
+        return self.sdk.get_service(service_id)
 
-    def contracts(self, service_id: str):
-        return self.client.fetch_contracts(service_id)
+    def discover_by_category(self, category):
+        """Convenience helper."""
+        return self.sdk.discover_services(
+            {"capability_category": category}
+        )
 
-    def health(self, service_id: str):
-        return self.client.fetch_health(service_id)
+    def discover_active_services(self):
+        """Return only ACTIVE services."""
+        return self.sdk.discover_services(
+            {"status": "ACTIVE"}
+        )
+
+    def discover_by_classification(self, classification):
+        """Filter by service classification."""
+        return self.sdk.discover_services(
+            {"service_classification": classification}
+        )

@@ -79,4 +79,13 @@ InsightBridge provides secure runtime integration between the Insight Stack and 
 
 # Certification Status
 
-Pending runtime integration and validation.
+Pending runtime integration and validation.Repository implementation has been completed.
+
+The participant is ready for deployment into the Constitutional Runtime.
+
+Remaining work depends on:
+
+- Platform Runtime deployment
+- Runtime validation
+- Replay validation
+- Production certification

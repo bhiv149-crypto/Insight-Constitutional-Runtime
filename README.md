@@ -1,51 +1,154 @@
 # Insight Constitutional Runtime
 
-Constitutional Runtime Integration for:
+## Overview
+
+Insight Constitutional Runtime transforms the Insight Stack into reusable Constitutional Runtime Participants within the Intelligence Layer of the BHIV Constitutional Runtime ecosystem.
+
+Participants implemented:
 
 - InsightFlow
 - InsightBridge
 - InsightCore
 
-This repository contains the runtime participant implementation, integration artifacts, documentation, and production certification deliverables for the Constitutional Runtime ecosystem.
+The repository contains:
+
+- Runtime participant implementations
+- Platform adapter layer
+- Runtime integration framework
+- Runtime validation framework
+- Runtime identity documentation
+- Constitutional contracts
+- Integration documentation
+- Evidence packet
+- Production handover artifacts
 
 ---
 
-# Current Project Status
+# Project Objective
+
+Integrate the Insight Stack with the existing Constitutional Runtime by consuming Platform Runtime services rather than creating duplicate runtime infrastructure.
+
+The implementation preserves Platform ownership boundaries while implementing only Insight Runtime responsibilities.
+
+---
+
+# Current Status
 
 ## Completed
 
-- Repository initialization
-- Constitutional Runtime architecture review
-- Runtime dependency mapping
-- Runtime Identity Cards
+### Runtime Identity
+
+- InsightFlow Runtime Identity
+- InsightBridge Runtime Identity
+- InsightCore Runtime Identity
+
+### Constitutional Contracts
+
 - Participant Contracts
-- Runtime Integration Blueprint
-- Shared Participant Framework
-- InsightFlow Runtime Participant
-- InsightBridge Runtime Participant
-- InsightCore Runtime Participant
-- Platform Adapter Skeleton
+- Dependency Mapping
+- Runtime Responsibilities
+
+### Runtime Participants
+
+- InsightFlow
+- InsightBridge
+- InsightCore
+
+### Platform Integration Layer
+
+- Platform SDK Adapter
+- Platform Registry Adapter
+- Platform Discovery Adapter
+- Platform Runtime Adapter
+- Platform Replay Adapter
+- Platform Health Adapter
+- Platform Telemetry Adapter
+
+### Runtime Integration
+
+- Registration Builder
+- Participant Registration
+- Capability Discovery
+- Capability Invocation
+- Runtime Validation
+
+### Validation
+
+Repository Readiness
+
+✓ 17 / 17 Checks Passed
+
+Runtime Validation
+
+✓ Runtime Ready
 
 ---
 
-## Architecture Discoveries
+# Runtime Architecture
 
-The implementation is designed to integrate using existing Constitutional Runtime interfaces.
+Insight Runtime
 
-Confirmed interfaces reviewed:
+↓
 
-- CapabilityDiscoveryInterface
-- HealthStatusInterface
-- ReplayVerifierInterface
-- TrustVerifierInterface
-- ExecutionValidatorInterface
+Platform Runtime Adapters
 
-The project intentionally consumes existing Platform Services instead of creating parallel runtime infrastructure.
+↓
+
+PlatformCapabilitySDK
+
+↓
+
+Platform Runtime
 
 ---
 
-## Current Phase
+# Repository Status
 
-Phase 3 — Runtime Integration Preparation
+Internal Runtime Integration Completed
 
-Pending live runtime integration with Platform Services and Quantum Runtime.
+Repository Ready for Platform Runtime Integration
+
+---
+
+# Remaining External Activities
+
+The following require the official Constitutional Runtime environment:
+
+- Platform Runtime deployment
+- Runtime Registry
+- Replay Registry
+- OpenTelemetry
+- Production Runtime Validation
+- Production Certification
+
+---
+
+# Project Structure
+
+src/
+
+Platform adapters and runtime implementation
+
+contracts/
+
+Constitutional contracts
+
+runtime_identity/
+
+Runtime identity cards
+
+dependency_mapping/
+
+Platform dependency analysis
+
+evidence_packet/
+
+Engineering evidence
+
+docs/
+
+Architecture and handover documentation
+
+tests/
+
+Repository validation

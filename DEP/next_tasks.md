@@ -1,35 +1,20 @@
 # Next Tasks
 
-## Phase 3 — Runtime Integration
+## Platform Integration
 
-1. Obtain Runtime Participant registration clarification.
-2. Integrate PlatformCapabilitySDK.
-3. Integrate CapabilityDiscoveryInterface.
-4. Integrate ExecutionValidatorInterface.
-5. Integrate ReplayVerifierInterface.
-6. Integrate HealthStatusInterface.
-7. Validate Runtime Registration.
-8. Validate Runtime Discovery.
-9. Validate Capability Invocation.
+- Deploy Insight Runtime
+- Register Runtime Participants
+- Validate Runtime Discovery
+- Validate Capability Invocation
 
----
-
-## Phase 4
+## Runtime Validation
 
 - Replay Validation
-- Runtime Trace Validation
-- Evidence Chain Validation
+- Runtime Health Validation
+- Observability Validation
 
----
+## Production
 
-## Phase 5
-
-- OpenTelemetry Validation
-- Runtime Metrics
-- Runtime Health
-
----
-
-## Phase 6
-
-- Production Certification
+- Execute Certification Checklist
+- Generate Runtime Evidence
+- Complete Production Certification
