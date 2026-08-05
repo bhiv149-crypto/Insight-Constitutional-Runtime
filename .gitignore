@@ -1,7 +1,11 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 *.egg-info/
+
+# Virtual environments
 .venv/
 venv/
 env/
@@ -29,7 +33,16 @@ build/
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
+
+# Type checkers
+.mypy_cache/
+.pyright/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
 
 # Misc
 *.tmp
