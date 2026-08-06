@@ -1,0 +1,14 @@
+{
+  "execution_trace": {
+    "status": "RECORDED",
+    "trace_id": "trace-001",
+    "type": "execution",
+    "sequence": 1
+  },
+  "contract_lineage": {
+    "status": "RECORDED",
+    "contract_id": "contract-001",
+    "type": "contract_lineage",
+    "sequence": 2
+  }
+}

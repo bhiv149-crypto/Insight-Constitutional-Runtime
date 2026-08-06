@@ -1,0 +1,59 @@
+[
+  {
+    "platform_service_id": "insightflow.runtime.intelligence.v1",
+    "capability_id": "insightflow.runtime.intelligence.v1",
+    "service_name": "InsightFlow",
+    "version": "1.0.0",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "registration_timestamp": "2026-08-06T11:24:14.150760+00:00",
+    "description": "",
+    "tags": [],
+    "endpoints": {},
+    "dependencies": []
+  },
+  {
+    "platform_service_id": "insightbridge.runtime.intelligence.v1",
+    "capability_id": "insightbridge.runtime.intelligence.v1",
+    "service_name": "InsightBridge",
+    "version": "1.0.0",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "registration_timestamp": "2026-08-06T11:24:14.151763+00:00",
+    "description": "",
+    "tags": [],
+    "endpoints": {},
+    "dependencies": []
+  },
+  {
+    "platform_service_id": "insightcore.runtime.intelligence.v1",
+    "capability_id": "insightcore.runtime.intelligence.v1",
+    "service_name": "InsightCore",
+    "version": "1.0.0",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "registration_timestamp": "2026-08-06T11:24:14.153120+00:00",
+    "description": "",
+    "tags": [],
+    "endpoints": {},
+    "dependencies": []
+  }
+]

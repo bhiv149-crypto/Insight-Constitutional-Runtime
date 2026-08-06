@@ -16,23 +16,21 @@ Instead it consumes Platform Runtime interfaces through a thin adapter layer.
 
 # Runtime Flow
 
+```
 Insight Participant
-
-↓
-
+        │
+        ▼
 Registration Builder
-
-↓
-
+        │
+        ▼
 Platform Runtime Adapters
-
-↓
-
+        │
+        ▼
 PlatformCapabilitySDK
-
-↓
-
-Platform Runtime
+        │
+        ▼
+Platform Runtime (Live Federated Nodes)
+```
 
 ---
 
@@ -52,25 +50,14 @@ Implemented:
 
 # Runtime Validation
 
-Completed:
+**Live Platform Runtime Integration Completed and Verified:**
 
-- Repository Readiness
-- Runtime Validation
-- Registration Framework
-- Discovery Framework
-- Capability Invocation Framework
-
----
-
-# External Dependencies
-
-Live integration requires:
-
-- Platform Runtime
-- Runtime Registry
-- Replay Registry
-- TraceStore
-- OpenTelemetry
+- **Repository Readiness:** 17/17 checks passed.
+- **Runtime Validation:** Completed successfully.
+- **Registration Verification:** InsightFlow, InsightBridge, and InsightCore successfully registered on Node 1 and federated.
+- **Discovery Validation:** Verified capability discovery via `PlatformCapabilitySDK`.
+- **Replay Verification:** Verified deduplication and replay safety checks via `PlatformReplayAdapter` and `CanonicalReplayAuthority`.
+- **Telemetry Verification:** Verified execution trace recording and OpenTelemetry trace continuity.
 
 ---
 
@@ -78,18 +65,18 @@ Live integration requires:
 
 Operational Readiness
 
-GET    /health
-GET    /health/live
-GET    /health/ready
-GET    /capabilities
-POST   /verify
-POST   /gc/validate
+- GET    /health
+- GET    /health/live
+- GET    /health/ready
+- GET    /capabilities
+- POST   /verify
+- POST   /gc/validate
 
 Platform Discovery
 
-GET    /platform/v1/services
-POST   /platform/v1/register
-POST   /platform/v1/heartbeat
-POST   /platform/v1/negotiate
-GET    /platform/v1/federation/status
-GET    /platform/v1/services/{service_id}
+- GET    /platform/v1/services
+- POST   /platform/v1/register
+- POST   /platform/v1/heartbeat
+- POST   /platform/v1/negotiate
+- GET    /platform/v1/federation/status
+- GET    /platform/v1/services/{service_id}

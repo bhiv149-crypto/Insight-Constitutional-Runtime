@@ -18,7 +18,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 ROOT = PROJECT_ROOT
 
 def print_result(name, success):
-    symbol = "✓" if success else "✗"
+    symbol = "[PASS]" if success else "[FAIL]"
     print(f"{symbol} {name}")
 
 

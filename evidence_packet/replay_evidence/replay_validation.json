@@ -1,0 +1,12 @@
+{
+  "submission_1": {
+    "status": "DUPLICATE",
+    "sequence": 1,
+    "reason": "already processed as sequence 1"
+  },
+  "submission_2": {
+    "status": "DUPLICATE",
+    "sequence": 1,
+    "reason": "already processed as sequence 1"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sequence_counter": 1,
+  "entries": {
+    "msg-insight-001": {
+      "message_id": "msg-insight-001",
+      "sequence_number": 1,
+      "issued_at": 1786004891.9236677
+    }
+  }
+}

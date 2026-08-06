@@ -1,0 +1,6 @@
+{
+  "endpoint": "https://bhiv-qcg.onrender.com/registry/platform/v1/register",
+  "status_code": 500,
+  "exception": "500 Server Error: Internal Server Error for url: https://bhiv-qcg.onrender.com/registry/platform/v1/register",
+  "timestamp": "2026-08-06T13:34:58.915918+00:00"
+}

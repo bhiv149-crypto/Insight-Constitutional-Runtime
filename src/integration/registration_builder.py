@@ -1,20 +1,16 @@
 """
 Registration Builder
 
-Builds the Platform Runtime registration objects required for
-registering an Insight Runtime Participant.
+Builds the JSON payloads required to register
+Insight Runtime participants with the live
+BHIV Constitutional Runtime.
 
-This module only constructs Platform models.
-Registration is performed by ParticipantRegistration.
+This module only constructs REST payloads.
+
+It performs no network communication.
 """
-
 from src.common.models import RuntimeParticipant
 
-from src.platform.imports import (
-    PlatformServiceRecord,
-    CapabilityManifest,
-    OperationContract,
-)
 
 
 class RegistrationBuilder:
@@ -24,74 +20,67 @@ class RegistrationBuilder:
     """
 
     @staticmethod
-    def build_operation_contract(participant: RuntimeParticipant):
-        """
-        Build the default execution contract.
-        """
+    def build_service_record(participant: RuntimeParticipant) -> dict:
 
-        return OperationContract(
-            operation_name="execute",
-            description=f"Execute {participant.participant_name}",
-            input_contract={
-                "type": "object"
+        return {
+            "platform_service_id": participant.runtime_identity,
+            "capability_id": participant.runtime_identity,
+            "service_name": participant.participant_name,
+            "version": participant.version,
+            "provider": "Insight Runtime",
+            "owner": {
+                "team": "Insight Stack",
+                "contact": "insight-runtime@bhiv.internal",
             },
-            output_contract={
-                "type": "object"
-            },
-            execution_modes=["SYNCHRONOUS"],
-            idempotent=True,
-        )
+            "runtime_type": participant.runtime_type,
+            "service_classification": "DOMAIN_SERVICE",
+            "capability_category": "INTELLIGENCE",
+            "status": "ACTIVE",
+            "description": f"{participant.participant_name} Runtime Participant",
+            "tags": [
+                "insight",
+                "runtime",
+                "constitutional",
+            ],
+            "endpoints": {},
+            "dependencies": list(participant.dependencies),
+        }
 
+    
     @staticmethod
-    def build_capability_manifest(participant: RuntimeParticipant):
+    def build_capability_manifest(participant: RuntimeParticipant) -> dict:
 
-        operation = RegistrationBuilder.build_operation_contract(
-            participant
-        )
-
-        return CapabilityManifest(
-            manifest_id=f"{participant.runtime_identity}-MANIFEST",
-            service_name=participant.participant_name,
-            version=participant.version,
-            supported_operations=[operation],
-            execution_modes=["SYNCHRONOUS"],
-            determinism_guarantees={
-                "strict_determinism": True
+        return {
+            "capability_id": participant.runtime_identity,
+            "capability_name": participant.participant_name.upper(),
+            "owner": {
+                "team": "Insight Stack",
+                "contact": "insight-runtime@bhiv.internal",
             },
-            replay_guarantees={
-                "replay_safe": True
+            "version": participant.version,
+            "status": "ACTIVE",
+            "scope": "SYSTEM",
+            "dependencies": list(participant.dependencies),
+            "attachment_rules": {
+                "attachment_type": "embedded",
+                "protocol": "REST",
+                "idempotent": True,
             },
-            trust_requirements={
-                "provider": "Platform"
+            "authority_limits": {
+                "owns": [
+                    "Insight execution",
+                    "Evidence generation",
+                ],
+                "does_not_own": [
+                    "Platform governance",
+                    "Quantum execution",
+                ],
+                "requires_governance_approval": False,
             },
-            evidence_guarantees={
-                "hash_chain": True
+            "inputs": [],
+            "outputs": [],
+            "consumers": [],
+            "documentation_reference": {
+                "primary": f"{participant.participant_name}.md",
             },
-            runtime_dependencies=list(participant.dependencies),
-            version_compatibility={
-                "supported": [participant.version]
-            },
-            security_requirements={
-                "authentication": True
-            },
-            resource_requirements={},
-        )
-
-    @staticmethod
-    def build_service_record(participant: RuntimeParticipant):
-
-        return PlatformServiceRecord(
-            platform_service_id=participant.runtime_identity,
-            capability_id=participant.runtime_identity,
-            service_name=participant.participant_name,
-            version=participant.version,
-            provider="Insight Runtime",
-            owner={
-                "team": "Insight Stack"
-            },
-            runtime_type=participant.runtime_type,
-            service_classification="DOMAIN_SERVICE",
-            capability_category="INTELLIGENCE",
-            status="ACTIVE",
-            endpoints={},
-        )
+        }
