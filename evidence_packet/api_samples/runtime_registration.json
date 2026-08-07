@@ -4,14 +4,16 @@
     "capability_id": "insightflow.runtime.intelligence.v1",
     "service_name": "InsightFlow",
     "version": "1.0.0",
-    "provider": "Generic Provider",
-    "owner": {},
-    "runtime_type": "PROCESS",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-07T13:08:35.371806+00:00",
-    "description": "",
+    "description": "InsightFlow Runtime Participant",
     "tags": [
       "insight",
       "runtime",
@@ -21,21 +23,28 @@
       "execute": "",
       "health": ""
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ]
   },
   {
     "platform_service_id": "insightbridge.runtime.intelligence.v1",
     "capability_id": "insightbridge.runtime.intelligence.v1",
     "service_name": "InsightBridge",
     "version": "1.0.0",
-    "provider": "Generic Provider",
-    "owner": {},
-    "runtime_type": "PROCESS",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-07T13:08:36.139425+00:00",
-    "description": "",
+    "description": "InsightBridge Runtime Participant",
     "tags": [
       "insight",
       "runtime",
@@ -45,21 +54,28 @@
       "execute": "",
       "health": ""
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "QuantumCommunicationGateway"
+    ]
   },
   {
     "platform_service_id": "insightcore.runtime.intelligence.v1",
     "capability_id": "insightcore.runtime.intelligence.v1",
     "service_name": "InsightCore",
     "version": "1.0.0",
-    "provider": "Generic Provider",
-    "owner": {},
-    "runtime_type": "PROCESS",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-07T13:08:36.867688+00:00",
-    "description": "",
+    "description": "InsightCore Runtime Participant",
     "tags": [
       "insight",
       "runtime",
@@ -69,6 +85,11 @@
       "execute": "",
       "health": ""
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "ReplayRegistry"
+    ]
   }
 ]

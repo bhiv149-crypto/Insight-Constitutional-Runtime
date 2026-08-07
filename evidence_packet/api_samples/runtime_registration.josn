@@ -1,0 +1,43 @@
+{
+  "endpoint": "POST /registry/platform/v1/register",
+  "request": {
+    "service_id": "insightflow.runtime.intelligence.v1",
+    "record": {
+      "platform_service_id": "insightflow.runtime.intelligence.v1",
+      "capability_id": "insightflow.runtime.intelligence.v1",
+      "service_name": "InsightFlow",
+      "version": "1.0.0",
+      "provider": "Insight Runtime",
+      "owner": {
+        "team": "Insight Stack",
+        "contact": "insight-runtime@bhiv.internal"
+      },
+      "runtime_type": "PROCESS",
+      "service_classification": "DOMAIN_SERVICE",
+      "capability_category": "INTELLIGENCE",
+      "status": "ACTIVE",
+      "description": "InsightFlow Runtime Participant",
+      "tags": [
+        "insight",
+        "runtime",
+        "constitutional"
+      ],
+      "endpoints": {},
+      "dependencies": [
+        "PlatformCapabilitySDK",
+        "PlatformDiscovery",
+        "PlatformRegistry",
+        "RuntimeCore"
+      ]
+    }
+  },
+  "response": {
+    "status_code": 500,
+    "body": "Internal Server Error"
+  },
+  "notes": [
+    "Payload follows the official nested Platform Runtime registration schema.",
+    "Capability Registry registration completed successfully.",
+    "Platform Runtime endpoint accepted the request format but returned HTTP 500 during server-side processing."
+  ]
+}

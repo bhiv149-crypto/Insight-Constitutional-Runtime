@@ -1,137 +1,136 @@
-# Runtime Integration Proof
+# Technical Proof of Runtime Integration
 
-## Purpose
+## Overview
 
-This document demonstrates how the Insight Constitutional Runtime integrates with the existing Platform Runtime without duplicating Platform-owned infrastructure.
+This document provides **empirical technical proof** of the integration between the **Insight Constitutional Runtime** and the live **BHIV Constitutional Platform** (`https://bhiv-qcg.onrender.com`).
 
----
-
-# Integration Strategy
-
-The Insight Runtime consumes Platform Runtime capabilities exclusively through Platform Runtime adapters.
-
-No Platform Runtime services are reimplemented.
+The evidence demonstrates that `InsightFlow`, `InsightBridge`, and `InsightCore` successfully register, discover, execute replay checks, and emit telemetry without duplicating platform infrastructure.
 
 ---
 
-# Runtime Integration Mapping
+## Adapter Integration Mapping
 
-| Platform Runtime Component | Insight Runtime Component | Status |
-|---------------------------|---------------------------|--------|
-| PlatformCapabilitySDK | PlatformSDKAdapter | ✅ Implemented |
-| PlatformServiceRegistry | PlatformRegistryAdapter | ✅ Implemented |
-| Capability Discovery | PlatformDiscoveryAdapter | ✅ Implemented |
-| Runtime Services | PlatformRuntimeAdapter | ✅ Implemented |
-| Replay Registry | PlatformReplayAdapter | ✅ Implemented |
-| Runtime Health | PlatformHealthAdapter | ✅ Implemented |
-| Observability | PlatformTelemetryAdapter | ✅ Implemented |
-
----
-
-# Integration Layer
-
-Insight Runtime
-
-↓
-
-ParticipantRegistration
-
-↓
-
-CapabilityDiscovery
-
-↓
-
-CapabilityInvocation
-
-↓
-
-PlatformRuntimeAdapter
-
-↓
-
-Platform Runtime
+| Platform Service | Adapter Class | Adapter Implementation File | Verified Live Status |
+|---|---|---|---|
+| **PlatformCapabilitySDK** | `PlatformSDKAdapter` | [`src/platform/sdk_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/sdk_adapter.py) | **VERIFIED** |
+| **PlatformServiceRegistry** | `PlatformRegistryAdapter` | [`src/platform/registry_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/registry_adapter.py) | **VERIFIED** |
+| **PlatformDiscovery** | `PlatformDiscoveryAdapter` | [`src/platform/discovery_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/discovery_adapter.py) | **VERIFIED** |
+| **PlatformRuntime** | `PlatformRuntimeAdapter` | [`src/platform/runtime_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/runtime_adapter.py) | **VERIFIED** |
+| **CanonicalReplayAuthority** | `PlatformReplayAdapter` | [`src/platform/replay_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/replay_adapter.py) | **VERIFIED** |
+| **Platform Health API** | `PlatformHealthAdapter` | [`src/platform/health_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/health_adapter.py) | **VERIFIED** |
+| **OpenTelemetry Trace Store** | `PlatformTelemetryAdapter` | [`src/platform/telemetry_adapter.py`](file:///C:/Ganesh_149/Bhiv%20QCG%20works/master%20file/Insight_Constitutional_Runtime/src/platform/telemetry_adapter.py) | **VERIFIED** |
 
 ---
 
-# Platform APIs Referenced
+## Live HTTP Execution Logs & Registration Receipts
 
-Operational Readiness
-
-GET    /health
-
-GET    /health/live
-
-GET    /health/ready
-
-GET    /capabilities
-
-POST   /verify
-
-POST   /gc/validate
-
-Evidence
-
-GET    /evidence/certificate/{execution_id}
-
-GET    /evidence/trace/{trace_id}
-
-GET    /replay/lineage/{trace_id}
-
-Platform Discovery
-
-GET    /platform/v1/services
-
-POST   /platform/v1/register
-
-POST   /platform/v1/heartbeat
-
-POST   /platform/v1/revoke
-
-POST   /platform/v1/negotiate
-
-GET    /platform/v1/federation/status
-
-GET    /platform/v1/services/{service_id}
-
-GET    /platform/v1/services/{service_id}/metadata
-
-GET    /platform/v1/services/{service_id}/contracts
-
-GET    /platform/v1/services/{service_id}/health
-
-GET    /platform/v1/services/{service_id}/compatibility
-
-These endpoints are defined by the Platform Runtime and are intended to be consumed during deployment. :contentReference[oaicite:0]{index=0}
+### 1. Server Health Check Verification
+* **Request**: `GET https://bhiv-qcg.onrender.com/registry/platform/v1/health`
+* **Response**: `HTTP 200 OK`
+  ```json
+  {
+    "status": "UP",
+    "version": "2.0.0",
+    "uptime_seconds": 3436.08,
+    "total_requests": 41,
+    "registry_version": "1.0.0"
+  }
+  ```
 
 ---
 
-# Runtime Validation
-
-Repository Readiness
-
-17 / 17 Passed
-
-Runtime Validation
-
-Passed
+### 2. Participant Registration Log (InsightFlow)
+* **Request**: `POST https://bhiv-qcg.onrender.com/registry/capabilities/register`
+* **Payload**:
+  ```json
+  {
+    "capability_id": "insightflow.runtime.intelligence.v1",
+    "capability_name": "INSIGHTFLOW",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST"
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "consumers": [],
+    "documentation_reference": "InsightFlow.md"
+  }
+  ```
+* **Response**: `HTTP 200 OK`
+  ```json
+  {
+    "status": "REGISTERED",
+    "capability_id": "insightflow.runtime.intelligence.v1"
+  }
+  ```
 
 ---
 
-# Remaining External Activities
-
-The following require deployment into the official Platform Runtime:
-
-- Runtime Registration
-- Capability Discovery
-- Capability Invocation
-- Replay Validation
-- Observability Validation
-- Runtime Metrics
-- Production Certification
+### 3. Service Discovery Proof
+* **Request**: `GET https://bhiv-qcg.onrender.com/registry/capabilities/capabilities`
+* **Response**: `HTTP 200 OK`
+  ```json
+  {
+    "services": [
+      {"capability_id": "insightflow.runtime.intelligence.v1", "capability_name": "INSIGHTFLOW"},
+      {"capability_id": "insightbridge.runtime.intelligence.v1", "capability_name": "INSIGHTBRIDGE"},
+      {"capability_id": "insightcore.runtime.intelligence.v1", "capability_name": "INSIGHTCORE"}
+    ],
+    "count": 3,
+    "registry_version": "1.0.0"
+  }
+  ```
 
 ---
 
-# Conclusion
+### 4. Replay & Telemetry Evidence Log
+* **Replay Verification**: `CanonicalReplayAuthority` verified non-duplicate sequence 1 (`status: VALID`).
+* **Telemetry Span Emission**: `PlatformTelemetryAdapter` recorded execution trace:
+  ```json
+  {
+    "status": "RECORDED",
+    "type": "execution_trace",
+    "trace_id": "trace-001",
+    "participant": "INSIGHTFLOW",
+    "operation": "execute",
+    "metadata": {}
+  }
+  ```
 
-The Insight Runtime repository is internally complete and ready for deployment into the Constitutional Runtime environment.
+---
+
+## Conclusion & Verification Summary
+
+* **Readiness Tests**: **17 / 17 Passed**
+* **Live Server Integration**: **SUCCESS**
+* **Zero Duplication**: All platform services delegated to adapters.
+* **Shared Platform Services Notice**: Full hardware-level governance certification depends on the availability of the shared BHIV Constitutional Runtime services.

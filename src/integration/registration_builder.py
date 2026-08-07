@@ -42,7 +42,10 @@ class RegistrationBuilder:
                 "runtime",
                 "constitutional",
             ],
-            "endpoints": {},
+            "endpoints": {
+                "execute": "",
+                "health": "",
+            },
             "dependencies": list(participant.dependencies),
         }
 

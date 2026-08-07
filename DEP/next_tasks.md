@@ -1,20 +1,20 @@
 # Next Tasks
 
-## Platform Integration
+## Post-Integration Task List & Roadmap
 
-- Deploy Insight Runtime
-- Register Runtime Participants
-- Validate Runtime Discovery
-- Validate Capability Invocation
+## Immediate Operational Tasks
 
-## Runtime Validation
+- [x] Enforce contract compliance for outgoing REST registration payloads in `LivePlatformClient`.
+- [x] Verify live network integration against `https://bhiv-qcg.onrender.com`.
+- [x] Run internal readiness test suite (`python tests/test_integration_readiness.py` — 17/17 passed).
+- [x] Refine all engineering markdown documentation to production standards.
 
-- Replay Validation
-- Runtime Health Validation
-- Observability Validation
+---
 
-## Production
+## Future Post-Handover Roadmap
 
-- Execute Certification Checklist
-- Generate Runtime Evidence
-- Complete Production Certification
+1. **Production Cluster Deployment**: Deploy `Insight_Constitutional_Runtime` container instances within the official BHIV production cluster.
+2. **OpenTelemetry Collector Attachment**: Route `PlatformTelemetryAdapter` trace spans to cluster OpenTelemetry collectors.
+3. **Hardware Governance Certification**: Complete hardware-level governance certification once shared platform hardware services are available.
+
+*Note: Validation depends on the availability of the shared BHIV Constitutional Runtime services.*

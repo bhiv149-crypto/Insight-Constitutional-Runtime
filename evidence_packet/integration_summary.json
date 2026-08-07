@@ -1,0 +1,43 @@
+{
+  "status": "SUCCESS",
+  "participants": 3,
+  "registered": 3,
+  "capabilities": 3,
+  "discovered": 3,
+  "platform_health": {
+    "status": "UP",
+    "version": "2.0.0",
+    "uptime_seconds": 128.83,
+    "total_requests": 10,
+    "registry_version": "1.0.0"
+  },
+  "replay": {
+    "submission_1": {
+      "status": "VALID",
+      "sequence": 1,
+      "reason": ""
+    },
+    "submission_2": {
+      "status": "VALID",
+      "sequence": 1,
+      "reason": ""
+    }
+  },
+  "telemetry": {
+    "execution_trace": {
+      "status": "RECORDED",
+      "type": "execution_trace",
+      "trace_id": "trace-001",
+      "participant": "INSIGHTFLOW",
+      "operation": "execute",
+      "metadata": {}
+    },
+    "contract_lineage": {
+      "status": "RECORDED",
+      "type": "contract_lineage",
+      "contract_id": "contract-001",
+      "parent_contract": "root-contract",
+      "metadata": {}
+    }
+  }
+}

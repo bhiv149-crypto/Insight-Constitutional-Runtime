@@ -1,6 +1,6 @@
 {
-  "endpoint": "https://bhiv-qcg.onrender.com/registry/platform/v1/register",
+  "endpoint": "https://bhiv-qcg.onrender.com/registry/platform/v1/services",
   "status_code": 500,
-  "exception": "500 Server Error: Internal Server Error for url: https://bhiv-qcg.onrender.com/registry/platform/v1/register",
-  "timestamp": "2026-08-06T13:34:58.915918+00:00"
+  "exception": "HTTPSConnectionPool(host='bhiv-qcg.onrender.com', port=443): Read timed out. (read timeout=20)",
+  "timestamp": "2026-08-07T12:19:15.502521+00:00"
 }

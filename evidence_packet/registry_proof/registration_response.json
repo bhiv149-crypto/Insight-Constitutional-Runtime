@@ -1,0 +1,63 @@
+{
+  "runtime_registration": {
+    "insightflow.runtime.intelligence.v1": {
+      "status": "ALREADY_REGISTERED",
+      "service_id": "insightflow.runtime.intelligence.v1",
+      "evidence": {
+        "evidence_id": "e36f5abc-259b-4e7a-b8c0-ab80f3b2b38b",
+        "event_type": "REGISTRATION_IDEMPOTENT",
+        "service_id": "insightflow.runtime.intelligence.v1",
+        "timestamp": "2026-08-07T13:10:25.037809+00:00",
+        "details": {
+          "message": "Service already registered with same version."
+        },
+        "evidence_hash": "8b0a75dc0a9070ab6bbe42e80fce88c57a3c6c982e8cbfbcb0eef3f9c93ebb4b",
+        "previous_evidence_hash": "da90c858c347de4d70402af027ff97fca8793a4b524b53239d1035f03b1ed024"
+      }
+    },
+    "insightbridge.runtime.intelligence.v1": {
+      "status": "ALREADY_REGISTERED",
+      "service_id": "insightbridge.runtime.intelligence.v1",
+      "evidence": {
+        "evidence_id": "863c32cd-0eb8-401c-a3a7-fd591893d0a0",
+        "event_type": "REGISTRATION_IDEMPOTENT",
+        "service_id": "insightbridge.runtime.intelligence.v1",
+        "timestamp": "2026-08-07T13:10:25.445816+00:00",
+        "details": {
+          "message": "Service already registered with same version."
+        },
+        "evidence_hash": "80ba6e545a6407e79faa2842a4e5b87e7b7928d4fa409629ec025a265763516a",
+        "previous_evidence_hash": "8b0a75dc0a9070ab6bbe42e80fce88c57a3c6c982e8cbfbcb0eef3f9c93ebb4b"
+      }
+    },
+    "insightcore.runtime.intelligence.v1": {
+      "status": "ALREADY_REGISTERED",
+      "service_id": "insightcore.runtime.intelligence.v1",
+      "evidence": {
+        "evidence_id": "1fd517a9-c033-48e5-9856-e75716155f29",
+        "event_type": "REGISTRATION_IDEMPOTENT",
+        "service_id": "insightcore.runtime.intelligence.v1",
+        "timestamp": "2026-08-07T13:10:25.700533+00:00",
+        "details": {
+          "message": "Service already registered with same version."
+        },
+        "evidence_hash": "516e8985b67fe436cc426d7a2e94dc7b341e0bdd06d31fdc0c9b32e93d22a14f",
+        "previous_evidence_hash": "80ba6e545a6407e79faa2842a4e5b87e7b7928d4fa409629ec025a265763516a"
+      }
+    }
+  },
+  "capability_registration": {
+    "insightflow.runtime.intelligence.v1": {
+      "status": "REGISTERED",
+      "capability_id": "insightflow.runtime.intelligence.v1"
+    },
+    "insightbridge.runtime.intelligence.v1": {
+      "status": "REGISTERED",
+      "capability_id": "insightbridge.runtime.intelligence.v1"
+    },
+    "insightcore.runtime.intelligence.v1": {
+      "status": "REGISTERED",
+      "capability_id": "insightcore.runtime.intelligence.v1"
+    }
+  }
+}

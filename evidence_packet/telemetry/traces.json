@@ -1,14 +1,17 @@
 {
   "execution_trace": {
     "status": "RECORDED",
+    "type": "execution_trace",
     "trace_id": "trace-001",
-    "type": "execution",
-    "sequence": 1
+    "participant": "INSIGHTFLOW",
+    "operation": "execute",
+    "metadata": {}
   },
   "contract_lineage": {
     "status": "RECORDED",
-    "contract_id": "contract-001",
     "type": "contract_lineage",
-    "sequence": 2
+    "contract_id": "contract-001",
+    "parent_contract": "root-contract",
+    "metadata": {}
   }
 }

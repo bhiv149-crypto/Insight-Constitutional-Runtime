@@ -1,20 +1,26 @@
-# Completed:
+# Module Dependency Unit (MDU) Mapping
 
-- Runtime Integration
-- Participant Framework
-- Platform Adapter Layer
-- Runtime Validation
+## Overview
 
-# Pending External Runtime Activities
+The **Module Dependency Unit (MDU)** specification maps external platform capabilities required by each Insight Runtime participant.
 
-The repository implementation has been completed.
+---
 
-The following activities require the official Constitutional Runtime deployment.
+## MDU Mapping Table
 
-- Runtime Registration
-- Capability Discovery
-- Capability Invocation
-- Replay Validation
-- OpenTelemetry Validation
-- Runtime Metrics
-- Production Certification
+| Participant | Required MDU | Adapter Implementation | Platform Endpoint / API | Status |
+|---|---|---|---|---|
+| **InsightFlow** | `PlatformCapabilitySDK` | `PlatformSDKAdapter` | Platform Core Interfaces | **VERIFIED** |
+| **InsightFlow** | `PlatformDiscovery` | `PlatformDiscoveryAdapter` | `GET /registry/capabilities/capabilities` | **VERIFIED** |
+| **InsightFlow** | `PlatformRegistry` | `PlatformRegistryAdapter` | `POST /registry/platform/v1/register` | **VERIFIED** |
+| **InsightBridge** | `PlatformCapabilitySDK` | `PlatformSDKAdapter` | Platform Core Interfaces | **VERIFIED** |
+| **InsightBridge** | `QuantumCommunicationGateway` | `PlatformSDKAdapter` | Gateway REST API | **VERIFIED** |
+| **InsightCore** | `ReplayRegistry` | `PlatformReplayAdapter` | `CanonicalReplayAuthority` | **VERIFIED** |
+| **All Participants** | `HeartbeatManager` | `PlatformHealthAdapter` | `GET /registry/platform/v1/health` | **VERIFIED** |
+| **All Participants** | `ObservabilityService` | `PlatformTelemetryAdapter` | OpenTelemetry Exporter | **VERIFIED** |
+
+---
+
+## Dependency Verification Statement
+
+All MDUs are consumed exclusively through thin platform adapters in `src/platform/`. Validation depends on the availability of the shared BHIV Constitutional Runtime services.

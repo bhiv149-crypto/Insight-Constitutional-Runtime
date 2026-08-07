@@ -1,0 +1,119 @@
+[
+  {
+    "capability_id": "insightflow.runtime.intelligence.v1",
+    "capability_name": "INSIGHTFLOW",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST",
+      "idempotent": true
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ],
+      "requires_governance_approval": false
+    },
+    "inputs": [],
+    "outputs": [],
+    "consumers": [],
+    "documentation_reference": {
+      "primary": "InsightFlow.md"
+    }
+  },
+  {
+    "capability_id": "insightbridge.runtime.intelligence.v1",
+    "capability_name": "INSIGHTBRIDGE",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "QuantumCommunicationGateway"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST",
+      "idempotent": true
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ],
+      "requires_governance_approval": false
+    },
+    "inputs": [],
+    "outputs": [],
+    "consumers": [],
+    "documentation_reference": {
+      "primary": "InsightBridge.md"
+    }
+  },
+  {
+    "capability_id": "insightcore.runtime.intelligence.v1",
+    "capability_name": "INSIGHTCORE",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "ReplayRegistry"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST",
+      "idempotent": true
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ],
+      "requires_governance_approval": false
+    },
+    "inputs": [],
+    "outputs": [],
+    "consumers": [],
+    "documentation_reference": {
+      "primary": "InsightCore.md"
+    }
+  }
+]

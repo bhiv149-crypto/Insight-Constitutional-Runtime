@@ -1,0 +1,11 @@
+{
+  "status": "DEPLOYED",
+  "platform_health": {
+    "status": "UP",
+    "version": "2.0.0",
+    "uptime_seconds": 128.83,
+    "total_requests": 10,
+    "registry_version": "1.0.0"
+  },
+  "timestamp": "2026-08-07T13:10:28+00:00"
+}
