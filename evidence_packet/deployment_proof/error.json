@@ -1,6 +1,0 @@
-{
-  "endpoint": "https://bhiv-qcg.onrender.com/registry/platform/v1/services",
-  "status_code": 500,
-  "exception": "HTTPSConnectionPool(host='bhiv-qcg.onrender.com', port=443): Read timed out. (read timeout=20)",
-  "timestamp": "2026-08-07T12:19:15.502521+00:00"
-}
