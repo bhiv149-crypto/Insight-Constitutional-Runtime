@@ -17,7 +17,7 @@ def test_1_insightflow_success():
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
         "payload": {"test": True},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-1"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -34,7 +34,7 @@ def test_2_insightbridge_success():
         "service_id": "insightbridge.runtime.intelligence.v1",
         "operation": "execute",
         "payload": {"test": True},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-2"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -49,7 +49,7 @@ def test_3_insightcore_success():
         "service_id": "insightcore.runtime.intelligence.v1",
         "operation": "execute",
         "payload": {"test": True},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-3"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -64,7 +64,7 @@ def test_4_unknown_service():
         "service_id": "unknown.service",
         "operation": "execute",
         "payload": {},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-4"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -77,7 +77,7 @@ def test_5_unknown_operation():
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "invalid_operation",
         "payload": {},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-5"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -89,7 +89,7 @@ def test_6_missing_service_id():
     req = {
         "operation": "execute",
         "payload": {},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-6"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -99,7 +99,7 @@ def test_7_missing_operation():
     req = {
         "service_id": "insightflow.runtime.intelligence.v1",
         "payload": {},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-7"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -109,7 +109,7 @@ def test_8_missing_payload():
     req = {
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-8"
     }
     resp = client.post("/api/v1/execute", json=req)
@@ -130,7 +130,7 @@ def test_10_missing_invocation_id():
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
         "payload": {},
-        "version": "1.0.0"
+        "version": "1.0.2"
     }
     resp = client.post("/api/v1/execute", json=req)
     assert resp.status_code == 422
@@ -153,7 +153,7 @@ def test_12_response_contract():
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
         "payload": {"test": True},
-        "version": "1.0.0",
+        "version": "1.0.2",
         "invocation_id": "test-id-12"
     }
     resp = client.post("/api/v1/execute", json=req)

@@ -1,0 +1,28 @@
+﻿{
+    "openapi":  "3.1.0",
+    "info":  {
+                 "title":  "TANTRA QCG \u0026 Universal Solver Fabric (Monolith)",
+                 "description":  "Unified platform serving the QCG Gateway, External Quantum Node, and Platform Registries.",
+                 "version":  "2.0.0"
+             },
+    "paths":  {
+                  "/":  {
+                            "get":  {
+                                        "summary":  "Root",
+                                        "operationId":  "root__get",
+                                        "responses":  {
+                                                          "200":  {
+                                                                      "description":  "Successful Response",
+                                                                      "content":  {
+                                                                                      "application/json":  {
+                                                                                                               "schema":  {
+
+                                                                                                                          }
+                                                                                                           }
+                                                                                  }
+                                                                  }
+                                                      }
+                                    }
+                        }
+              }
+}

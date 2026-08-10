@@ -7,13 +7,14 @@
 | Participant | InsightBridge |
 | Constitutional Layer | Intelligence Layer |
 | Runtime Identity | insightbridge.runtime.intelligence.v1 |
-| Contract Version | v1.0.0 |
+| Contract Version | v1.1.0 |
+| Convergence Release | Live Runtime Convergence — 2026-08-10 |
 
 ---
 
 # Contract Purpose
 
-InsightBridge provides secure runtime integration between the Insight Stack and the Constitutional Runtime using approved SDKs, registries, and runtime interfaces.
+InsightBridge participates in the Constitutional Runtime by bridging runtime communication, trace propagation, and event forwarding between the Insight Stack and the Constitutional Runtime ecosystem. Platform concerns are delegated through the canonical Platform Runtime contracts.
 
 ---
 
@@ -34,58 +35,68 @@ InsightBridge provides secure runtime integration between the Insight Stack and 
 - Platform Discovery Service
 - Platform Capability SDK
 - Runtime Core
+- Quantum Communication Gateway
 - Replay Registry
 - Observability Service
-- Heartbeat Manager
 
 ---
 
 # Capabilities Provided
 
-- Runtime integration
-- Capability coordination
-- Runtime communication
-- Runtime trace propagation
+- Runtime bridge communication
+- Trace propagation
+- Event forwarding
+
+---
+
+# Supported Operations
+
+| Operation | Input Contract | Output Contract |
+|-----------|---------------|-----------------|
+| `execute` | `{ type: "object" }` | `{ participant, runtime_identity, version, status, payload }` |
+| `health` | `{ type: "object" }` | `{ participant, runtime_identity, state }` |
 
 ---
 
 # Runtime Guarantees
 
+- Deterministic runtime participation
 - Registry-based discovery
-- Runtime interface compliance
-- Replay-safe participation
-- Trace propagation
-- Health monitoring
+- Replay-safe execution
+- Distributed trace propagation
+- Runtime health reporting
+- Version compatibility through Platform SDK
+- Evidence chain integrity
 
 ---
 
 # Runtime Outputs
 
-- Integration evidence
 - Runtime traces
-- Health metrics
 - Registration evidence
+- Execution evidence
+- Health metrics
+- Bridge event evidence
 
 ---
 
 # Integration Constraints
 
-- No registry ownership
-- No runtime orchestration
-- No replay implementation
-- Uses existing Constitutional Runtime services
+- No custom runtime interfaces
+- No independent replay implementation
+- No direct Runtime Core modification
+- Uses only approved Platform Services
 
 ---
 
 # Certification Status
 
-Pending runtime integration and validation.Repository implementation has been completed.
+**CERTIFIED** — Live Runtime Convergence verified 2026-08-10.
 
-The participant is ready for deployment into the Constitutional Runtime.
-
-Remaining work depends on:
-
-- Platform Runtime deployment
-- Runtime validation
-- Replay validation
-- Production certification
+- Platform Runtime registration: VERIFIED
+- Capability discovery: VERIFIED
+- Canonical invocation: VERIFIED
+- Replay deduplication: VERIFIED
+- Telemetry/observability: VERIFIED
+- Failure-path behaviour: VERIFIED
+- Version negotiation: VERIFIED

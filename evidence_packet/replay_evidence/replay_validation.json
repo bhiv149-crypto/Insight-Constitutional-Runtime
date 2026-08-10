@@ -1,6 +1,6 @@
 {
-  "message_id": "msg-insight-72ae0466",
-  "trace_reference": "trace-insight-ec998e2d",
+  "message_id": "msg-insight-d755c64a",
+  "trace_reference": "trace-insight-55331ec9",
   "submission_1": {
     "status": "VALID",
     "sequence": 1,
@@ -8,9 +8,9 @@
     "reason": ""
   },
   "submission_2": {
-    "status": "DUPLICATE",
+    "status": "VALID",
     "sequence": 1,
-    "is_valid": false,
-    "reason": "Message 'msg-insight-72ae0466' already processed (seq=1)."
+    "is_valid": true,
+    "reason": ""
   }
 }

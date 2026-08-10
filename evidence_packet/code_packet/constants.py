@@ -7,7 +7,7 @@ versions, and shared metadata used across the Insight Stack.
 
 PROJECT_NAME = "Insight Constitutional Runtime"
 
-PROJECT_VERSION = "1.0.2"
+PROJECT_VERSION = "1.1.0"
 
 CONVERGENCE_RELEASE = "Live Runtime Convergence — 2026-08-10"
 

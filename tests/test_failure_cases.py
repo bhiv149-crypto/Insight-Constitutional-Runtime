@@ -1,4 +1,4 @@
-﻿"""
+"""
 Failure Case Test Suite â€” Insight Stack
 
 Tests failure-path behaviour through the canonical Platform SDK:
@@ -107,7 +107,7 @@ def main():
         ok = check(
             "Unsupported version returns non-ACCEPTED status",
             status in ("UNSUPPORTED", "UNREACHABLE", "UNKNOWN", "NEGOTIATED",
-                       "FALLBACK", "ERROR", "NOT_FOUND"),
+                       "FALLBACK", "ERROR", "NOT_FOUND", "UNKNOWN_SERVICE"),
             f"status={status}",
         )
         if not ok:

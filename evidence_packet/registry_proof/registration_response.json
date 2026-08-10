@@ -4,45 +4,45 @@
       "status": "ALREADY_REGISTERED",
       "service_id": "insightflow.runtime.intelligence.v1",
       "evidence": {
-        "evidence_id": "03ba8808-f309-418a-85b4-46c75b614c27",
+        "evidence_id": "335dde7e-264b-4f89-83dc-c0f54eb238ee",
         "event_type": "REGISTRATION_IDEMPOTENT",
         "service_id": "insightflow.runtime.intelligence.v1",
-        "timestamp": "2026-08-08T12:18:51.539922+00:00",
+        "timestamp": "2026-08-10T10:02:53.736469+00:00",
         "details": {
           "message": "Service already registered with same version."
         },
-        "evidence_hash": "b6498e35a213293ff5c6e3c25cc9455ef1909979c1bc227295cc2fb7f94a7fe8",
-        "previous_evidence_hash": "acb29234fff1813750b808c1885c8f67a007f59316b81e257ce9d57b11504c18"
+        "evidence_hash": "2f1f8b7514f9cee6f66a72fcd6b3443098df2545cc1486ccbc0f55e8e44cbdc9",
+        "previous_evidence_hash": "4edf586ad8d37fc0dbad83b344aca260d96002ecc15f7800a3198d9f0632a24d"
       }
     },
     "insightbridge.runtime.intelligence.v1": {
       "status": "ALREADY_REGISTERED",
       "service_id": "insightbridge.runtime.intelligence.v1",
       "evidence": {
-        "evidence_id": "a6c0bba4-b6e2-4754-9bf3-262beff230b5",
+        "evidence_id": "5bd1660e-d78a-40cf-9bce-b8082644b76f",
         "event_type": "REGISTRATION_IDEMPOTENT",
         "service_id": "insightbridge.runtime.intelligence.v1",
-        "timestamp": "2026-08-08T12:18:51.809602+00:00",
+        "timestamp": "2026-08-10T10:02:54.025253+00:00",
         "details": {
           "message": "Service already registered with same version."
         },
-        "evidence_hash": "4a3d579cd9c3af331344893baff45065bbd56f9c9394158a6ad293ed8ba2c252",
-        "previous_evidence_hash": "b6498e35a213293ff5c6e3c25cc9455ef1909979c1bc227295cc2fb7f94a7fe8"
+        "evidence_hash": "97e53f29ba5896eff303fd438e3e06ee823cbd79f51bb7a2926cd38cd7f20ba7",
+        "previous_evidence_hash": "2f1f8b7514f9cee6f66a72fcd6b3443098df2545cc1486ccbc0f55e8e44cbdc9"
       }
     },
     "insightcore.runtime.intelligence.v1": {
       "status": "ALREADY_REGISTERED",
       "service_id": "insightcore.runtime.intelligence.v1",
       "evidence": {
-        "evidence_id": "335762c3-add2-4e73-8f37-bcdde66aef5a",
+        "evidence_id": "9e3956fe-e2ea-4389-b358-a12457b99303",
         "event_type": "REGISTRATION_IDEMPOTENT",
         "service_id": "insightcore.runtime.intelligence.v1",
-        "timestamp": "2026-08-08T12:18:52.050597+00:00",
+        "timestamp": "2026-08-10T10:02:54.298194+00:00",
         "details": {
           "message": "Service already registered with same version."
         },
-        "evidence_hash": "a7d4f369cd4860bd3b3e26d366dab115f6c7421b20c8b31266c24a0d347946fd",
-        "previous_evidence_hash": "4a3d579cd9c3af331344893baff45065bbd56f9c9394158a6ad293ed8ba2c252"
+        "evidence_hash": "795826e76947895fe36cd0304ee6a9858f77fa148d2acf042babbd6cc0e75ef9",
+        "previous_evidence_hash": "97e53f29ba5896eff303fd438e3e06ee823cbd79f51bb7a2926cd38cd7f20ba7"
       }
     }
   },

@@ -1,52 +1,24 @@
 """
-insight_execution_service.py — Insight Stack Canonical Execution Service
+Insight Stack — Canonical Execution Service
 
-Exposes the Insight Stack participants (InsightFlow, InsightBridge, InsightCore)
-as a live HTTP service conforming to Kanishk's TANTRA Platform Runtime invocation
-contract.
+Exposes:
+    InsightFlow
+    InsightBridge
+    InsightCore
 
-Canonical Invocation Endpoint
--------------------------------
-POST /api/v1/execute
+through the canonical:
 
-    {
-        "service_id":    "insightflow.runtime.intelligence.v1",
-        "operation":     "execute",
-        "payload":       {},
-        "version":       "1.0.0",
-        "invocation_id": "<uuid>"
-    }
+    POST /api/v1/execute
 
-    → InvocationResult:
-    {
-        "status":        "SUCCESS",
-        "invocation_id": "<uuid>",
-        "service_id":    "insightflow.runtime.intelligence.v1",
-        "operation":     "execute",
-        "response":      { <participant output> },
-        "duration_ms":   ...,
-        "trust_method":  "CLASSICAL",
-        "evidence":      { ... },
-        "error":         null,
-        "retry_count":   0,
-        "timestamp":     "..."
-    }
+This service is an execution host only.
 
-Supported Status Values
------------------------
-SUCCESS        — operation completed normally
-FAILED         — participant raised an exception
-INVALID_OP     — operation not supported by this participant
-NOT_FOUND      — service_id not recognised by this service
-
-Design Principles
------------------
-- This service contains ZERO Platform Runtime logic.
-- It does not register, discover, or relay to other services.
-- It is an execution host — it receives a canonical invocation request
-  and routes it to the matching participant's execute() method.
-- The Platform SDK runs on the CALLER side.
-- No circular dependency with the Platform Registry.
+It does NOT:
+- register itself
+- perform discovery
+- implement Platform Runtime logic
+- create a registry
+- call the copied QCG repository
+- depend on localhost QCG
 """
 
 import hashlib
@@ -54,26 +26,34 @@ import json
 import os
 import sys
 import time
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+
 # -------------------------------------------------------------------------
-# Path setup — resolve project root so src/ is importable
+# Project path
 # -------------------------------------------------------------------------
+
 PROJECT_ROOT = Path(__file__).resolve().parent
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+
+# -------------------------------------------------------------------------
+# Insight participants
+# -------------------------------------------------------------------------
 
 from src.participants.insightflow.participant import InsightFlowParticipant
 from src.participants.insightbridge.participant import InsightBridgeParticipant
 from src.participants.insightcore.participant import InsightCoreParticipant
 from src.common.constants import RUNTIME_IDENTITIES
+
 
 # -------------------------------------------------------------------------
 # Application
@@ -82,34 +62,48 @@ from src.common.constants import RUNTIME_IDENTITIES
 app = FastAPI(
     title="Insight Stack Execution Service",
     description=(
-        "Canonical TANTRA Platform Runtime execution endpoint for "
-        "InsightFlow, InsightBridge, and InsightCore."
+        "Canonical TANTRA Platform Runtime execution endpoint "
+        "for InsightFlow, InsightBridge and InsightCore."
     ),
     version="1.0.0",
 )
 
+
 # -------------------------------------------------------------------------
-# Participant Registry
+# Participant registry
 # -------------------------------------------------------------------------
 
 _PARTICIPANTS: Dict[str, Any] = {}
 
-def _init_participants():
-    """Instantiate all three participants once at startup."""
+
+def _init_participants() -> None:
+    """
+    Initialise all Insight participants exactly once.
+    """
+
     global _PARTICIPANTS
+
+    if _PARTICIPANTS:
+        return
+
     _PARTICIPANTS = {
-        RUNTIME_IDENTITIES["INSIGHTFLOW"]:   InsightFlowParticipant(),
+        RUNTIME_IDENTITIES["INSIGHTFLOW"]: InsightFlowParticipant(),
         RUNTIME_IDENTITIES["INSIGHTBRIDGE"]: InsightBridgeParticipant(),
-        RUNTIME_IDENTITIES["INSIGHTCORE"]:   InsightCoreParticipant(),
+        RUNTIME_IDENTITIES["INSIGHTCORE"]: InsightCoreParticipant(),
     }
-    
-    # Activate participants for production
-    for p in _PARTICIPANTS.values():
-        if hasattr(p, "lifecycle") and hasattr(p.lifecycle, "activate"):
-            p.lifecycle.activate()
+
+    for participant in _PARTICIPANTS.values():
+        lifecycle = getattr(participant, "lifecycle", None)
+
+        if lifecycle is not None:
+            activate = getattr(lifecycle, "activate", None)
+
+            if callable(activate):
+                activate()
+
 
 # -------------------------------------------------------------------------
-# Request / Response Models
+# Request model
 # -------------------------------------------------------------------------
 
 class InvocationRequest(BaseModel):
@@ -120,13 +114,31 @@ class InvocationRequest(BaseModel):
     invocation_id: str
 
 
+# -------------------------------------------------------------------------
+# Evidence helpers
+# -------------------------------------------------------------------------
+
 def _make_hash(data: dict) -> str:
-    """Deterministic SHA-256 over a dict."""
-    canonical = json.dumps(data, sort_keys=True, default=str)
-    return hashlib.sha256(canonical.encode()).hexdigest()
+    """
+    Deterministic SHA-256 hash for request/response evidence.
+    """
+
+    canonical = json.dumps(
+        data,
+        sort_keys=True,
+        default=str,
+        separators=(",", ":"),
+    )
+
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _utc_timestamp() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 def _make_response(
+    *,
     invocation_id: str,
     service_id: str,
     operation: str,
@@ -137,9 +149,17 @@ def _make_response(
     error: Optional[str] = None,
     retry_count: int = 0,
 ) -> dict:
-    """Build a canonical InvocationResult dict."""
+    """
+    Build the canonical InvocationResult-compatible response.
+
+    Important:
+    Application failures remain failures.
+    They are NOT converted into SUCCESS.
+    """
+
     request_hash = _make_hash(request_payload)
     response_hash = _make_hash(response)
+    timestamp = _utc_timestamp()
 
     evidence = {
         "invocation_id": invocation_id,
@@ -150,7 +170,7 @@ def _make_response(
         "trust_method": "CLASSICAL",
         "duration_ms": duration_ms,
         "status": status,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": timestamp,
     }
 
     return {
@@ -164,61 +184,67 @@ def _make_response(
         "evidence": evidence,
         "error": error,
         "retry_count": retry_count,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": timestamp,
     }
 
 
 # -------------------------------------------------------------------------
-# Execution Router
+# Supported operations
 # -------------------------------------------------------------------------
 
 SUPPORTED_OPERATIONS = {
-    "execute": "_execute_op",
-    "health":  "_health_op",
+    "execute",
+    "health",
 }
 
 
-def _execute_op(participant, payload: dict) -> dict:
-    """Route to participant.execute()."""
-    return participant.execute(payload)
-
-
-def _health_op(participant, payload: dict) -> dict:
-    """Route to participant.health()."""
-    return participant.health()
-
-
-def _dispatch(participant, operation: str, payload: dict):
+def _dispatch(
+    participant: Any,
+    operation: str,
+    payload: dict,
+) -> tuple[Optional[dict], Optional[str]]:
     """
-    Dispatch an operation to the correct participant method.
+    Dispatch an operation to the participant.
 
-    Returns (result_dict, error_str_or_None).
+    Returns:
+        (result, error)
     """
-    if operation not in SUPPORTED_OPERATIONS:
-        return None, f"Operation '{operation}' is not supported by this participant."
 
-    handler_name = SUPPORTED_OPERATIONS[operation]
-    if handler_name == "_execute_op":
-        return _execute_op(participant, payload), None
-    if handler_name == "_health_op":
-        return _health_op(participant, payload), None
-    return None, f"Internal routing error for operation '{operation}'."
+    if operation == "execute":
+        return participant.execute(payload), None
+
+    if operation == "health":
+        return participant.health(), None
+
+    return None, (
+        f"Operation '{operation}' is not supported "
+        f"by this participant."
+    )
 
 
 # -------------------------------------------------------------------------
-# /api/v1/execute — Canonical Invocation Endpoint
+# Canonical execution endpoint
 # -------------------------------------------------------------------------
 
 @app.post("/api/v1/execute")
 async def execute(req: InvocationRequest):
     """
-    Canonical capability invocation endpoint.
+    Canonical Insight capability execution endpoint.
 
-    Accepts Kanishk's PlatformCapabilitySDK invocation payload and
-    routes it to the matching Insight participant.
+    Request:
+        service_id
+        operation
+        payload
+        version
+        invocation_id
+
+    Response:
+        InvocationResult-compatible envelope.
     """
-    invocation_id = req.invocation_id or str(uuid.uuid4())
-    start_time = time.time()
+
+    start_time = time.perf_counter()
+
+    invocation_id = req.invocation_id
 
     request_payload = {
         "service_id": req.service_id,
@@ -228,12 +254,17 @@ async def execute(req: InvocationRequest):
         "invocation_id": invocation_id,
     }
 
-    # Participant lookup
+    # -------------------------------------------------------------
+    # 1. Service lookup
+    # -------------------------------------------------------------
+
     participant = _PARTICIPANTS.get(req.service_id)
+
     if participant is None:
-        duration_ms = (time.time() - start_time) * 1000
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
         return JSONResponse(
-            status_code=200,
+            status_code=404,
             content=_make_response(
                 invocation_id=invocation_id,
                 service_id=req.service_id,
@@ -242,15 +273,41 @@ async def execute(req: InvocationRequest):
                 response={},
                 duration_ms=duration_ms,
                 request_payload=request_payload,
-                error=f"Service '{req.service_id}' is not hosted by this execution service.",
+                error=(
+                    f"Service '{req.service_id}' "
+                    "is not hosted by this execution service."
+                ),
             ),
         )
 
-    # Version check
-    if req.version != participant.version:
-        duration_ms = (time.time() - start_time) * 1000
+    # -------------------------------------------------------------
+    # 2. Version validation
+    # -------------------------------------------------------------
+
+    participant_version = getattr(participant, "version", None)
+
+    if participant_version is None:
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
         return JSONResponse(
-            status_code=200,
+            status_code=500,
+            content=_make_response(
+                invocation_id=invocation_id,
+                service_id=req.service_id,
+                operation=req.operation,
+                status="FAILED",
+                response={},
+                duration_ms=duration_ms,
+                request_payload=request_payload,
+                error="Participant version is not configured.",
+            ),
+        )
+
+    if req.version != participant_version:
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
+        return JSONResponse(
+            status_code=400,
             content=_make_response(
                 invocation_id=invocation_id,
                 service_id=req.service_id,
@@ -259,18 +316,30 @@ async def execute(req: InvocationRequest):
                 response={},
                 duration_ms=duration_ms,
                 request_payload=request_payload,
-                error=f"Version '{req.version}' is not supported. Supported version is '{participant.version}'.",
+                error=(
+                    f"Version '{req.version}' is not supported. "
+                    f"Supported version is '{participant_version}'."
+                ),
             ),
         )
 
-    # Dispatch to participant
-    try:
-        result, error = _dispatch(participant, req.operation, req.payload)
-        duration_ms = (time.time() - start_time) * 1000
+    # -------------------------------------------------------------
+    # 3. Operation validation + participant execution
+    # -------------------------------------------------------------
 
-        if error:
+    try:
+        result, error = _dispatch(
+            participant,
+            req.operation,
+            req.payload,
+        )
+
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
+        # Unsupported operation
+        if error is not None:
             return JSONResponse(
-                status_code=200,
+                status_code=400,
                 content=_make_response(
                     invocation_id=invocation_id,
                     service_id=req.service_id,
@@ -282,6 +351,10 @@ async def execute(req: InvocationRequest):
                     error=error,
                 ),
             )
+
+        # Genuine successful execution
+        if not isinstance(result, dict):
+            result = {"result": result}
 
         return JSONResponse(
             status_code=200,
@@ -297,9 +370,10 @@ async def execute(req: InvocationRequest):
         )
 
     except Exception as exc:
-        duration_ms = (time.time() - start_time) * 1000
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
         return JSONResponse(
-            status_code=200,
+            status_code=500,
             content=_make_response(
                 invocation_id=invocation_id,
                 service_id=req.service_id,
@@ -314,33 +388,56 @@ async def execute(req: InvocationRequest):
 
 
 # -------------------------------------------------------------------------
-# /api/v1/health — Platform-Facing Health Endpoint
+# Aggregate health
 # -------------------------------------------------------------------------
 
 @app.get("/api/v1/health")
 async def global_health():
     """
-    Platform-level health endpoint.
-
-    Returns the aggregate health of all hosted participants.
+    Aggregate health of all Insight participants.
     """
+
     services = {}
     all_up = True
 
     for service_id, participant in _PARTICIPANTS.items():
+
         try:
-            ph = participant.health()
-            state = ph.get("state", "UNKNOWN")
+            health = participant.health()
+
+            state = health.get("state", "UNKNOWN")
+
+            healthy_states = {
+                "INITIALISED",
+                "RUNNING",
+                "HEALTHY",
+                "ACTIVE",
+            }
+
+            status = (
+                "UP"
+                if state in healthy_states
+                else "DEGRADED"
+            )
+
+            if status != "UP":
+                all_up = False
+
             services[service_id] = {
                 "service_id": service_id,
                 "state": state,
-                "status": "UP" if state in ("INITIALISED", "RUNNING", "HEALTHY", "ACTIVE") else "DEGRADED",
+                "status": status,
             }
-            if state not in ("INITIALISED", "RUNNING", "HEALTHY", "ACTIVE"):
-                all_up = False
+
         except Exception as exc:
-            services[service_id] = {"service_id": service_id, "status": "ERROR", "error": str(exc)}
+
             all_up = False
+
+            services[service_id] = {
+                "service_id": service_id,
+                "status": "ERROR",
+                "error": str(exc),
+            }
 
     return {
         "status": "UP" if all_up else "DEGRADED",
@@ -348,53 +445,91 @@ async def global_health():
         "version": "1.0.0",
         "participants": list(_PARTICIPANTS.keys()),
         "participant_health": services,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": _utc_timestamp(),
     }
 
 
+# -------------------------------------------------------------------------
+# Per-service health
+# -------------------------------------------------------------------------
+
 @app.get("/api/v1/health/{service_id}")
 async def service_health(service_id: str):
-    """
-    Per-service health endpoint for SDK health checks.
-    """
+
     participant = _PARTICIPANTS.get(service_id)
-    if not participant:
+
+    if participant is None:
         raise HTTPException(
             status_code=404,
             detail=f"Service '{service_id}' not hosted here.",
         )
-    ph = participant.health()
-    state = ph.get("state", "UNKNOWN")
+
+    health = participant.health()
+
+    state = health.get("state", "UNKNOWN")
+
+    healthy_states = {
+        "INITIALISED",
+        "RUNNING",
+        "HEALTHY",
+        "ACTIVE",
+    }
+
     return {
         "service_id": service_id,
-        "status": "UP" if state in ("INITIALISED", "RUNNING", "HEALTHY") else "DEGRADED",
+        "status": (
+            "UP"
+            if state in healthy_states
+            else "DEGRADED"
+        ),
         "version": participant.version,
         "state": state,
-        "uptime_seconds": 0.0,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": _utc_timestamp(),
     }
 
 
 # -------------------------------------------------------------------------
-# /api/v1/services — Discovery metadata
+# Hosted services metadata
 # -------------------------------------------------------------------------
 
 @app.get("/api/v1/services")
 async def list_hosted_services():
-    """
-    List all services hosted by this execution service.
-    """
-    service_url = os.environ.get("INSIGHT_SERVICE_URL", "http://127.0.0.1:8003")
+
+    service_url = os.environ.get(
+        "INSIGHT_SERVICE_URL",
+        "",
+    ).rstrip("/")
+
     services = []
+
     for service_id, participant in _PARTICIPANTS.items():
-        services.append({
-            "service_id": service_id,
-            "participant": participant.name,
-            "version": participant.version,
-            "execution_endpoint": f"{service_url}/api/v1/execute",
-            "health_endpoint": f"{service_url}/api/v1/health/{service_id}",
-        })
-    return {"services": services, "count": len(services)}
+
+        execution_endpoint = (
+            f"{service_url}/api/v1/execute"
+            if service_url
+            else "/api/v1/execute"
+        )
+
+        health_endpoint = (
+            f"{service_url}/api/v1/health/{service_id}"
+            if service_url
+            else f"/api/v1/health/{service_id}"
+        )
+
+        services.append(
+            {
+                "service_id": service_id,
+                "participant": participant.name,
+                "version": participant.version,
+                "execution_endpoint": execution_endpoint,
+                "health_endpoint": health_endpoint,
+            }
+        )
+
+    return {
+        "services": services,
+        "count": len(services),
+    }
 
 
 # -------------------------------------------------------------------------
@@ -403,14 +538,27 @@ async def list_hosted_services():
 
 @app.get("/")
 async def root():
-    service_url = os.environ.get("INSIGHT_SERVICE_URL", "http://127.0.0.1:8003")
+
+    service_url = os.environ.get(
+        "INSIGHT_SERVICE_URL",
+        "",
+    ).rstrip("/")
+
     return {
         "service": "Insight Stack Execution Service",
         "status": "ONLINE",
         "version": "1.0.0",
         "participants": list(_PARTICIPANTS.keys()),
-        "canonical_execution_endpoint": f"{service_url}/api/v1/execute",
-        "health_endpoint": f"{service_url}/api/v1/health",
+        "canonical_execution_endpoint": (
+            f"{service_url}/api/v1/execute"
+            if service_url
+            else "/api/v1/execute"
+        ),
+        "health_endpoint": (
+            f"{service_url}/api/v1/health"
+            if service_url
+            else "/api/v1/health"
+        ),
         "docs": "/docs",
     }
 
@@ -421,28 +569,48 @@ async def root():
 
 @app.on_event("startup")
 async def startup_event():
+
     _init_participants()
-    service_url = os.environ.get("INSIGHT_SERVICE_URL", "http://127.0.0.1:8003")
+
+    service_url = os.environ.get(
+        "INSIGHT_SERVICE_URL",
+        "",
+    ).rstrip("/")
+
     print("=" * 64)
     print("  Insight Stack Execution Service")
     print("=" * 64)
-    print(f"  Participants : {', '.join(_PARTICIPANTS.keys())}")
-    print(f"  Execute URL  : {service_url}/api/v1/execute")
-    print(f"  Health URL   : {service_url}/api/v1/health")
+
+    print(
+        f"  Participants : "
+        f"{', '.join(_PARTICIPANTS.keys())}"
+    )
+
+    print(
+        f"  Execute URL  : "
+        f"{service_url}/api/v1/execute"
+        if service_url
+        else "  Execute URL  : /api/v1/execute"
+    )
+
+    print(
+        f"  Health URL   : "
+        f"{service_url}/api/v1/health"
+        if service_url
+        else "  Health URL   : /api/v1/health"
+    )
+
     print("=" * 64)
 
 
 # -------------------------------------------------------------------------
-# Entry point
+# Direct entry point
 # -------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.environ.get("PORT", 8003))
-    service_url = os.environ.get("INSIGHT_SERVICE_URL", f"http://127.0.0.1:{port}")
-
-    _init_participants()
+    port = int(os.environ.get("PORT", "8003"))
 
     uvicorn.run(
         "insight_execution_service:app",

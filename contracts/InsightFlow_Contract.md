@@ -7,7 +7,8 @@
 | Participant | InsightFlow |
 | Constitutional Layer | Intelligence Layer |
 | Runtime Identity | insightflow.runtime.intelligence.v1 |
-| Contract Version | v1.0.0 |
+| Contract Version | v1.1.0 |
+| Convergence Release | Live Runtime Convergence — 2026-08-10 |
 
 ---
 
@@ -49,6 +50,15 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 
 ---
 
+# Supported Operations
+
+| Operation | Input Contract | Output Contract |
+|-----------|---------------|-----------------|
+| `execute` | `{ type: "object" }` | `{ participant, runtime_identity, version, status, payload }` |
+| `health` | `{ type: "object" }` | `{ participant, runtime_identity, state }` |
+
+---
+
 # Runtime Guarantees
 
 - Deterministic runtime participation
@@ -57,6 +67,7 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 - Distributed trace propagation
 - Runtime health reporting
 - Version compatibility through Platform SDK
+- Evidence chain integrity
 
 ---
 
@@ -66,6 +77,7 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 - Registration evidence
 - Execution evidence
 - Health metrics
+- SDK evidence chain records
 
 ---
 
@@ -80,13 +92,12 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 
 # Certification Status
 
-Pending runtime integration and validation.Repository implementation has been completed.
+**CERTIFIED** — Live Runtime Convergence verified 2026-08-10.
 
-The participant is ready for deployment into the Constitutional Runtime.
-
-Remaining work depends on:
-
-- Platform Runtime deployment
-- Runtime validation
-- Replay validation
-- Production certification
+- Platform Runtime registration: VERIFIED
+- Capability discovery: VERIFIED
+- Canonical invocation: VERIFIED
+- Replay deduplication: VERIFIED
+- Telemetry/observability: VERIFIED
+- Failure-path behaviour: VERIFIED
+- Version negotiation: VERIFIED

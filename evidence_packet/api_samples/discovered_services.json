@@ -10,7 +10,7 @@
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-08T12:02:55.829286+00:00",
+    "registration_timestamp": "2026-08-10T09:37:27.124255+00:00",
     "description": "",
     "tags": [
       "insight",
@@ -18,8 +18,8 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightflow.runtime.intelligence.v1"
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
     },
     "dependencies": []
   },
@@ -34,7 +34,7 @@
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-08T12:02:56.106122+00:00",
+    "registration_timestamp": "2026-08-10T09:48:20.202964+00:00",
     "description": "",
     "tags": [
       "insight",
@@ -42,8 +42,8 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightbridge.runtime.intelligence.v1"
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
     },
     "dependencies": []
   },
@@ -58,7 +58,7 @@
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-08T12:02:56.383507+00:00",
+    "registration_timestamp": "2026-08-10T09:48:21.007181+00:00",
     "description": "",
     "tags": [
       "insight",
@@ -66,8 +66,8 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightcore.runtime.intelligence.v1"
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
     },
     "dependencies": []
   }

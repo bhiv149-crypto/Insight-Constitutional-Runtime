@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 # Force the INSIGHT_SERVICE_URL
-os.environ["INSIGHT_SERVICE_URL"] = "https://loose-books-beam.loca.lt"
+os.environ["INSIGHT_SERVICE_URL"] = "https://insight-constitutional-runtime.onrender.com"
 
 from src.platform.live_platform_client import LivePlatformClient
 from src.integration.registration_builder import RegistrationBuilder

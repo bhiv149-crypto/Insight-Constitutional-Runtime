@@ -36,7 +36,10 @@ LOG_FORMAT = "json"
 SERVICE_ID = "INSIGHT-RUNTIME-001"
 
 # Trust
-TRUST_PROVIDER = create_trust_provider("CLASSICAL")
+TRUST_PROVIDER = None
+
+if create_trust_provider is not None:
+    TRUST_PROVIDER = create_trust_provider("CLASSICAL")
 
 SDK_CONFIG = {
     "discovery_urls": DISCOVERY_URLS,

@@ -12,13 +12,10 @@ class BaseParticipant(ABC):
     """
     Base class for all Constitutional Runtime Participants.
 
-    Platform responsibilities such as runtime registration,
-    capability discovery, capability invocation, runtime health,
-    and registry participation are delegated to the Platform
-    Runtime Adapter.
+    Participant construction is independent of the Platform SDK.
 
-    Participant implementations are responsible only for
-    participant-specific intelligence.
+    The Platform Runtime adapter is initialized lazily only when a
+    Platform Runtime operation is actually requested.
     """
 
     def __init__(
@@ -27,7 +24,25 @@ class BaseParticipant(ABC):
         runtime_adapter: PlatformRuntimeAdapter | None = None,
     ):
         self.participant = participant
-        self.runtime = runtime_adapter or PlatformRuntimeAdapter()
+        self._runtime_adapter = runtime_adapter
+
+    # ------------------------------------------------------------------
+    # Lazy Platform Runtime adapter
+    # ------------------------------------------------------------------
+
+    @property
+    def runtime(self) -> PlatformRuntimeAdapter:
+        """
+        Return the Platform Runtime adapter.
+
+        The adapter is created only when a runtime operation is used.
+        This prevents participant construction from requiring the
+        official Platform SDK.
+        """
+        if self._runtime_adapter is None:
+            self._runtime_adapter = PlatformRuntimeAdapter()
+
+        return self._runtime_adapter
 
     # ------------------------------------------------------------------
     # Identity
@@ -42,7 +57,7 @@ class BaseParticipant(ABC):
         return self.participant.participant_name
 
     @property
-    def version(self)-> str:
+    def version(self) -> str:
         return self.participant.version
 
     # ------------------------------------------------------------------
@@ -55,7 +70,7 @@ class BaseParticipant(ABC):
         """
         return self.runtime.register_service(record, manifest)
 
-    def discover_services(self, filters=None)  -> dict:
+    def discover_services(self, filters=None) -> dict:
         """
         Discover Platform capabilities.
         """

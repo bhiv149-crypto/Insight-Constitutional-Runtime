@@ -20,9 +20,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightflow.runtime.intelligence.v1"
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",
@@ -52,9 +52,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightbridge.runtime.intelligence.v1"
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",
@@ -84,9 +84,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
-      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightcore.runtime.intelligence.v1"
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",

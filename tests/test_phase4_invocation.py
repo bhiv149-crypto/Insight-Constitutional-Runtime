@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 # Force the INSIGHT_SERVICE_URL to the public deployed URL
-os.environ["INSIGHT_SERVICE_URL"] = "https://slapstick-ditch-raving.ngrok-free.dev"
+os.environ["INSIGHT_SERVICE_URL"] = "https://insight-constitutional-runtime.onrender.com"
 
 from src.integration.platform_integration_service import PlatformIntegrationService
 

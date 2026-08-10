@@ -1,5 +1,7 @@
 [
   {
+    "manifest_id": "insightflow.runtime.intelligence.v1.manifest",
+    "service_name": "InsightFlow",
     "capability_id": "insightflow.runtime.intelligence.v1",
     "capability_name": "INSIGHTFLOW",
     "owner": {
@@ -9,6 +11,23 @@
     "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
     "dependencies": [
       "PlatformCapabilitySDK",
       "PlatformDiscovery",
@@ -31,14 +50,22 @@
       ],
       "requires_governance_approval": false
     },
-    "inputs": [],
-    "outputs": [],
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
     "consumers": [],
     "documentation_reference": {
       "primary": "InsightFlow.md"
     }
   },
   {
+    "manifest_id": "insightbridge.runtime.intelligence.v1.manifest",
+    "service_name": "InsightBridge",
     "capability_id": "insightbridge.runtime.intelligence.v1",
     "capability_name": "INSIGHTBRIDGE",
     "owner": {
@@ -48,6 +75,23 @@
     "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
     "dependencies": [
       "PlatformCapabilitySDK",
       "PlatformDiscovery",
@@ -70,14 +114,22 @@
       ],
       "requires_governance_approval": false
     },
-    "inputs": [],
-    "outputs": [],
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
     "consumers": [],
     "documentation_reference": {
       "primary": "InsightBridge.md"
     }
   },
   {
+    "manifest_id": "insightcore.runtime.intelligence.v1.manifest",
+    "service_name": "InsightCore",
     "capability_id": "insightcore.runtime.intelligence.v1",
     "capability_name": "INSIGHTCORE",
     "owner": {
@@ -87,6 +139,23 @@
     "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
     "dependencies": [
       "PlatformCapabilitySDK",
       "PlatformDiscovery",
@@ -109,8 +178,14 @@
       ],
       "requires_governance_approval": false
     },
-    "inputs": [],
-    "outputs": [],
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
     "consumers": [],
     "documentation_reference": {
       "primary": "InsightCore.md"

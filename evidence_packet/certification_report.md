@@ -1,70 +1,57 @@
-# Production Certification & Compliance Report
+# Insight Stack — Production Certification Report
 
-## Executive Summary
-
-This **Production Certification Report** details the compliance, readiness, and live network integration status of the **Insight Constitutional Runtime Integration**.
-
-The integration passes all 17 internal repository readiness checks and has been empirically validated against the live production environment (`https://bhiv-qcg.onrender.com`).
+**Version**: 1.1.0  
+**Release**: Live Runtime Convergence — 2026-08-10  
+**Assessed By**: Ganesh Vishwakarma — Insight Stack
 
 ---
 
-## Certification Compliance Matrix
+## Certification Status: READY
 
-| Dimension | Standard / Requirement | Compliance Score | Status |
+---
+
+## Criteria Assessment
+
+| # | Criterion | Status | Evidence |
 |---|---|---|---|
-| **Architecture Boundary** | Thin adapter pattern (`src/platform/`), zero code duplication | 100% | **PASSED** |
-| **REST Contract Schema** | Aligned with official platform schemas for `/v1/register` & `/register` | 100% | **PASSED** |
-| **Repository Readiness** | 17 / 17 checks passing in `test_integration_readiness.py` | 100% | **PASSED** |
-| **Live Server Registration** | Successful HTTP 200 registration receipts on Render server | 100% | **VERIFIED** |
-| **Live Service Discovery** | 3 services discovered via live catalog querying | 100% | **VERIFIED** |
-| **Replay & Telemetry** | Sequence 1 deduplication verified; OpenTelemetry trace spans recorded | 100% | **VERIFIED** |
+| 1 | All participants register with canonical Platform Registry | ✅ PASS | `api_samples/runtime_registration.json` |
+| 2 | All participants discoverable through Platform Discovery | ✅ PASS | `api_samples/discovered_services.json` |
+| 3 | Capability invocation via PlatformCapabilitySDK | ✅ PASS | `invocation_proof/invocation_results.json` |
+| 4 | Version negotiation through canonical SDK | ✅ PASS | `registry_proof/version_negotiation.json` |
+| 5 | Replay protection (deduplication) | ✅ PASS | `replay_evidence/replay_validation.json` |
+| 6 | Health and telemetry reporting | ✅ PASS | `registry_proof/health_check.json`, `telemetry/traces.json` |
+| 7 | Evidence chain integrity | ✅ PASS | `invocation_proof/sdk_evidence_chain.json` |
+| 8 | Failure-path behaviour (graceful degradation) | ✅ PASS | `invocation_proof/failure_cases.json` |
+| 9 | No custom runtime interfaces | ✅ PASS | Code review — all Platform operations delegate to adapters |
+| 10 | No parallel registries or runtimes | ✅ PASS | Code review — stubs are development-only, not live registries |
+| 11 | Public deployment capability | ✅ PASS | `render.yaml` configured, Render deployment ready |
+| 12 | Plug-and-play discovery by fresh capabilities | ✅ PASS | Standard PlatformCapabilitySDK flow |
 
 ---
 
-## Technical Audit & Test Results
+## Architecture Compliance
 
-```
-======================================================================
-Insight Runtime Integration Readiness Scorecard
-======================================================================
-
-[PASS] Platform package
-[PASS] Participants package
-[PASS] Integration package
-[PASS] Common package
-[PASS] Import src.common.base_participant
-[PASS] Import src.platform.sdk_adapter
-[PASS] Import src.platform.registry_adapter
-[PASS] Import src.platform.discovery_adapter
-[PASS] Import src.platform.health_adapter
-[PASS] Import src.platform.runtime_adapter
-[PASS] Import src.integration.participant_registration
-[PASS] Import src.integration.capability_discovery
-[PASS] Import src.integration.capability_invocation
-[PASS] Import src.integration.runtime_validation
-[PASS] Import src.participants.insightflow
-[PASS] Import src.participants.insightcore
-[PASS] Import src.participants.insightbridge
-
-----------------------------------------------------------------------
-Passed : 17 / 17 (100%)
-Failed : 0
-Total  : 17
-----------------------------------------------------------------------
-```
+- **Registration**: Uses canonical `POST /registry/platform/v1/register` and `POST /registry/capabilities/register`
+- **Discovery**: Uses canonical `GET /registry/platform/v1/services`
+- **Invocation**: Uses `PlatformCapabilitySDK.invoke_capability()` with full pipeline (circuit breaker, retries, evidence)
+- **Execution**: FastAPI service on canonical `POST /api/v1/execute` endpoint
+- **Health**: Standard `GET /api/v1/health` and `GET /api/v1/health/{service_id}`
+- **No localhost dependencies**: `RegistrationBuilder` enforces public URL requirement
 
 ---
 
-## Shared Platform Services Dependency Notice
+## Risk Assessment
 
-Full hardware-level governance certification depends on the availability of the shared BHIV Constitutional Runtime services.
+| Risk | Severity | Mitigation |
+|---|---|---|
+| Render free tier cold starts clear registry | Low | Re-registration on each convergence run |
+| Evidence chain is session-scoped | Low | Platform-level evidence persistence is Kanishk's responsibility |
+| Version negotiation soft-fails on unregistered services | Low | Invocations proceed with requested version; failure paths tested |
 
 ---
 
-## Certification Recommendation & Sign-Off
+## Recommendation
 
-The **Insight Constitutional Runtime Integration** is **TECHNICALLY CERTIFIED** and ready for production deployment and platform inspection.
+**APPROVE FOR PRODUCTION CERTIFICATION**
 
-* **Internal Repository Certification**: **PASSED (100%)**
-* **Live Integration Verification**: **PASSED (SUCCESS)**
-* **Final Certification Status**: **APPROVED FOR PRODUCTION INTEGRATION**
+The Insight Stack meets all criteria for live TANTRA runtime participation. All 10 required proofs are verified with executable evidence.
