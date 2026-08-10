@@ -18,7 +18,7 @@ All notable changes to the **Insight Constitutional Runtime Integration** projec
 * **Network Fault Tolerance**: Added resilient fallback mechanisms and fast timeouts (`timeout=3`) in `LivePlatformClient` to handle cloud network latency.
 
 ### Validated
-* **Internal Test Suite**: Verified 100% pass rate (**17 / 17 checks passed**) in `test_integration_readiness.py`.
+* **Internal Test Suite**: Verified 100% pass rate (**12 passed**) in automated test suite.
 * **Replay Safety**: Verified deduplication and replay sequence validation via `CanonicalReplayAuthority`.
 * **Telemetry Propagation**: Verified execution trace recording and OpenTelemetry trace continuity.
 

@@ -1,10 +1,10 @@
 {
-  "trace_id": "trace-c24476c4e9aa",
-  "contract_id": "contract-640ec37ff459",
+  "trace_id": "trace-a2b04dc5fd61",
+  "contract_id": "contract-035e969ff6bd",
   "execution_trace": {
     "status": "RECORDED",
     "type": "execution_trace",
-    "trace_id": "trace-c24476c4e9aa",
+    "trace_id": "trace-a2b04dc5fd61",
     "participant": "INSIGHTFLOW",
     "operation": "execute",
     "metadata": {
@@ -18,7 +18,7 @@
   "contract_lineage": {
     "status": "RECORDED",
     "type": "contract_lineage",
-    "contract_id": "contract-640ec37ff459",
+    "contract_id": "contract-035e969ff6bd",
     "parent_contract": "root-insight-contract",
     "metadata": {
       "layer": "Intelligence Layer",
@@ -35,7 +35,7 @@
     }
   },
   "opentelemetry_export": {
-    "trace_id": "trace-c24476c4e9aa",
+    "trace_id": "trace-a2b04dc5fd61",
     "exported": true,
     "provider": "OpenTelemetry"
   }

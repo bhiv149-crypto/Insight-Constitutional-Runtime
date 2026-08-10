@@ -1,29 +1,29 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "service_id": "insightflow.runtime.intelligence.v1",
-    "status": "UNREACHABLE",
+    "status": "COMPATIBLE",
     "requested_version": "1.0.2",
-    "negotiated_version": null,
+    "negotiated_version": "1.0.2",
     "suggested_versions": [],
-    "message": "All discovery nodes unreachable",
-    "timestamp": "2026-08-10T10:02:58.461617+00:00"
+    "message": "Version 1.0.2 is fully supported.",
+    "timestamp": "2026-08-10T13:39:23.028895+00:00"
   },
   "insightbridge.runtime.intelligence.v1": {
     "service_id": "insightbridge.runtime.intelligence.v1",
-    "status": "UNREACHABLE",
+    "status": "COMPATIBLE",
     "requested_version": "1.0.2",
-    "negotiated_version": null,
+    "negotiated_version": "1.0.2",
     "suggested_versions": [],
-    "message": "All discovery nodes unreachable",
-    "timestamp": "2026-08-10T10:02:58.723858+00:00"
+    "message": "Version 1.0.2 is fully supported.",
+    "timestamp": "2026-08-10T13:39:23.288692+00:00"
   },
   "insightcore.runtime.intelligence.v1": {
     "service_id": "insightcore.runtime.intelligence.v1",
-    "status": "UNREACHABLE",
+    "status": "COMPATIBLE",
     "requested_version": "1.0.2",
-    "negotiated_version": null,
+    "negotiated_version": "1.0.2",
     "suggested_versions": [],
-    "message": "All discovery nodes unreachable",
-    "timestamp": "2026-08-10T10:02:58.973485+00:00"
+    "message": "Version 1.0.2 is fully supported.",
+    "timestamp": "2026-08-10T13:39:23.558915+00:00"
   }
 }

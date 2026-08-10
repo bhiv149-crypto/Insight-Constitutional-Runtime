@@ -23,6 +23,28 @@
           "type": "object",
           "properties": {}
         }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
       }
     ],
     "execution_modes": [
@@ -87,6 +109,28 @@
           "type": "object",
           "properties": {}
         }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
       }
     ],
     "execution_modes": [
@@ -150,6 +194,28 @@
         "output_contract": {
           "type": "object",
           "properties": {}
+        }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
         }
       }
     ],

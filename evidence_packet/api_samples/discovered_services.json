@@ -4,24 +4,33 @@
     "capability_id": "insightflow.runtime.intelligence.v1",
     "service_name": "InsightFlow",
     "version": "1.0.2",
-    "provider": "Generic Provider",
-    "owner": {},
-    "runtime_type": "PROCESS",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T09:37:27.124255+00:00",
-    "description": "",
+    "registration_timestamp": "2026-08-10T12:04:01.385126+00:00",
+    "description": "InsightFlow Runtime Participant",
     "tags": [
       "insight",
       "runtime",
       "constitutional"
     ],
     "endpoints": {
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
       "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
       "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ]
   },
   {
     "platform_service_id": "insightbridge.runtime.intelligence.v1",
@@ -34,7 +43,7 @@
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T09:48:20.202964+00:00",
+    "registration_timestamp": "2026-08-10T12:59:11.305426+00:00",
     "description": "",
     "tags": [
       "insight",
@@ -58,7 +67,7 @@
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T09:48:21.007181+00:00",
+    "registration_timestamp": "2026-08-10T12:59:12.013764+00:00",
     "description": "",
     "tags": [
       "insight",

@@ -118,6 +118,6 @@ sequenceDiagram
 
 ## Validation Status
 
-* **Internal Readiness Test**: `17 / 17 PASSED` in `tests/test_integration_readiness.py`.
+* **Internal Readiness Test**: `12 PASSED` in automated test suite.
 * **Live Integration Execution**: Successfully executed against `https://bhiv-qcg.onrender.com`.
 * **Shared Platform Services Notice**: Full hardware-level governance certification depends on the availability of the shared BHIV Constitutional Runtime services.

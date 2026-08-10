@@ -5,7 +5,7 @@
     "version": "1.0.2",
     "uptime_seconds": 0.0,
     "dependencies": {},
-    "timestamp": "2026-08-10T10:03:02.498028+00:00"
+    "timestamp": "2026-08-10T13:39:26.262440+00:00"
   },
   "insightbridge.runtime.intelligence.v1": {
     "service_id": "insightbridge.runtime.intelligence.v1",
@@ -13,7 +13,7 @@
     "version": "1.0.2",
     "uptime_seconds": 0.0,
     "dependencies": {},
-    "timestamp": "2026-08-10T10:03:02.760648+00:00"
+    "timestamp": "2026-08-10T13:39:26.535864+00:00"
   },
   "insightcore.runtime.intelligence.v1": {
     "service_id": "insightcore.runtime.intelligence.v1",
@@ -21,6 +21,6 @@
     "version": "1.0.2",
     "uptime_seconds": 0.0,
     "dependencies": {},
-    "timestamp": "2026-08-10T10:03:03.053528+00:00"
+    "timestamp": "2026-08-10T13:39:26.818659+00:00"
   }
 }

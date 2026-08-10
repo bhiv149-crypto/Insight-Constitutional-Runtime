@@ -3,17 +3,17 @@
     "test": "invoke non-existent service",
     "service_id": "nonexistent.service.v999",
     "result": {
-      "invocation_id": "f1e4ee49-567a-44c7-99ae-aba068fd000e",
+      "invocation_id": "8b356d3f-ad90-4d70-9d38-4dfdf8fad958",
       "service_id": "nonexistent.service.v999",
       "operation": "execute",
       "status": "SERVICE_NOT_FOUND",
       "response": {},
-      "duration_ms": 955.9803009033203,
+      "duration_ms": 528.6028385162354,
       "trust_method": "CLASSICAL",
       "evidence": null,
       "error": "Service 'nonexistent.service.v999' not found in any discovery node",
       "retry_count": 0,
-      "timestamp": "2026-08-10T10:03:04.010526+00:00"
+      "timestamp": "2026-08-10T13:39:27.348278+00:00"
     }
   },
   "version_negotiation_unsupported": {
@@ -22,12 +22,14 @@
     "requested_version": "999.0.0",
     "result": {
       "service_id": "insightflow.runtime.intelligence.v1",
-      "status": "UNREACHABLE",
+      "status": "UNSUPPORTED",
       "requested_version": "999.0.0",
       "negotiated_version": null,
-      "suggested_versions": [],
-      "message": "All discovery nodes unreachable",
-      "timestamp": "2026-08-10T10:03:04.252729+00:00"
+      "suggested_versions": [
+        "1.0.2"
+      ],
+      "message": "Version 999.0.0 is not recognised. Available versions: ['1.0.2']",
+      "timestamp": "2026-08-10T13:39:27.606720+00:00"
     }
   },
   "invalid_operation": {
@@ -35,52 +37,29 @@
     "service_id": "insightflow.runtime.intelligence.v1",
     "operation": "invalid_operation",
     "result": {
-      "invocation_id": "fdc9ebba-5a0e-4dac-8a09-8589a39a20c6",
+      "invocation_id": "46a821cc-bc3c-4d3f-85b1-be9efa748309",
       "service_id": "insightflow.runtime.intelligence.v1",
       "operation": "invalid_operation",
-      "status": "SUCCESS",
-      "response": {
-        "platform_service_id": "insightflow.runtime.intelligence.v1",
-        "capability_id": "insightflow.runtime.intelligence.v1",
-        "service_name": "InsightFlow",
-        "version": "1.0.2",
-        "provider": "Generic Provider",
-        "owner": {},
-        "runtime_type": "PROCESS",
-        "service_classification": "DOMAIN_SERVICE",
-        "capability_category": "INTELLIGENCE",
-        "status": "ACTIVE",
-        "registration_timestamp": "2026-08-10T09:37:27.124255+00:00",
-        "description": "",
-        "tags": [
-          "insight",
-          "runtime",
-          "constitutional"
-        ],
-        "endpoints": {
-          "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
-          "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
-        },
-        "dependencies": []
-      },
-      "duration_ms": 802.410364151001,
+      "status": "FAILED",
+      "response": {},
+      "duration_ms": 5450.04940032959,
       "trust_method": "CLASSICAL",
       "evidence": {
-        "invocation_id": "fdc9ebba-5a0e-4dac-8a09-8589a39a20c6",
+        "invocation_id": "46a821cc-bc3c-4d3f-85b1-be9efa748309",
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "invalid_operation",
-        "request_hash": "9804fad4ada249c23b28609e32fffefbdb9b2a3133308a33ff9a65e88823f534",
-        "response_hash": "3e674557956ec8df0e7a95c18a22882e9f8ed847a880b426d0568903ec87cba9",
+        "request_hash": "ba4d77ff1b4c36d0797823342c68725e45b5de8021898735d85c6d87a30b9c68",
+        "response_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
         "trust_method": "CLASSICAL",
-        "duration_ms": 802.410364151001,
-        "status": "SUCCESS",
-        "timestamp": "2026-08-10T10:03:05.056158+00:00",
-        "evidence_hash": "c4fd55e43729b0afbabc6b16b35057d05b1c5eb7f447c6f8f6fa98f7e59d7556",
+        "duration_ms": 5450.04940032959,
+        "status": "FAILED",
+        "timestamp": "2026-08-10T13:39:33.057790+00:00",
+        "evidence_hash": "f35405e41c5541ef6f9fc1c7f0f60b8f6f35a1a07125c1e5db0b407c278ef81f",
         "previous_evidence_hash": "af05c09e9a7be20a81cd07438950d152676e85344e19430907ef24e9da1bbcb4"
       },
-      "error": null,
-      "retry_count": 0,
-      "timestamp": "2026-08-10T10:03:05.056158+00:00"
+      "error": "HTTP Error 400: Bad Request",
+      "retry_count": 4,
+      "timestamp": "2026-08-10T13:39:33.057790+00:00"
     }
   }
 }
