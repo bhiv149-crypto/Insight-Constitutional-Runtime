@@ -1,113 +1,95 @@
-# Constitutional Runtime Identity Cards Catalog
+# Insight Stack — Runtime Identity Cards
 
-## Overview
-
-This document compiles the formal **Runtime Identity Cards** for the three Constitutional Runtime Participants comprising the Insight Stack: `InsightFlow`, `InsightBridge`, and `InsightCore`.
-
-Each identity card defines the participant's permanent runtime identity, constitutional scope, authority boundaries, API dependencies, emitted evidence, and operational status within the **BHIV Constitutional Platform**.
+**Live Integration Verified**: 2026-08-08T10:10:05Z UTC  
+**Platform**: BHIV Constitutional Platform Runtime (https://bhiv-qcg.onrender.com)  
+**All Three Participants**: REGISTERED (HTTP 200) + ACTIVE
 
 ---
 
-# 1. Runtime Identity Card — InsightFlow
+## Card 1: InsightFlow
 
-## Runtime Participant Information
-
-| Property | Value |
+| Field | Value |
 |---|---|
-| **Participant Name** | `InsightFlow` |
-| **Constitutional Layer** | Intelligence Layer / Domain Services |
-| **Runtime Type** | Constitutional Runtime Participant (`PROCESS`) |
-| **Permanent Runtime Identity** | `insightflow.runtime.intelligence.v1` |
-| **Current Version** | `v1.0.0` |
-| **Live Registration Status** | **VERIFIED** (`HTTP 200 OK` on `https://bhiv-qcg.onrender.com`) |
-
-### Authority Owned
-* Intelligence workflow orchestration
-* Insight execution initiation
-* Runtime capability invocation
-* Runtime evidence contribution and trace span generation
-
-### Authority Explicitly NOT Owned
-* Runtime platform orchestration
-* Platform Service Registry & Capability Registry management
-* Quantum Runtime execution
-* Replay Registry & Trust verification management
-
-### Upstream Platform Dependencies
-* `PlatformCapabilitySDK`, `PlatformDiscovery`, `PlatformRegistry`, `RuntimeCore`
+| **Participant Name** | InsightFlow |
+| **Runtime Identity** | `insightflow.runtime.intelligence.v1` |
+| **Version** | 1.0.0 |
+| **Layer** | Intelligence Layer |
+| **Runtime Type** | Constitutional Runtime Participant |
+| **Status** | ACTIVE |
+| **Service Classification** | DOMAIN_SERVICE |
+| **Capability Category** | INTELLIGENCE |
+| **Registration Hash** | `66cdc114ed87f10a00a5cebc1869ed353366975fe287cebe50c2abbd928e590c` |
+| **Evidence Hash** | `6a5335e1cf032f6174b9099ecf33e6dde11d58edb99f867e78ef34e690ac5c8e` |
+| **Previous Evidence Hash** | `9a9b162a21fc3e957ea53d4d174eac82f527616cd7e5205671b92c9d1de4d6ab` |
+| **Registration Timestamp** | 2026-08-08T10:10:08.821518+00:00 |
+| **Execution Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/services/insightflow.runtime.intelligence.v1` |
+| **Health Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/health` |
+| **Owner Team** | Insight Stack |
+| **Owner Contact** | insight-runtime@bhiv.internal |
+| **Capabilities** | workflow_orchestration, capability_invocation, trace_generation, evidence_generation |
+| **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, PlatformRegistry, RuntimeCore |
 
 ---
 
-# 2. Runtime Identity Card — InsightBridge
+## Card 2: InsightBridge
 
-## Runtime Participant Information
-
-| Property | Value |
+| Field | Value |
 |---|---|
-| **Participant Name** | `InsightBridge` |
-| **Constitutional Layer** | Intelligence Layer / Domain Services |
-| **Runtime Type** | Constitutional Runtime Participant (`PROCESS`) |
-| **Permanent Runtime Identity** | `insightbridge.runtime.intelligence.v1` |
-| **Current Version** | `v1.0.0` |
-| **Live Registration Status** | **VERIFIED** (`HTTP 200 OK` on `https://bhiv-qcg.onrender.com`) |
-
-### Authority Owned
-* Cross-domain protocol translation and messaging integration
-* Capability coordination and gateway interface wrapping
-* Integration evidence logging and distributed trace propagation
-
-### Authority Explicitly NOT Owned
-* Platform Registry management
-* Quantum execution algorithm selection
-* Replay deduplication enforcement
-
-### Upstream Platform Dependencies
-* `PlatformCapabilitySDK`, `PlatformDiscovery`, `RuntimeCore`, `QuantumCommunicationGateway`
+| **Participant Name** | InsightBridge |
+| **Runtime Identity** | `insightbridge.runtime.intelligence.v1` |
+| **Version** | 1.0.0 |
+| **Layer** | Intelligence Layer |
+| **Runtime Type** | Constitutional Runtime Participant |
+| **Status** | ACTIVE |
+| **Service Classification** | DOMAIN_SERVICE |
+| **Capability Category** | INTELLIGENCE |
+| **Registration Hash** | `c54e8da5fe421973fefc0ea1e4a1f6e725a40f41aba8ee1c8562e52b0c749cbc` |
+| **Evidence Hash** | `456e36d0f0cd671b2ee571de33b449a347f3b68aa439b264be3a19aff40aea9b` |
+| **Previous Evidence Hash** | `6a5335e1cf032f6174b9099ecf33e6dde11d58edb99f867e78ef34e690ac5c8e` |
+| **Registration Timestamp** | 2026-08-08T10:10:09.092180+00:00 |
+| **Execution Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/services/insightbridge.runtime.intelligence.v1` |
+| **Health Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/health` |
+| **Owner Team** | Insight Stack |
+| **Owner Contact** | insight-runtime@bhiv.internal |
+| **Capabilities** | protocol_translation, bridge_orchestration, quantum_interface, evidence_propagation |
+| **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, RuntimeCore, QuantumCommunicationGateway |
 
 ---
 
-# 3. Runtime Identity Card — InsightCore
+## Card 3: InsightCore
 
-## Runtime Participant Information
-
-| Property | Value |
+| Field | Value |
 |---|---|
-| **Participant Name** | `InsightCore` |
-| **Constitutional Layer** | Intelligence Layer / Domain Services |
-| **Runtime Type** | Constitutional Runtime Participant (`PROCESS`) |
-| **Permanent Runtime Identity** | `insightcore.runtime.intelligence.v1` |
-| **Current Version** | `v1.0.0` |
-| **Live Registration Status** | **VERIFIED** (`HTTP 200 OK` on `https://bhiv-qcg.onrender.com`) |
-
-### Authority Owned
-* Primary intelligence execution logic
-* State validation and deterministic execution output generation
-* Replay sequence participation and evidence generation
-
-### Authority Explicitly NOT Owned
-* Platform consensus management
-* Global identity issuance
-* Hardware-level governance authority
-
-### Upstream Platform Dependencies
-* `PlatformCapabilitySDK`, `PlatformDiscovery`, `RuntimeCore`, `ReplayRegistry`
+| **Participant Name** | InsightCore |
+| **Runtime Identity** | `insightcore.runtime.intelligence.v1` |
+| **Version** | 1.0.0 |
+| **Layer** | Intelligence Layer |
+| **Runtime Type** | Constitutional Runtime Participant |
+| **Status** | ACTIVE |
+| **Service Classification** | DOMAIN_SERVICE |
+| **Capability Category** | INTELLIGENCE |
+| **Registration Hash** | `ddd83fafedf27b13ac26fbb98064e2e9b66182f726461ff8882b3e30cdc20e28` |
+| **Evidence Hash** | `ede9b5b9cc9ecc8cf89b48677789805201ca167151689b384117ddefb7d83b76` |
+| **Previous Evidence Hash** | `456e36d0f0cd671b2ee571de33b449a347f3b68aa439b264be3a19aff40aea9b` |
+| **Registration Timestamp** | 2026-08-08T10:10:09.833006+00:00 |
+| **Execution Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/services/insightcore.runtime.intelligence.v1` |
+| **Health Endpoint** | `https://bhiv-qcg.onrender.com/registry/platform/v1/health` |
+| **Owner Team** | Insight Stack |
+| **Owner Contact** | insight-runtime@bhiv.internal |
+| **Capabilities** | core_intelligence, contract_resolution, replay_management, constitutional_enforcement |
+| **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, RuntimeCore, ReplayRegistry |
 
 ---
 
-## Identity Verification Summary
+## Evidence Chain Integrity
 
-```json
-{
-  "verified_identities": [
-    "insightflow.runtime.intelligence.v1",
-    "insightbridge.runtime.intelligence.v1",
-    "insightcore.runtime.intelligence.v1"
-  ],
-  "live_platform": "https://bhiv-qcg.onrender.com",
-  "registration_status": "REGISTERED",
-  "readiness_checks": "17/17 PASSED"
-}
+The three registrations form a cryptographic chain:
+
+```
+GENESIS HASH (platform)
+    └─> InsightFlow evidence_hash:  6a5335e1...
+            └─> InsightBridge evidence_hash: 456e36d0...
+                    └─> InsightCore evidence_hash: ede9b5b9...
 ```
 
-*Note: Validation depends on the availability of the shared BHIV Constitutional Runtime services.*es
-- Production certification
+Each participant's `previous_evidence_hash` matches the prior participant's `evidence_hash`, confirming sequential, tamper-evident registration.

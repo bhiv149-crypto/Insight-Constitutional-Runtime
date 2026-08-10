@@ -1,0 +1,91 @@
+{
+  "dependency_map": {
+    "insight_stack": {
+      "InsightFlow": {
+        "runtime_identity": "insightflow.runtime.intelligence.v1",
+        "version": "1.0.0",
+        "layer": "Intelligence Layer",
+        "participant_file": "src/participants/insightflow/participant.py",
+        "dependencies": [
+          "PlatformCapabilitySDK",
+          "PlatformDiscovery",
+          "PlatformRegistry",
+          "RuntimeCore"
+        ]
+      },
+      "InsightBridge": {
+        "runtime_identity": "insightbridge.runtime.intelligence.v1",
+        "version": "1.0.0",
+        "layer": "Intelligence Layer",
+        "participant_file": "src/participants/insightbridge/participant.py",
+        "dependencies": [
+          "PlatformCapabilitySDK",
+          "PlatformDiscovery",
+          "RuntimeCore",
+          "QuantumCommunicationGateway"
+        ]
+      },
+      "InsightCore": {
+        "runtime_identity": "insightcore.runtime.intelligence.v1",
+        "version": "1.0.0",
+        "layer": "Intelligence Layer",
+        "participant_file": "src/participants/insightcore/participant.py",
+        "dependencies": [
+          "PlatformCapabilitySDK",
+          "PlatformDiscovery",
+          "RuntimeCore",
+          "ReplayRegistry"
+        ]
+      }
+    },
+    "platform_runtime": {
+      "PlatformCapabilitySDK": {
+        "source": "bhiv-QCG-main/platform_capability_sdk.py",
+        "owner": "Kanishk",
+        "import_strategy": "sys.path injection from peer repo",
+        "fallback": "src/platform/stubs.py"
+      },
+      "LivePlatformClient": {
+        "source": "src/platform/live_platform_client.py",
+        "base_url": "https://bhiv-qcg.onrender.com",
+        "endpoints": {
+          "health": "/registry/platform/v1/health",
+          "register": "/registry/platform/v1/register",
+          "services": "/registry/platform/v1/services",
+          "capability_register": "/registry/capabilities/register"
+        }
+      }
+    },
+    "adapter_layer": {
+      "PlatformRuntimeAdapter": "src/platform/runtime_adapter.py",
+      "PlatformSDKAdapter": "src/platform/sdk_adapter.py",
+      "PlatformRegistryAdapter": "src/platform/registry_adapter.py",
+      "PlatformDiscoveryAdapter": "src/platform/discovery_adapter.py",
+      "PlatformHealthAdapter": "src/platform/health_adapter.py",
+      "PlatformReplayAdapter": "src/platform/replay_adapter.py",
+      "PlatformTelemetryAdapter": "src/platform/telemetry_adapter.py"
+    },
+    "python_packages": {
+      "requests": ">=2.28.0",
+      "fastapi": ">=0.100.0 (platform_agent only)",
+      "uvicorn": ">=0.23.0 (platform_agent only)"
+    },
+    "external_services": {
+      "bhiv_platform": {
+        "url": "https://bhiv-qcg.onrender.com",
+        "owner": "Kanishk",
+        "version": "2.0.0",
+        "registry_version": "1.0.0",
+        "note": "Free-tier Render deployment — registry resets on cold start"
+      }
+    },
+    "team_integration_block": {
+      "Ganesh": ["InsightFlow", "InsightBridge", "InsightCore"],
+      "Kanishk": ["Platform Runtime", "Registry", "Discovery", "SDK"],
+      "Pritesh": ["Quantum Platform Services"],
+      "Dhiraj": ["Quantum Runtime"],
+      "Raj": ["Core Runtime", "Governance"],
+      "Vinayak": ["Testing", "Certification"]
+    }
+  }
+}

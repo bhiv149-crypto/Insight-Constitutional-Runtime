@@ -1,0 +1,29 @@
+{
+  "insightflow.runtime.intelligence.v1": {
+    "service_id": "insightflow.runtime.intelligence.v1",
+    "status": "UNREACHABLE",
+    "requested_version": "1.0.2",
+    "negotiated_version": null,
+    "suggested_versions": [],
+    "message": "All discovery nodes unreachable",
+    "timestamp": "2026-08-08T12:18:56.338680+00:00"
+  },
+  "insightbridge.runtime.intelligence.v1": {
+    "service_id": "insightbridge.runtime.intelligence.v1",
+    "status": "UNREACHABLE",
+    "requested_version": "1.0.2",
+    "negotiated_version": null,
+    "suggested_versions": [],
+    "message": "All discovery nodes unreachable",
+    "timestamp": "2026-08-08T12:18:56.589771+00:00"
+  },
+  "insightcore.runtime.intelligence.v1": {
+    "service_id": "insightcore.runtime.intelligence.v1",
+    "status": "UNREACHABLE",
+    "requested_version": "1.0.2",
+    "negotiated_version": null,
+    "suggested_versions": [],
+    "message": "All discovery nodes unreachable",
+    "timestamp": "2026-08-08T12:18:57.334864+00:00"
+  }
+}

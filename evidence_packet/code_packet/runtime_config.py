@@ -9,7 +9,7 @@ from src.platform.imports import create_trust_provider
 
 # Discovery — Live BHIV Platform Runtime
 DISCOVERY_URLS = [
-    "https://bhiv-qcg.onrender.com/registry",
+    "https://bhiv-qcg.onrender.com/registry/platform",
 ]
 
 DISCOVERY_PORT_BASE = 9010

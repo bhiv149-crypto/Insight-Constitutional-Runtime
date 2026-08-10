@@ -3,7 +3,7 @@
     "platform_service_id": "insightflow.runtime.intelligence.v1",
     "capability_id": "insightflow.runtime.intelligence.v1",
     "service_name": "InsightFlow",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "provider": "Insight Runtime",
     "owner": {
       "team": "Insight Stack",
@@ -20,8 +20,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "",
-      "health": ""
+      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightflow.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",
@@ -34,7 +35,7 @@
     "platform_service_id": "insightbridge.runtime.intelligence.v1",
     "capability_id": "insightbridge.runtime.intelligence.v1",
     "service_name": "InsightBridge",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "provider": "Insight Runtime",
     "owner": {
       "team": "Insight Stack",
@@ -51,8 +52,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "",
-      "health": ""
+      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightbridge.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",
@@ -65,7 +67,7 @@
     "platform_service_id": "insightcore.runtime.intelligence.v1",
     "capability_id": "insightcore.runtime.intelligence.v1",
     "service_name": "InsightCore",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "provider": "Insight Runtime",
     "owner": {
       "team": "Insight Stack",
@@ -82,8 +84,9 @@
       "constitutional"
     ],
     "endpoints": {
-      "execute": "",
-      "health": ""
+      "execute": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "execution": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/execute",
+      "health": "https://slapstick-ditch-raving.ngrok-free.dev/api/v1/health/insightcore.runtime.intelligence.v1"
     },
     "dependencies": [
       "PlatformCapabilitySDK",

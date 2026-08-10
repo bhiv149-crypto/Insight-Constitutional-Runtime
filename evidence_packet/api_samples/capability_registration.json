@@ -6,7 +6,7 @@
       "team": "Insight Stack",
       "contact": "insight-runtime@bhiv.internal"
     },
-    "version": "1.0.0",
+    "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
     "dependencies": [
@@ -45,7 +45,7 @@
       "team": "Insight Stack",
       "contact": "insight-runtime@bhiv.internal"
     },
-    "version": "1.0.0",
+    "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
     "dependencies": [
@@ -84,7 +84,7 @@
       "team": "Insight Stack",
       "contact": "insight-runtime@bhiv.internal"
     },
-    "version": "1.0.0",
+    "version": "1.0.2",
     "status": "ACTIVE",
     "scope": "SYSTEM",
     "dependencies": [

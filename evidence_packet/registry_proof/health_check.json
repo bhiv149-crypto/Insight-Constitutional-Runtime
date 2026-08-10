@@ -1,0 +1,26 @@
+{
+  "insightflow.runtime.intelligence.v1": {
+    "service_id": "insightflow.runtime.intelligence.v1",
+    "status": "UP",
+    "version": "1.0.2",
+    "uptime_seconds": 0.0,
+    "dependencies": {},
+    "timestamp": "2026-08-08T12:18:59.768506+00:00"
+  },
+  "insightbridge.runtime.intelligence.v1": {
+    "service_id": "insightbridge.runtime.intelligence.v1",
+    "status": "UP",
+    "version": "1.0.2",
+    "uptime_seconds": 0.0,
+    "dependencies": {},
+    "timestamp": "2026-08-08T12:19:00.494733+00:00"
+  },
+  "insightcore.runtime.intelligence.v1": {
+    "service_id": "insightcore.runtime.intelligence.v1",
+    "status": "UP",
+    "version": "1.0.2",
+    "uptime_seconds": 0.0,
+    "dependencies": {},
+    "timestamp": "2026-08-08T12:19:00.761960+00:00"
+  }
+}
