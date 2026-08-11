@@ -1,24 +1,71 @@
 {
-  "trace_id": "trace-a2b04dc5fd61",
-  "contract_id": "contract-035e969ff6bd",
-  "execution_trace": {
-    "status": "RECORDED",
-    "type": "execution_trace",
-    "trace_id": "trace-a2b04dc5fd61",
-    "participant": "INSIGHTFLOW",
-    "operation": "execute",
-    "metadata": {
-      "participants": [
-        "InsightFlow",
-        "InsightBridge",
-        "InsightCore"
-      ]
+  "contract_id": "contract-e1d54ce4ffae",
+  "execution_traces": [
+    {
+      "service_id": "insightflow.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
+      "trace_id": "trace-d3355e198f80",
+      "timestamp": 1786453443.4378753,
+      "execution_trace": {
+        "status": "RECORDED",
+        "type": "execution_trace",
+        "trace_id": "trace-d3355e198f80",
+        "participant": "insightflow.runtime.intelligence.v1",
+        "operation": "execute",
+        "metadata": {
+          "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
+          "service_id": "insightflow.runtime.intelligence.v1",
+          "operation": "execute",
+          "timestamp": 1786453443.4378753
+        }
+      }
+    },
+    {
+      "service_id": "insightbridge.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
+      "trace_id": "trace-a10190d9edf3",
+      "timestamp": 1786453444.8133564,
+      "execution_trace": {
+        "status": "RECORDED",
+        "type": "execution_trace",
+        "trace_id": "trace-a10190d9edf3",
+        "participant": "insightbridge.runtime.intelligence.v1",
+        "operation": "execute",
+        "metadata": {
+          "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
+          "service_id": "insightbridge.runtime.intelligence.v1",
+          "operation": "execute",
+          "timestamp": 1786453444.8133564
+        }
+      }
+    },
+    {
+      "service_id": "insightcore.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
+      "trace_id": "trace-9dfcd44aa4ba",
+      "timestamp": 1786453445.5673678,
+      "execution_trace": {
+        "status": "RECORDED",
+        "type": "execution_trace",
+        "trace_id": "trace-9dfcd44aa4ba",
+        "participant": "insightcore.runtime.intelligence.v1",
+        "operation": "execute",
+        "metadata": {
+          "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
+          "service_id": "insightcore.runtime.intelligence.v1",
+          "operation": "execute",
+          "timestamp": 1786453445.5673678
+        }
+      }
     }
-  },
+  ],
   "contract_lineage": {
     "status": "RECORDED",
     "type": "contract_lineage",
-    "contract_id": "contract-035e969ff6bd",
+    "contract_id": "contract-e1d54ce4ffae",
     "parent_contract": "root-insight-contract",
     "metadata": {
       "layer": "Intelligence Layer",
@@ -31,12 +78,76 @@
     "adapter": "PlatformRuntimeAdapter",
     "action": "invoke_capability",
     "metadata": {
-      "route": "live_sdk"
+      "route": "live_sdk",
+      "invocations": [
+        {
+          "service_id": "insightflow.runtime.intelligence.v1",
+          "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522"
+        },
+        {
+          "service_id": "insightbridge.runtime.intelligence.v1",
+          "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe"
+        },
+        {
+          "service_id": "insightcore.runtime.intelligence.v1",
+          "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118"
+        }
+      ]
     }
   },
-  "opentelemetry_export": {
-    "trace_id": "trace-a2b04dc5fd61",
-    "exported": true,
-    "provider": "OpenTelemetry"
-  }
+  "opentelemetry_exports": [
+    {
+      "service_id": "insightflow.runtime.intelligence.v1",
+      "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
+      "trace_id": "trace-d3355e198f80",
+      "result": {
+        "trace_id": "trace-d3355e198f80",
+        "exported": true,
+        "provider": "OpenTelemetry"
+      }
+    },
+    {
+      "service_id": "insightbridge.runtime.intelligence.v1",
+      "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
+      "trace_id": "trace-a10190d9edf3",
+      "result": {
+        "trace_id": "trace-a10190d9edf3",
+        "exported": true,
+        "provider": "OpenTelemetry"
+      }
+    },
+    {
+      "service_id": "insightcore.runtime.intelligence.v1",
+      "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
+      "trace_id": "trace-9dfcd44aa4ba",
+      "result": {
+        "trace_id": "trace-9dfcd44aa4ba",
+        "exported": true,
+        "provider": "OpenTelemetry"
+      }
+    }
+  ],
+  "correlations": [
+    {
+      "service_id": "insightflow.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
+      "trace_id": "trace-d3355e198f80",
+      "timestamp": 1786453443.4378753
+    },
+    {
+      "service_id": "insightbridge.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
+      "trace_id": "trace-a10190d9edf3",
+      "timestamp": 1786453444.8133564
+    },
+    {
+      "service_id": "insightcore.runtime.intelligence.v1",
+      "operation": "execute",
+      "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
+      "trace_id": "trace-9dfcd44aa4ba",
+      "timestamp": 1786453445.5673678
+    }
+  ]
 }

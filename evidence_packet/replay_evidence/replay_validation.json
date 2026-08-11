@@ -1,6 +1,6 @@
 {
-  "message_id": "msg-insight-6e25fea2",
-  "trace_reference": "trace-insight-a888b0b9",
+  "message_id": "msg-insight-2ed08422",
+  "trace_reference": "trace-insight-6b21143f",
   "submission_1": {
     "status": "VALID",
     "sequence": 1,
@@ -11,6 +11,6 @@
     "status": "DUPLICATE",
     "sequence": 0,
     "is_valid": false,
-    "reason": "message_id 'msg-insight-6e25fea2' has already been processed"
+    "reason": "message_id 'msg-insight-2ed08422' has already been processed"
   }
 }

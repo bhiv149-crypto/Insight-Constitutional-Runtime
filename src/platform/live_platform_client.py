@@ -148,7 +148,7 @@ class LivePlatformClient:
         raw_endpoints = record.get("endpoints") or {}
 
         endpoints = {
-            "execute": raw_endpoints.get("execute", ""),
+            "execution": raw_endpoints.get("execute", ""),
             "health": raw_endpoints.get("health", ""),
         }
 
@@ -156,8 +156,11 @@ class LivePlatformClient:
             "service_id": service_id,
             "signature": record.get("signature", ""),
             "platform_service_id": platform_sid,
+            "capability_id": clean_record.get("capability_id", platform_sid),
             "service_name": clean_record["service_name"],
             "version": clean_record["version"],
+            "provider": clean_record.get("provider", "Insight Runtime"),
+            "owner": clean_record.get("owner", {}),
             "status": clean_record["status"],
             "runtime_type": clean_record["runtime_type"],
             "service_classification": (
@@ -166,7 +169,9 @@ class LivePlatformClient:
             "capability_category": (
                 clean_record["capability_category"]
             ),
+            "description": clean_record.get("description", ""),
             "endpoints": endpoints,
+            "dependencies": clean_record.get("dependencies", []),
             "capabilities": (
                 record.get("capabilities")
                 or [cap_id]

@@ -10,4 +10,4 @@ This report verifies that the Insight Constitutional Runtime is ready for produc
 - **Capability Invocation:** 3 invocations attempted
 - **Health Checks:** 3 services queried
 - **Version Negotiation:** 3 negotiations completed
-- **Failure Paths:** SERVICE_NOT_FOUND and VERSION negotiation tested
+- **Failure Paths:** service_not_found, version_negotiation_unsupported, invalid_operation tested

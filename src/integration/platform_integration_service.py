@@ -63,6 +63,8 @@ class PlatformIntegrationService:
 
         self.invocation_results = {}
 
+        self.invocation_contexts = []
+
         self.failure_results = {}
 
         self.version_negotiation_results = {}
@@ -289,23 +291,30 @@ class PlatformIntegrationService:
     def _invoke_capabilities(self):
         """
         Invoke each registered capability through the canonical SDK pipeline.
-        Captures invocation results and the SDK evidence chain.
+
+        The Platform SDK owns the canonical invocation_id. This method
+        captures that returned ID and preserves it for telemetry correlation.
         """
         try:
             from src.platform.sdk_adapter import PlatformSDKAdapter
+
             sdk = PlatformSDKAdapter()
 
             for participant in self.participants:
                 service_id = participant.participant.runtime_identity
                 operation = "execute"
+
                 payload = {
-                    "invocation_id": str(uuid.uuid4()),
                     "participant": participant.participant.participant_name,
                     "operation": operation,
                     "timestamp": time.time(),
                 }
 
-                self.logger.info("Invoking capability: %s.%s", service_id, operation)
+                self.logger.info(
+                    "Invoking capability: %s.%s",
+                    service_id,
+                    operation,
+                )
 
                 result = sdk.invoke_capability(
                     service_id=service_id,
@@ -314,34 +323,67 @@ class PlatformIntegrationService:
                     version=participant.participant.version,
                 )
 
-                # Normalize result to dict
-                if hasattr(result, 'to_dict'):
+                # Normalize SDK result to dict.
+                if hasattr(result, "to_dict"):
                     result_dict = result.to_dict()
-                elif hasattr(result, '__dict__'):
-                    result_dict = {k: v for k, v in result.__dict__.items()
-                                   if not k.startswith('_')}
+                elif hasattr(result, "__dict__"):
+                    result_dict = {
+                        key: value
+                        for key, value in result.__dict__.items()
+                        if not key.startswith("_")
+                    }
                 else:
                     result_dict = result or {}
 
                 self.invocation_results[service_id] = result_dict
-                self.logger.info("Invocation result for %s: %s", service_id,
-                                 result_dict.get("status", "UNKNOWN"))
 
-            # Collect SDK evidence chain if available
-            if hasattr(sdk.sdk, 'evidence'):
+                # The SDK-generated invocation_id is the canonical runtime ID.
+                invocation_id = result_dict.get("invocation_id")
+
+                if not invocation_id:
+                    raise RuntimeError(
+                        f"SDK invocation for {service_id} returned no "
+                        "canonical invocation_id."
+                    )
+
+                self.invocation_contexts.append(
+                    {
+                        "service_id": service_id,
+                        "operation": operation,
+                        "invocation_id": invocation_id,
+                        "timestamp": time.time(),
+                    }
+                )
+
+                self.logger.info(
+                    "Invocation result for %s: %s; invocation_id=%s",
+                    service_id,
+                    result_dict.get("status", "UNKNOWN"),
+                    invocation_id,
+                )
+
+            # Collect SDK evidence chain if available.
+            if hasattr(sdk.sdk, "evidence"):
                 chain = sdk.sdk.evidence
-                if hasattr(chain, 'get_all'):
+
+                if hasattr(chain, "get_all"):
                     self.sdk_evidence_chain = chain.get_all()
-                elif hasattr(chain, '_evidence'):
+
+                elif hasattr(chain, "_evidence"):
                     self.sdk_evidence_chain = [
-                        e.to_dict() if hasattr(e, 'to_dict') else e.__dict__
+                        e.to_dict() if hasattr(e, "to_dict") else e.__dict__
                         for e in chain._evidence
                     ]
 
         except Exception as exc:
-            self.logger.warning("Capability invocation encountered error: %s", str(exc))
+            self.logger.warning(
+                "Capability invocation encountered error: %s",
+                str(exc),
+            )
+
             for participant in self.participants:
                 service_id = participant.participant.runtime_identity
+
                 if service_id not in self.invocation_results:
                     self.invocation_results[service_id] = {
                         "status": "ERROR",
@@ -434,46 +476,100 @@ class PlatformIntegrationService:
 
     def _record_telemetry(self):
         """
-        Record execution telemetry.
+        Record execution telemetry correlated with canonical runtime
+        invocation IDs returned by the Platform SDK.
         """
 
         telemetry = PlatformTelemetryAdapter()
 
-        trace_id = f"trace-{uuid.uuid4().hex[:12]}"
         contract_id = f"contract-{uuid.uuid4().hex[:12]}"
 
-        execution = telemetry.record_execution_trace(
-            trace_id,
-            "INSIGHTFLOW",
-            "execute",
-            {"participants": ["InsightFlow", "InsightBridge", "InsightCore"]},
-        )
+        execution_traces = []
+        opentelemetry_exports = []
+
+        for context in self.invocation_contexts:
+            trace_id = f"trace-{uuid.uuid4().hex[:12]}"
+
+            execution = telemetry.record_execution_trace(
+                trace_id,
+                context["service_id"],
+                context["operation"],
+                {
+                    "invocation_id": context["invocation_id"],
+                    "service_id": context["service_id"],
+                    "operation": context["operation"],
+                    "timestamp": context["timestamp"],
+                },
+            )
+
+            otel_export = telemetry.export_opentelemetry(trace_id)
+
+            execution_traces.append(
+                {
+                    "service_id": context["service_id"],
+                    "operation": context["operation"],
+                    "invocation_id": context["invocation_id"],
+                    "trace_id": trace_id,
+                    "timestamp": context["timestamp"],
+                    "execution_trace": execution,
+                }
+            )
+
+            opentelemetry_exports.append(
+                {
+                    "service_id": context["service_id"],
+                    "invocation_id": context["invocation_id"],
+                    "trace_id": trace_id,
+                    "result": otel_export,
+                }
+            )
 
         lineage = telemetry.record_contract_lineage(
             contract_id,
             "root-insight-contract",
-            {"layer": "Intelligence Layer", "version": "1.0.0"},
+            {
+                "layer": "Intelligence Layer",
+                "version": "1.0.0",
+            },
         )
 
         bridge_trace = telemetry.record_adapter_trace(
             "PlatformRuntimeAdapter",
             "invoke_capability",
-            {"route": "live_sdk"},
+            {
+                "route": "live_sdk",
+                "invocations": [
+                    {
+                        "service_id": context["service_id"],
+                        "invocation_id": context["invocation_id"],
+                    }
+                    for context in self.invocation_contexts
+                ],
+            },
         )
 
-        # Export opentelemetry for the main trace
-        otel_export = telemetry.export_opentelemetry(trace_id)
-
         self.telemetry_results = {
-            "trace_id": trace_id,
             "contract_id": contract_id,
-            "execution_trace": execution,
+            "execution_traces": execution_traces,
             "contract_lineage": lineage,
             "adapter_trace": bridge_trace,
-            "opentelemetry_export": otel_export,
+            "opentelemetry_exports": opentelemetry_exports,
+            "correlations": [
+                {
+                    "service_id": context["service_id"],
+                    "operation": context["operation"],
+                    "invocation_id": context["invocation_id"],
+                    "trace_id": execution_traces[index]["trace_id"],
+                    "timestamp": context["timestamp"],
+                }
+                for index, context in enumerate(self.invocation_contexts)
+            ],
         }
 
-        self.logger.info("Telemetry recorded for trace_id=%s", trace_id)
+        self.logger.info(
+            "Telemetry recorded for %d invocation(s).",
+            len(self.invocation_contexts),
+        )
 
 
     def _exercise_failure_paths(self):
@@ -625,7 +721,11 @@ class PlatformIntegrationService:
             "w",
         ) as file:
             json.dump({
-                "status": "DEPLOYED",
+                "status": (
+                    "DEPLOYED"
+                    if self.platform_health.get("status") == "UP"
+                    else "UNVERIFIED"
+                ),
                 "platform_health": self.platform_health,
                 "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S+00:00", time.gmtime())
             }, file, indent=2)
@@ -646,7 +746,7 @@ class PlatformIntegrationService:
                 f"- **Capability Invocation:** {len(self.invocation_results)} invocations attempted\n"
                 f"- **Health Checks:** {len(self.health_results)} services queried\n"
                 f"- **Version Negotiation:** {len(self.version_negotiation_results)} negotiations completed\n"
-                "- **Failure Paths:** SERVICE_NOT_FOUND and VERSION negotiation tested\n"
+                f"- **Failure Paths:** {', '.join(self.failure_results.keys())} tested\n"
             )
 
         # 10. invocation_proof/invocation_results.json
@@ -698,7 +798,16 @@ class PlatformIntegrationService:
         """
 
         return {
-            "status": "SUCCESS",
+            "status": (
+                "SUCCESS"
+                if self.platform_health.get("status") == "UP"
+                and all(
+                    result.get("status") == "SUCCESS"
+                    for result in self.invocation_results.values()
+                    if isinstance(result, dict)
+                )
+                else "PARTIAL_OR_FAILED"
+            ),
             "participants": len(self.participants),
             "registered": len(self.registration_results),
             "capabilities": len(self.capability_results),

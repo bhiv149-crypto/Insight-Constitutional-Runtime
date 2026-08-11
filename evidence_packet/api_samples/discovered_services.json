@@ -9,11 +9,11 @@
       "team": "Insight Stack",
       "contact": "insight-runtime@bhiv.internal"
     },
-    "runtime_type": "Constitutional Runtime Participant",
+    "runtime_type": "PROCESS",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T12:04:01.385126+00:00",
+    "registration_timestamp": "2026-08-11T11:23:17.685134+00:00",
     "description": "InsightFlow Runtime Participant",
     "tags": [
       "insight",
@@ -22,7 +22,6 @@
     ],
     "endpoints": {
       "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
-      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
       "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
     },
     "dependencies": [
@@ -37,47 +36,63 @@
     "capability_id": "insightbridge.runtime.intelligence.v1",
     "service_name": "InsightBridge",
     "version": "1.0.2",
-    "provider": "Generic Provider",
-    "owner": {},
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
     "runtime_type": "PROCESS",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T12:59:11.305426+00:00",
-    "description": "",
+    "registration_timestamp": "2026-08-11T11:39:13.834647+00:00",
+    "description": "InsightBridge Runtime Participant",
     "tags": [
       "insight",
       "runtime",
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
       "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "QuantumCommunicationGateway"
+    ]
   },
   {
     "platform_service_id": "insightcore.runtime.intelligence.v1",
     "capability_id": "insightcore.runtime.intelligence.v1",
     "service_name": "InsightCore",
     "version": "1.0.2",
-    "provider": "Generic Provider",
-    "owner": {},
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
     "runtime_type": "PROCESS",
     "service_classification": "DOMAIN_SERVICE",
     "capability_category": "INTELLIGENCE",
     "status": "ACTIVE",
-    "registration_timestamp": "2026-08-10T12:59:12.013764+00:00",
-    "description": "",
+    "registration_timestamp": "2026-08-11T11:39:14.081051+00:00",
+    "description": "InsightCore Runtime Participant",
     "tags": [
       "insight",
       "runtime",
       "constitutional"
     ],
     "endpoints": {
-      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
       "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
     },
-    "dependencies": []
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "ReplayRegistry"
+    ]
   }
 ]
