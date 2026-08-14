@@ -10,6 +10,7 @@ This module only constructs registration payloads.
 It performs no network communication.
 """
 
+
 import os
 
 from src.common.models import RuntimeParticipant

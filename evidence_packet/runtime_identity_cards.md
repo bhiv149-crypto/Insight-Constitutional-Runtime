@@ -1,9 +1,9 @@
 # Insight Stack — Runtime Identity Cards
 
-**Live Integration Version**: 1.1.0  
-**Convergence Release**: Live Runtime Convergence — 2026-08-10  
+**Live Integration Version**: 1.0.2  
+**Convergence Release**: Live Runtime Convergence — 2026-08-14  
 **Platform**: BHIV Constitutional Platform Runtime (https://bhiv-qcg.onrender.com)  
-**All Three Participants**: REGISTERED + ACTIVE
+**All Three Participants**: 🟢 LIVE VERIFIED — Registered, Discoverable, Executable
 
 ---
 
@@ -13,7 +13,7 @@
 |---|---|
 | **Participant Name** | InsightFlow |
 | **Runtime Identity** | `insightflow.runtime.intelligence.v1` |
-| **Version** | 1.1.0 |
+| **Version** | 1.0.2 |
 | **Layer** | Intelligence Layer |
 | **Runtime Type** | Constitutional Runtime Participant |
 | **Status** | ACTIVE |
@@ -26,8 +26,8 @@
 | **Owner Contact** | insight-runtime@bhiv.internal |
 | **Capabilities** | workflow_orchestration, capability_invocation, trace_generation, evidence_generation |
 | **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, PlatformRegistry, RuntimeCore |
-| **Contract Version** | v1.1.0 |
-| **Certification** | CERTIFIED — 2026-08-10 |
+| **Contract Version** | v1.0.2 |
+| **Certification** | INTEGRATED — 2026-08-14 |
 
 ---
 
@@ -37,7 +37,7 @@
 |---|---|
 | **Participant Name** | InsightBridge |
 | **Runtime Identity** | `insightbridge.runtime.intelligence.v1` |
-| **Version** | 1.1.0 |
+| **Version** | 1.0.2 |
 | **Layer** | Intelligence Layer |
 | **Runtime Type** | Constitutional Runtime Participant |
 | **Status** | ACTIVE |
@@ -50,8 +50,8 @@
 | **Owner Contact** | insight-runtime@bhiv.internal |
 | **Capabilities** | runtime_bridge, trace_propagation, event_forwarding |
 | **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, RuntimeCore, QuantumCommunicationGateway |
-| **Contract Version** | v1.1.0 |
-| **Certification** | CERTIFIED — 2026-08-10 |
+| **Contract Version** | v1.0.2 |
+| **Certification** | INTEGRATED — 2026-08-14 |
 
 ---
 
@@ -61,7 +61,7 @@
 |---|---|
 | **Participant Name** | InsightCore |
 | **Runtime Identity** | `insightcore.runtime.intelligence.v1` |
-| **Version** | 1.1.0 |
+| **Version** | 1.0.2 |
 | **Layer** | Intelligence Layer |
 | **Runtime Type** | Constitutional Runtime Participant |
 | **Status** | ACTIVE |
@@ -74,8 +74,8 @@
 | **Owner Contact** | insight-runtime@bhiv.internal |
 | **Capabilities** | intelligence_processing, knowledge_contribution, runtime_analysis |
 | **Platform Dependencies** | PlatformCapabilitySDK, PlatformDiscovery, RuntimeCore, ReplayRegistry |
-| **Contract Version** | v1.1.0 |
-| **Certification** | CERTIFIED — 2026-08-10 |
+| **Contract Version** | v1.0.2 |
+| **Certification** | INTEGRATED — 2026-08-14 |
 
 ---
 

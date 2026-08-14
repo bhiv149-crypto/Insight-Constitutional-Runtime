@@ -76,7 +76,7 @@ Uses Heartbeat Manager.
 
 # Observability
 
-Uses OpenTelemetry Trace Store.
+InsightFlow uses the Platform Telemetry Adapter. The current backend is a local development stub (`src/platform/stubs.py`). No live telemetry backend is configured or reachable. OpenTelemetry export methods exist but return local dictionaries only.
 
 ---
 

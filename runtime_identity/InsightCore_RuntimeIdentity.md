@@ -8,8 +8,8 @@
 | Constitutional Layer | Intelligence Layer |
 | Runtime Type | Constitutional Runtime Participant |
 | Permanent Runtime Identity | insightcore.runtime.intelligence.v1 |
-| Current Version | v1.0.0 |
-| Status |Implemented – Pending External Runtime Validation|
+| Current Version | v1.0.2 |
+| Status | 🟢 LIVE VERIFIED — Registered, Discoverable, Executable |
 
 ---
 
@@ -125,13 +125,13 @@ Registers through the Platform Service Registry and publishes runtime capabiliti
 
 # Replay Participation
 
-Participates in deterministic replay using the existing Replay Registry.
+Participates in deterministic replay using the existing Replay Registry. Canonical replay reconstruction via QCG is NOT YET VERIFIED — the lineage endpoint returns 404 and `PlatformReplayAdapter.submit()` is not implemented.
 
 ---
 
 # Observability Model
 
-Publishes distributed traces, metrics, structured logs, and execution telemetry through the existing observability platform.
+Publishes distributed traces, metrics, structured logs, and execution telemetry through the Platform Telemetry Adapter. The current backend is a local development stub (`src/platform/stubs.py`). No live telemetry backend is configured or reachable. Methods return local dictionaries only.
 
 ---
 
@@ -155,10 +155,7 @@ Supports registry-managed version compatibility through the Platform Capability 
 
 # Production Certification Status
 
-Repository implementation completed.
-
-Pending:
-
-- Platform Runtime deployment
-- Runtime validation against live services
-- Production certification
+🟢 LIVE VERIFIED: Registration, discovery, version negotiation, SDK invocation, direct execution, health.
+🔴 NOT VERIFIED: Canonical replay reconstruction.
+⚪ NOT EXPOSED: Live telemetry export.
+🟡 EXTERNAL DEPENDENCY: Production certification pending platform/governance requirements.

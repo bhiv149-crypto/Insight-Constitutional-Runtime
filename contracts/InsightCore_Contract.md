@@ -7,8 +7,8 @@
 | Participant | InsightCore |
 | Constitutional Layer | Intelligence Layer |
 | Runtime Identity | insightcore.runtime.intelligence.v1 |
-| Contract Version | v1.1.0 |
-| Convergence Release | Live Runtime Convergence — 2026-08-10 |
+| Contract Version | v1.0.2 |
+| Convergence Release | Live Runtime Convergence — 2026-08-14 |
 
 ---
 
@@ -89,12 +89,12 @@ InsightCore participates in the Constitutional Runtime by providing intelligence
 
 # Certification Status
 
-**CERTIFIED** — Live Runtime Convergence verified 2026-08-10.
+**INTEGRATED** — Live runtime integration verified 2026-08-14.
 
-- Platform Runtime registration: VERIFIED
-- Capability discovery: VERIFIED
-- Canonical invocation: VERIFIED
-- Replay deduplication: VERIFIED
-- Telemetry/observability: VERIFIED
-- Failure-path behaviour: VERIFIED
-- Version negotiation: VERIFIED
+- Platform Runtime registration: 🟢 LIVE VERIFIED
+- Capability discovery: 🟢 LIVE VERIFIED
+- Canonical invocation (SDK + direct): 🟢 LIVE VERIFIED
+- Replay deduplication: 🔴 NOT VERIFIED — canonical endpoint returns 404; adapter missing submit()
+- Telemetry/observability: ⚪ NOT EXPOSED — local stub TraceStore only
+- Failure-path behaviour: 🟢 LIVE VERIFIED (SERVICE_NOT_FOUND, VERSION_REJECTED, INVALID_OP)
+- Version negotiation: 🟢 LIVE VERIFIED

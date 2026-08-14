@@ -18,14 +18,14 @@ All notable changes to the **Insight Constitutional Runtime Integration** projec
 * **Network Fault Tolerance**: Added resilient fallback mechanisms and fast timeouts (`timeout=3`) in `LivePlatformClient` to handle cloud network latency.
 
 ### Validated
-* **Internal Test Suite**: Verified 100% pass rate (**12 passed**) in automated test suite.
-* **Replay Safety**: Verified deduplication and replay sequence validation via `CanonicalReplayAuthority`.
-* **Telemetry Propagation**: Verified execution trace recording and OpenTelemetry trace continuity.
+* **Internal Test Suite**: Verified pass rate in automated test suite. Contract tests: 12/12 passed. Live platform tests: 2/2 passed when QCG reachable; flaky due to network timeouts. Integration readiness: 17/17 passed.
+* **Replay Safety**: Local stub `CanonicalReplayAuthority` provides in-memory deduplication. Canonical QCG replay lineage endpoint returns 404; `PlatformReplayAdapter.submit()` is not yet implemented. Canonical replay reconstruction is NOT verified.
+* **Telemetry Propagation**: `PlatformTelemetryAdapter` uses local stub `TraceStore`. No live telemetry backend is configured. OpenTelemetry export is NOT live — methods return local dictionaries only.
 
 ### Integrated
-* **Live Server Connectivity**: Successfully integrated with live platform server `https://bhiv-qcg.onrender.com`.
+* **Live Server Connectivity**: Successfully integrated with live platform server `https://bhiv-qcg.onrender.com` for registration, discovery, health, and invocation.
 * **Live Service Registration**: Registered `InsightFlow`, `InsightBridge`, and `InsightCore` with `HTTP 200 OK` responses.
-* **Live Capability Discovery**: Discovered all 3 active services via `GET /registry/capabilities/capabilities`.
+* **Live Capability Discovery**: Discovered all 3 active services via `GET /registry/platform/v1/services` and `GET /registry/capabilities/capabilities`.
 
 ### Evidence
 * **Evidence Packet**: Compiled `review_packet.md`, `runtime_identity_cards.md`, `certification_report.md`, and `executive_assessment.md` in `evidence_packet/`.

@@ -1,0 +1,6 @@
+{
+  "endpoint": "Unknown",
+  "status_code": 500,
+  "exception": "'PlatformReplayAdapter' object has no attribute 'submit'",
+  "timestamp": "2026-08-14T11:46:09.427583+00:00"
+}

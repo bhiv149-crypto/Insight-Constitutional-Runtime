@@ -1,7 +1,7 @@
 # Insight Stack — Convergence Dependency Map
 
-**Version**: 1.1.0  
-**Release**: Live Runtime Convergence — 2026-08-10
+**Version**: 1.0.2  
+**Release**: Live Runtime Convergence — 2026-08-14
 
 ---
 

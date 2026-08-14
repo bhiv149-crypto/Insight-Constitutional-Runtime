@@ -1,78 +1,142 @@
 """
 Platform Replay Adapter
 
-Thin wrapper around the Constitutional Runtime Replay system.
+Thin wrapper around the live QCG Constitutional Runtime Replay API.
 
 Insight Runtime does not implement replay logic.
-It delegates replay validation to the Platform Runtime.
+Replay authority remains owned by the Platform/QCG Runtime.
+
+This adapter only communicates with the live replay API and does
+not maintain a local replay registry.
 """
 
-from src.platform.imports import (
-    ReplayRegistry,
-    CanonicalReplayAuthority,
-)
+import requests
 
 
 class PlatformReplayAdapter:
     """
-    Thin wrapper around Platform Replay services.
+    Adapter for the live Platform/QCG Replay Authority.
+
+    The adapter does not own replay state.
+    It queries the canonical replay authority exposed by QCG.
     """
 
-    def __init__(self, registry=None, authority=None):
-        self.registry = registry or ReplayRegistry(
-            path="replay_registry.json",
-            ttl_seconds=300.0,
+    DEFAULT_BASE_URL = "https://bhiv-qcg.onrender.com"
+
+    def __init__(self, base_url=None, timeout=10):
+        self.base_url = (
+            base_url or self.DEFAULT_BASE_URL
+        ).rstrip("/")
+        self.timeout = timeout
+
+    # ---------------------------------------------------------
+    # Live Replay Lineage
+    # ---------------------------------------------------------
+
+    def lookup(self, trace_id):
+        """
+        Retrieve replay lineage from the live QCG replay authority.
+
+        This is a read operation. It does not create replay state.
+        """
+
+        if not trace_id:
+            raise ValueError("trace_id is required")
+
+        url = f"{self.base_url}/qcg/replay/lineage/{trace_id}"
+
+        response = requests.get(
+            url,
+            timeout=self.timeout,
+            headers={
+                "Accept": "application/json",
+            },
         )
 
-        self.authority = authority or CanonicalReplayAuthority(
-            registry=self.registry
-        )
+        if response.status_code == 404:
+            return {
+                "status": "NOT_FOUND",
+                "trace_id": trace_id,
+                "http_status": 404,
+                "response": response.json(),
+            }
 
-    def submit(
-        self,
-        message_id,
-        issued_at,
-        trace_reference,
-    ):
-        """
-        Submit a message for replay validation.
-        """
-        return self.authority.submit(
-            message_id=message_id,
-            issued_at=issued_at,
-            trace_reference=trace_reference,
-        )
+        response.raise_for_status()
+
+        data = response.json()
+
+        return {
+            "status": "FOUND",
+            "trace_id": trace_id,
+            "http_status": response.status_code,
+            "response": data,
+        }
+
+    # ---------------------------------------------------------
+    # Replay Validation
+    # ---------------------------------------------------------
 
     def validate(
         self,
         message_id,
-        issued_at,
-        trace_reference,
+        issued_at=None,
+        trace_reference=None,
     ):
         """
-        Convenience wrapper.
-        """
-        verdict = self.submit(
-            message_id,
-            issued_at,
-            trace_reference,
-        )
+        Validate replay state using the live QCG replay lineage API.
 
-        return verdict.is_valid
+        Note:
+            The live lineage endpoint is a lookup endpoint.
+            It does not submit a new replay event.
+
+        Returns True only when a replay record is found.
+        """
+
+        trace_id = trace_reference or message_id
+
+        result = self.lookup(trace_id)
+
+        return result["status"] == "FOUND"
+
+    # ---------------------------------------------------------
+    # Replay Sequence
+    # ---------------------------------------------------------
 
     def get_sequence(
         self,
         message_id,
-        issued_at,
-        trace_reference,
+        issued_at=None,
+        trace_reference=None,
     ):
         """
-        Return replay sequence number.
+        Retrieve the canonical replay sequence number
+        from the live QCG replay authority.
         """
-        verdict = self.submit(
-            message_id,
-            issued_at,
-            trace_reference,
-        )
 
-        return verdict.sequence_number
+        trace_id = trace_reference or message_id
+
+        result = self.lookup(trace_id)
+
+        if result["status"] != "FOUND":
+            return None
+
+        verdict = result["response"].get("verdict", {})
+
+        return verdict.get("sequence_number")
+
+    # ---------------------------------------------------------
+    # Raw Replay Verdict
+    # ---------------------------------------------------------
+
+    def get_verdict(self, trace_id):
+        """
+        Return the complete canonical replay verdict
+        returned by the live QCG runtime.
+        """
+
+        result = self.lookup(trace_id)
+
+        if result["status"] != "FOUND":
+            return result
+
+        return result["response"].get("verdict")

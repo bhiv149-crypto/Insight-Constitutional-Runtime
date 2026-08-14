@@ -1,7 +1,7 @@
 # Insight Stack — Integration Map
 
-**Version**: 1.1.0  
-**Release**: Live Runtime Convergence — 2026-08-10
+**Version**: 1.0.2  
+**Release**: Live Runtime Convergence — 2026-08-14
 
 ---
 
@@ -67,18 +67,18 @@
 │  │  RegistryAdapter → LivePlatformClient                    │  │
 │  │  DiscoveryAdapter → SDK discover_services()              │  │
 │  │  HealthAdapter → SDK check_health() + Registry health    │  │
-│  │  ReplayAdapter → CanonicalReplayAuthority                │  │
-│  │  TelemetryAdapter → TraceStore                           │  │
+│  │  ReplayAdapter → QCG Replay Lineage (BLOCKED: 404 / submit() missing)  │  │
+│  │  TelemetryAdapter → TraceStore (LOCAL STUB ONLY)         │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Integration Workflow (Convergence Runner)
+## Integration Workflow (PlatformIntegrationService)
 
 ```
-run_convergence.py
+PlatformIntegrationService.integrate()
     │
     ├── 1. _create_participants()
     │       → InsightFlowParticipant()
@@ -110,16 +110,17 @@ run_convergence.py
     │       → PlatformSDKAdapter.check_health()
     │
     ├── 8. _validate_replay()
-    │       → PlatformReplayAdapter.submit() × 2
-    │       → VALID → DUPLICATE
+    │       → 🔴 BLOCKED: PlatformReplayAdapter.submit() missing
+    │       → QCG /qcg/replay/lineage/{trace_id} returns 404
     │
     ├── 9. _record_telemetry()
     │       → PlatformTelemetryAdapter.record_*()
+    │       → ⚪ LOCAL STUB ONLY: TraceStore returns local dictionaries
     │
     ├── 10. _exercise_failure_paths()
     │        → Invoke ghost service → SERVICE_NOT_FOUND
-    │        → Negotiate v999.0.0 → UNREACHABLE/UNSUPPORTED
-    │        → Invoke invalid_operation → INVALID_OP
+    │        → Negotiate v999.0.0 → UNSUPPORTED
+    │        → Invoke invalid_operation → FAILED/INVALID_OP
     │
     └── 11. _generate_evidence()
              → Write all JSON evidence files

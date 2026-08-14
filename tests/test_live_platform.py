@@ -1,23 +1,29 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.platform.live_platform_client import LivePlatformClient
 
-client = LivePlatformClient()
 
-print("=" * 60)
-print("SERVER HEALTH")
-print("=" * 60)
+@pytest.fixture
+def client():
+    return LivePlatformClient()
 
-print(client.server_health())
 
-print()
+def test_server_health(client):
+    result = client.server_health()
 
-print("=" * 60)
-print("SERVICES")
-print("=" * 60)
+    assert isinstance(result, dict)
+    assert result.get("status") == "UP"
 
-print(client.list_services())
+
+def test_list_services(client):
+    result = client.list_services()
+
+    assert isinstance(result, dict)
+    assert "services" in result
+    assert "count" in result

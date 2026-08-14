@@ -4,6 +4,9 @@ Platform Runtime configuration.
 Values mirror the Platform Runtime configuration and may be
 overridden during deployment.
 """
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from src.platform.imports import create_trust_provider
 

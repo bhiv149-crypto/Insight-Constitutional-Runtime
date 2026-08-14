@@ -217,23 +217,24 @@ sequenceDiagram
 
 ```json
 {
-  "status": "SUCCESS",
+  "status": "PARTIAL",
   "participants": 3,
   "registered": 3,
   "capabilities": 3,
-  "discovered": 3,
+  "discovered": 4,
   "platform_health": {
     "status": "UP",
     "version": "2.0.0"
   },
   "replay": {
-    "submission_1": {"status": "VALID", "sequence": 1},
-    "submission_2": {"status": "VALID", "sequence": 1}
+    "status": "BLOCKED",
+    "reason": "QCG lineage endpoint returns 404; PlatformReplayAdapter.submit() missing"
   },
   "telemetry": {
-    "execution_trace": {"status": "RECORDED", "trace_id": "trace-001"}
+    "status": "LOCAL_STUB_ONLY",
+    "reason": "TraceStore is a local development stub; no live backend configured"
   }
 }
 ```
 
-*Note: Validation depends on the availability of the shared BHIV Constitutional Runtime services.*
+*Note: Registration, discovery, negotiation, invocation, execution, and health are live and verified. Replay and telemetry are blocked by external dependencies. Validation depends on the availability of the shared BHIV Constitutional Runtime services.*

@@ -520,15 +520,38 @@ class LivePlatformClient:
 
     def discover_capability(
         self,
-        capability_name: str,
+        discovery_name: str,
     ) -> dict:
-        """Discover a capability from the live Capability Registry."""
+        """
+        Discover a capability using the Platform discovery name.
+
+        The discovery name is NOT the full runtime identity.
+
+        Examples:
+            insightflow
+            insightbridge
+            insightcore
+
+        Platform discovery endpoint:
+            GET /registry/capabilities/discover/{discovery_name}
+
+        Example runtime identity:
+            insightflow.runtime.intelligence.v1
+
+        The runtime identity and discovery name are separate identifiers.
+        """
+
+        if not discovery_name or not discovery_name.strip():
+            raise ValueError(
+                "discovery_name is required for capability discovery."
+            )
+
+        discovery_name = discovery_name.strip()
 
         response = requests.get(
-            f"{self.capability}/discover/{capability_name}",
+            f"{self.capability}/discover/{discovery_name}",
             timeout=self.DEFAULT_TIMEOUT,
         )
 
         response.raise_for_status()
-
         return response.json()

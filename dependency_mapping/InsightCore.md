@@ -83,7 +83,7 @@ Uses the existing Heartbeat Manager for lease renewal and runtime health monitor
 
 # Observability
 
-Publishes execution traces through the existing OpenTelemetry-based observability infrastructure.
+InsightCore uses the Platform Telemetry Adapter. The current backend is a local development stub (`src/platform/stubs.py`). No live telemetry backend is configured or reachable. OpenTelemetry export methods exist but return local dictionaries only.
 
 ---
 

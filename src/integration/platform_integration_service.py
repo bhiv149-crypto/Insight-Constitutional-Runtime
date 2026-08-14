@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import time
 import uuid
+import logging
 
 from src.platform.live_platform_client import LivePlatformClient
 
@@ -54,6 +55,7 @@ class PlatformIntegrationService:
         self.client = LivePlatformClient()
 
         self.participants = []
+        self._create_participants()
 
         self.registration_results = {}
 
@@ -79,7 +81,9 @@ class PlatformIntegrationService:
 
         self.runtime_records = []
         self.capability_manifests = []
-        self.logger = None
+
+        self.logger = logging.getLogger("platform_integration")
+        self.logger.setLevel(logging.INFO)
 
 
     def integrate(self):
@@ -179,8 +183,10 @@ class PlatformIntegrationService:
 
     def _create_participants(self):
         """
-        Instantiate all Insight Runtime participants.
+        Create the canonical Insight participant set exactly once.
         """
+        if self.participants:
+            return self.participants
 
         self.participants = [
             InsightFlowParticipant(),
@@ -188,12 +194,24 @@ class PlatformIntegrationService:
             InsightCoreParticipant(),
         ]
 
+        return self.participants
+
+    def _require_participants(self):
+        """
+        Fail explicitly if lifecycle execution has no participants.
+        """
+        if not self.participants:
+            raise RuntimeError(
+                "No Insight participants initialized. "
+                "Participant creation must occur before this lifecycle stage."
+            )
 
     def _register_runtime(self):
         """
         Register all Insight Runtime participants
         with the live Platform Runtime.
         """
+        self._require_participants()
 
         for participant in self.participants:
 
@@ -214,6 +232,7 @@ class PlatformIntegrationService:
         """
         Register participant capabilities.
         """
+        self._require_participants()
 
         for participant in self.participants:
 
@@ -236,6 +255,7 @@ class PlatformIntegrationService:
         """
         Retrieve registered runtime participants.
         """
+        self._require_participants()
 
         response = self.client.list_services()
 
@@ -255,6 +275,7 @@ class PlatformIntegrationService:
         """
         Negotiate versions for all three participants via the Platform SDK.
         """
+        self._require_participants()
         try:
             from src.platform.sdk_adapter import PlatformSDKAdapter
             sdk = PlatformSDKAdapter()
@@ -295,6 +316,7 @@ class PlatformIntegrationService:
         The Platform SDK owns the canonical invocation_id. This method
         captures that returned ID and preserves it for telemetry correlation.
         """
+        self._require_participants()
         try:
             from src.platform.sdk_adapter import PlatformSDKAdapter
 
@@ -395,6 +417,7 @@ class PlatformIntegrationService:
         """
         Query health status for all registered participants via the SDK.
         """
+        self._require_participants()
         try:
             from src.platform.sdk_adapter import PlatformSDKAdapter
             sdk = PlatformSDKAdapter()
@@ -795,25 +818,107 @@ class PlatformIntegrationService:
     def _build_response(self):
         """
         Build the final integration summary.
+
+        Overall SUCCESS is allowed only when every required lifecycle
+        stage has produced a successful/valid result.
         """
 
+        registration_ok = (
+            len(self.registration_results) == len(self.participants)
+            and all(
+                isinstance(result, dict)
+                and result.get("status") in {
+                    "REGISTERED",
+                    "ALREADY_REGISTERED",
+                    "SUCCESS",
+                }
+                for result in self.registration_results.values()
+            )
+        )
+
+        capability_ok = (
+            len(self.capability_results) == len(self.participants)
+            and all(
+                isinstance(result, dict)
+                and result.get("status") in {
+                    "REGISTERED",
+                    "ALREADY_REGISTERED",
+                    "SUCCESS",
+                }
+                for result in self.capability_results.values()
+            )
+        )
+
+        discovery_ok = (
+            len(self.discovered_services) >= len(self.participants)
+        )
+
+        negotiation_ok = (
+            len(self.version_negotiation_results) == len(self.participants)
+            and all(
+                isinstance(result, dict)
+                and result.get("status") in {
+                    "COMPATIBLE",
+                    "SUCCESS",
+                }
+                for result in self.version_negotiation_results.values()
+            )
+        )
+
+        invocation_ok = (
+            len(self.invocation_results) == len(self.participants)
+            and all(
+                isinstance(result, dict)
+                and result.get("status") == "SUCCESS"
+                for result in self.invocation_results.values()
+            )
+        )
+
+        health_ok = (
+            len(self.health_results) == len(self.participants)
+            and all(
+                isinstance(result, dict)
+                and result.get("status") in {"UP", "HEALTHY", "SUCCESS"}
+                for result in self.health_results.values()
+            )
+        )
+
+        replay_ok = (
+            isinstance(self.replay_results, dict)
+            and self.replay_results.get("submission_1", {}).get("status") == "VALID"
+            and self.replay_results.get("submission_2", {}).get("status") == "DUPLICATE"
+        )
+
+        telemetry_ok = bool(self.telemetry_results)
+
+        platform_ok = (
+            isinstance(getattr(self, "platform_health", None), dict)
+            and self.platform_health.get("status") == "UP"
+        )
+
+        stage_status = {
+            "platform_health": platform_ok,
+            "registration": registration_ok,
+            "capability_registration": capability_ok,
+            "discovery": discovery_ok,
+            "version_negotiation": negotiation_ok,
+            "invocation": invocation_ok,
+            "health": health_ok,
+            "replay": replay_ok,
+            "telemetry": telemetry_ok,
+        }
+
+        overall_success = all(stage_status.values())
+
         return {
-            "status": (
-                "SUCCESS"
-                if self.platform_health.get("status") == "UP"
-                and all(
-                    result.get("status") == "SUCCESS"
-                    for result in self.invocation_results.values()
-                    if isinstance(result, dict)
-                )
-                else "PARTIAL_OR_FAILED"
-            ),
+            "status": "SUCCESS" if overall_success else "PARTIAL_OR_FAILED",
+            "stage_status": stage_status,
             "participants": len(self.participants),
             "registered": len(self.registration_results),
             "capabilities": len(self.capability_results),
             "discovered": len(self.discovered_services),
             "invocations": len(self.invocation_results),
-            "platform_health": self.platform_health,
+            "platform_health": getattr(self, "platform_health", {}),
             "version_negotiation": self.version_negotiation_results,
             "health_checks": self.health_results,
             "replay": self.replay_results,
