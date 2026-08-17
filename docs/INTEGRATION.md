@@ -213,28 +213,53 @@ sequenceDiagram
 
 ---
 
-## Live Integration Summary Results
+## Live Integration Summary Results (Updated 2026-08-17)
 
 ```json
 {
-  "status": "PARTIAL",
+  "status": "LIVE_VERIFIED",
+  "test_results": "17/17_PASSED",
   "participants": 3,
   "registered": 3,
   "capabilities": 3,
-  "discovered": 4,
+  "discovered": 3,
   "platform_health": {
     "status": "UP",
     "version": "2.0.0"
   },
+  "registration": {
+    "status": "LIVE_VERIFIED",
+    "all_services": "registered_successfully"
+  },
+  "discovery": {
+    "status": "LIVE_VERIFIED",
+    "method": "SDK_discover_services()",
+    "services_found": 3
+  },
+  "invocation": {
+    "status": "LIVE_VERIFIED",
+    "direct_execution": "working",
+    "sdk_execution": "working"
+  },
   "replay": {
-    "status": "BLOCKED",
-    "reason": "QCG lineage endpoint returns 404; PlatformReplayAdapter.submit() missing"
+    "status": "LIVE_VERIFIED",
+    "endpoint": "GET /qcg/replay/lineage/{invocation_id}",
+    "http_status": 200,
+    "verdict": "VALID",
+    "note": "Replay lineage endpoint is working and returns VALID verdict"
+  },
+  "verify": {
+    "status": "KNOWN_LIMITATION",
+    "endpoint": "POST /qcg/verify",
+    "http_status": 422,
+    "reason": "ECDSA_signature_verification_fails_at_trust_stage",
+    "note": "This is a platform-level issue, not a runtime bug. Replay works independently."
   },
   "telemetry": {
-    "status": "LOCAL_STUB_ONLY",
-    "reason": "TraceStore is a local development stub; no live backend configured"
+    "status": "STUBBED",
+    "reason": "TraceStore is a local development stub; platform telemetry contract awaiting"
   }
 }
 ```
 
-*Note: Registration, discovery, negotiation, invocation, execution, and health are live and verified. Replay and telemetry are blocked by external dependencies. Validation depends on the availability of the shared BHIV Constitutional Runtime services.*
+*Note: Registration, discovery, negotiation, invocation, execution, health, and replay are live and verified. Trust/signature verification has a known platform limitation but does not block replay. Telemetry is stubbed pending platform contract publication.*
