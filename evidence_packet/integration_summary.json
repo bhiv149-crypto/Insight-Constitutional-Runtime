@@ -1,5 +1,16 @@
 {
-  "status": "SUCCESS",
+  "status": "PARTIAL_OR_FAILED",
+  "stage_status": {
+    "platform_health": true,
+    "registration": true,
+    "capability_registration": true,
+    "discovery": true,
+    "version_negotiation": true,
+    "invocation": true,
+    "health": true,
+    "replay": false,
+    "telemetry": true
+  },
   "participants": 3,
   "registered": 3,
   "capabilities": 3,
@@ -8,8 +19,8 @@
   "platform_health": {
     "status": "UP",
     "version": "2.0.0",
-    "uptime_seconds": 9021.11,
-    "total_requests": 156,
+    "uptime_seconds": 1126.91,
+    "total_requests": 90,
     "registry_version": "1.0.0"
   },
   "version_negotiation": {
@@ -20,7 +31,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-11T13:04:02.104170+00:00"
+      "timestamp": "2026-08-18T08:29:01.850567+00:00"
     },
     "insightbridge.runtime.intelligence.v1": {
       "service_id": "insightbridge.runtime.intelligence.v1",
@@ -29,7 +40,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-11T13:04:02.371133+00:00"
+      "timestamp": "2026-08-18T08:29:02.151934+00:00"
     },
     "insightcore.runtime.intelligence.v1": {
       "service_id": "insightcore.runtime.intelligence.v1",
@@ -38,7 +49,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-11T13:04:02.643587+00:00"
+      "timestamp": "2026-08-18T08:29:02.981147+00:00"
     }
   },
   "health_checks": {
@@ -48,7 +59,7 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-11T13:04:05.846212+00:00"
+      "timestamp": "2026-08-18T08:29:05.725118+00:00"
     },
     "insightbridge.runtime.intelligence.v1": {
       "service_id": "insightbridge.runtime.intelligence.v1",
@@ -56,7 +67,7 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-11T13:04:06.105791+00:00"
+      "timestamp": "2026-08-18T08:29:05.976355+00:00"
     },
     "insightcore.runtime.intelligence.v1": {
       "service_id": "insightcore.runtime.intelligence.v1",
@@ -64,85 +75,79 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-11T13:04:06.361597+00:00"
+      "timestamp": "2026-08-18T08:29:06.774256+00:00"
     }
   },
   "replay": {
-    "message_id": "msg-insight-2ed08422",
-    "trace_reference": "trace-insight-6b21143f",
-    "submission_1": {
-      "status": "VALID",
-      "sequence": 1,
-      "is_valid": true,
-      "reason": ""
-    },
-    "submission_2": {
-      "status": "DUPLICATE",
-      "sequence": 0,
-      "is_valid": false,
-      "reason": "message_id 'msg-insight-2ed08422' has already been processed"
+    "status": "NOT_FOUND",
+    "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+    "trace_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+    "http_status": 404,
+    "verdict": {},
+    "response": {
+      "detail": "Trace ID not found in replay registry"
     }
   },
   "telemetry": {
-    "contract_id": "contract-e1d54ce4ffae",
+    "contract_id": "contract-5d7d759fe551",
     "execution_traces": [
       {
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
-        "trace_id": "trace-d3355e198f80",
-        "timestamp": 1786453443.4378753,
+        "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c",
+        "trace_id": "trace-be6ce3b27239",
+        "timestamp": 1787041743.590767,
         "execution_trace": {
           "status": "RECORDED",
           "type": "execution_trace",
-          "trace_id": "trace-d3355e198f80",
+          "trace_id": "trace-be6ce3b27239",
           "participant": "insightflow.runtime.intelligence.v1",
           "operation": "execute",
           "metadata": {
-            "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
+            "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c",
             "service_id": "insightflow.runtime.intelligence.v1",
             "operation": "execute",
-            "timestamp": 1786453443.4378753
+            "timestamp": 1787041743.590767
           }
         }
       },
       {
         "service_id": "insightbridge.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
-        "trace_id": "trace-a10190d9edf3",
-        "timestamp": 1786453444.8133564,
+        "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7",
+        "trace_id": "trace-2364a84587b2",
+        "timestamp": 1787041744.2296915,
         "execution_trace": {
           "status": "RECORDED",
           "type": "execution_trace",
-          "trace_id": "trace-a10190d9edf3",
+          "trace_id": "trace-2364a84587b2",
           "participant": "insightbridge.runtime.intelligence.v1",
           "operation": "execute",
           "metadata": {
-            "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
+            "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7",
             "service_id": "insightbridge.runtime.intelligence.v1",
             "operation": "execute",
-            "timestamp": 1786453444.8133564
+            "timestamp": 1787041744.2296915
           }
         }
       },
       {
         "service_id": "insightcore.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
-        "trace_id": "trace-9dfcd44aa4ba",
-        "timestamp": 1786453445.5673678,
+        "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+        "trace_id": "trace-a9b1ba3ad6f4",
+        "timestamp": 1787041745.4583807,
         "execution_trace": {
           "status": "RECORDED",
           "type": "execution_trace",
-          "trace_id": "trace-9dfcd44aa4ba",
+          "trace_id": "trace-a9b1ba3ad6f4",
           "participant": "insightcore.runtime.intelligence.v1",
           "operation": "execute",
           "metadata": {
-            "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
+            "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
             "service_id": "insightcore.runtime.intelligence.v1",
             "operation": "execute",
-            "timestamp": 1786453445.5673678
+            "timestamp": 1787041745.4583807
           }
         }
       }
@@ -150,7 +155,7 @@
     "contract_lineage": {
       "status": "RECORDED",
       "type": "contract_lineage",
-      "contract_id": "contract-e1d54ce4ffae",
+      "contract_id": "contract-5d7d759fe551",
       "parent_contract": "root-insight-contract",
       "metadata": {
         "layer": "Intelligence Layer",
@@ -167,15 +172,15 @@
         "invocations": [
           {
             "service_id": "insightflow.runtime.intelligence.v1",
-            "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522"
+            "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c"
           },
           {
             "service_id": "insightbridge.runtime.intelligence.v1",
-            "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe"
+            "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7"
           },
           {
             "service_id": "insightcore.runtime.intelligence.v1",
-            "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118"
+            "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf"
           }
         ]
       }
@@ -183,30 +188,30 @@
     "opentelemetry_exports": [
       {
         "service_id": "insightflow.runtime.intelligence.v1",
-        "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
-        "trace_id": "trace-d3355e198f80",
+        "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c",
+        "trace_id": "trace-be6ce3b27239",
         "result": {
-          "trace_id": "trace-d3355e198f80",
+          "trace_id": "trace-be6ce3b27239",
           "exported": true,
           "provider": "OpenTelemetry"
         }
       },
       {
         "service_id": "insightbridge.runtime.intelligence.v1",
-        "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
-        "trace_id": "trace-a10190d9edf3",
+        "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7",
+        "trace_id": "trace-2364a84587b2",
         "result": {
-          "trace_id": "trace-a10190d9edf3",
+          "trace_id": "trace-2364a84587b2",
           "exported": true,
           "provider": "OpenTelemetry"
         }
       },
       {
         "service_id": "insightcore.runtime.intelligence.v1",
-        "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
-        "trace_id": "trace-9dfcd44aa4ba",
+        "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+        "trace_id": "trace-a9b1ba3ad6f4",
         "result": {
-          "trace_id": "trace-9dfcd44aa4ba",
+          "trace_id": "trace-a9b1ba3ad6f4",
           "exported": true,
           "provider": "OpenTelemetry"
         }
@@ -216,23 +221,23 @@
       {
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "2e53e34f-c46d-4ee9-bc7a-ccfadbda9522",
-        "trace_id": "trace-d3355e198f80",
-        "timestamp": 1786453443.4378753
+        "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c",
+        "trace_id": "trace-be6ce3b27239",
+        "timestamp": 1787041743.590767
       },
       {
         "service_id": "insightbridge.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "aee39f0c-6f8d-4e91-872c-1da8cc8742fe",
-        "trace_id": "trace-a10190d9edf3",
-        "timestamp": 1786453444.8133564
+        "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7",
+        "trace_id": "trace-2364a84587b2",
+        "timestamp": 1787041744.2296915
       },
       {
         "service_id": "insightcore.runtime.intelligence.v1",
         "operation": "execute",
-        "invocation_id": "409b5585-5c44-4e00-8ca5-f99911259118",
-        "trace_id": "trace-9dfcd44aa4ba",
-        "timestamp": 1786453445.5673678
+        "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+        "trace_id": "trace-a9b1ba3ad6f4",
+        "timestamp": 1787041745.4583807
       }
     ]
   },
@@ -241,17 +246,17 @@
       "test": "invoke non-existent service",
       "service_id": "nonexistent.service.v999",
       "result": {
-        "invocation_id": "1e14c635-44fa-48f4-8df4-4eca70663a93",
+        "invocation_id": "545ba4b8-eaa7-418d-a9b6-f1d881c14573",
         "service_id": "nonexistent.service.v999",
         "operation": "execute",
         "status": "SERVICE_NOT_FOUND",
         "response": {},
-        "duration_ms": 971.3079929351807,
+        "duration_ms": 514.2521858215332,
         "trust_method": "CLASSICAL",
         "evidence": null,
         "error": "Service 'nonexistent.service.v999' not found in any discovery node",
         "retry_count": 0,
-        "timestamp": "2026-08-11T13:04:07.334395+00:00"
+        "timestamp": "2026-08-18T08:29:07.540550+00:00"
       }
     },
     "version_negotiation_unsupported": {
@@ -267,7 +272,7 @@
           "1.0.2"
         ],
         "message": "Version 999.0.0 is not recognised. Available versions: ['1.0.2']",
-        "timestamp": "2026-08-11T13:04:07.598401+00:00"
+        "timestamp": "2026-08-18T08:29:07.811510+00:00"
       }
     },
     "invalid_operation": {
@@ -275,29 +280,29 @@
       "service_id": "insightflow.runtime.intelligence.v1",
       "operation": "invalid_operation",
       "result": {
-        "invocation_id": "c581afd8-8307-412b-be68-028e82940547",
+        "invocation_id": "b54e39c4-3264-4a1b-b984-623e35401594",
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "invalid_operation",
         "status": "FAILED",
         "response": {},
-        "duration_ms": 5898.308277130127,
+        "duration_ms": 5507.924318313599,
         "trust_method": "CLASSICAL",
         "evidence": {
-          "invocation_id": "c581afd8-8307-412b-be68-028e82940547",
+          "invocation_id": "b54e39c4-3264-4a1b-b984-623e35401594",
           "service_id": "insightflow.runtime.intelligence.v1",
           "operation": "invalid_operation",
-          "request_hash": "47e865c87c92460b26d2273ab958f32145d35387028e34292193845673aa2985",
+          "request_hash": "23fe69fa583c0ee081998b3581b74aeb01e62bdcaa0caac5531f27af956844c9",
           "response_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
           "trust_method": "CLASSICAL",
-          "duration_ms": 5898.308277130127,
+          "duration_ms": 5507.924318313599,
           "status": "FAILED",
-          "timestamp": "2026-08-11T13:04:13.496709+00:00",
-          "evidence_hash": "09adc9a94039f77e8072c0a705e5d433309da012db84cf45c4c685391a04bb1b",
+          "timestamp": "2026-08-18T08:29:13.319434+00:00",
+          "evidence_hash": "c11191198d9f1cbf5f639989d3d22c2a2e4d6ed9b3551f6744277dd7518c1f74",
           "previous_evidence_hash": "af05c09e9a7be20a81cd07438950d152676e85344e19430907ef24e9da1bbcb4"
         },
         "error": "HTTP Error 400: Bad Request",
         "retry_count": 4,
-        "timestamp": "2026-08-11T13:04:13.496709+00:00"
+        "timestamp": "2026-08-18T08:29:13.319434+00:00"
       }
     }
   },

@@ -110,18 +110,39 @@ def test_sdk_invocation_verify_and_replay(sdk):
               v
         QCG /qcg/verify
               |
+              +----------------------+
+              |                      |
+              v                      v
+           Replay              Keshav Analysis
+           VALID                  COMPLETED
+              |
+              v
+           Trust
+       INVALID_SIGNATURE
+              |
+              v
+           HTTP 422
+
+    Separately, the canonical Replay Authority lineage is queried:
+
+        invocation_id
+              |
               v
         QCG /qcg/replay/lineage/{invocation_id}
+              |
+              v
+        VALID Replay lineage
 
     IMPORTANT:
-    The current live QCG returns HTTP 422 from /verify because its
-    ECDSA signature verification fails.
+    The current live QCG may return HTTP 422 from /verify because
+    ECDSA signature verification fails at the Trust stage.
 
-    We deliberately DO NOT bypass or fake this failure.
+    This test does NOT bypass or fake that failure.
 
-    The important observed behavior is that the replay registry still
-    contains the same invocation lineage and returns HTTP 200 with a
-    VALID replay verdict.
+    The important behavior is that the /verify pipeline reaches the
+    Replay stage successfully and returns a VALID Replay verdict.
+    The subsequent lineage lookup independently confirms the
+    canonical Replay record and its evidence.
     """
 
     # ---------------------------------------------------------
@@ -156,15 +177,24 @@ def test_sdk_invocation_verify_and_replay(sdk):
         timeout=30,
     )
 
-    # Current known platform behavior:
-    #
-    # HTTP 422
-    # HALT:INVALID_SIGNATURE
-    #
-    # We document the failure rather than bypassing it.
+    detail = verify_response.json().get("detail", {})
+
+    # ---------------------------------------------------------
+    # 2a. Validate Replay stage inside /verify
+    # ---------------------------------------------------------
+
+    replay_stage = detail.get("stages", {}).get("replay", {})
+
+    assert replay_stage.get("is_valid") is True
+    assert replay_stage.get("status") == "VALID"
+    assert replay_stage.get("sequence_number") is not None
+    assert replay_stage.get("verification_hash")
+
+    # ---------------------------------------------------------
+    # 2b. Validate Trust halt separately
+    # ---------------------------------------------------------
 
     if verify_response.status_code == 422:
-        detail = verify_response.json().get("detail", {})
 
         trust = detail.get("stages", {}).get("trust", {})
 
@@ -173,7 +203,7 @@ def test_sdk_invocation_verify_and_replay(sdk):
 
     else:
         # If the platform fixes the signature problem in the future,
-        # the test automatically accepts the successful verification.
+        # successful verification remains valid behavior.
         assert verify_response.status_code == 200
 
     # ---------------------------------------------------------
@@ -213,3 +243,9 @@ def test_sdk_invocation_verify_and_replay(sdk):
 
     assert lineage.get("trace_reference")
     assert lineage.get("replay_id")
+
+    # The Replay Authority resolved the SDK invocation into
+    # canonical replay lineage.
+    assert lineage.get("trace_reference")
+    assert lineage.get("replay_id")
+    assert lineage.get("verification_hash")

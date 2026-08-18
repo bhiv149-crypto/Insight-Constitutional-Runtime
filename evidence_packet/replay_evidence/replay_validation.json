@@ -1,16 +1,10 @@
 {
-  "message_id": "msg-insight-2ed08422",
-  "trace_reference": "trace-insight-6b21143f",
-  "submission_1": {
-    "status": "VALID",
-    "sequence": 1,
-    "is_valid": true,
-    "reason": ""
-  },
-  "submission_2": {
-    "status": "DUPLICATE",
-    "sequence": 0,
-    "is_valid": false,
-    "reason": "message_id 'msg-insight-2ed08422' has already been processed"
+  "status": "NOT_FOUND",
+  "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+  "trace_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+  "http_status": 404,
+  "verdict": {},
+  "response": {
+    "detail": "Trace ID not found in replay registry"
   }
 }

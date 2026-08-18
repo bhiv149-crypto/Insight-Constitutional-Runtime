@@ -1,0 +1,29 @@
+{
+  "http_status": 422,
+  "endpoint": "/qcg/verify",
+  "trace_id": "7accb0c8-8465-464f-a0a4-3d4b0daafd0f",
+  "flow_status": "HALTED",
+  "stages": {
+    "replay": {
+      "is_valid": true,
+      "status": "VALID",
+      "sequence_number": 2,
+      "verification_hash": "613941ec39278975bbecbae2215e59e111574d15026c209057586a0c911a9cb6"
+    },
+    "keshav_analysis": {
+      "status": "COMPLETED",
+      "live": true,
+      "trace_id": "7accb0c8-8465-464f-a0a4-3d4b0daafd0f",
+      "root_cause": null,
+      "resolution_signal": null,
+      "impact_score": 0,
+      "severity": "LOW"
+    },
+    "trust": {
+      "passed": false,
+      "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed — contract may be tampered"
+    }
+  },
+  "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed — contract may be tampered",
+  "interpretation": "Replay validation succeeded. The overall verification pipeline halted at the Trust stage because ECDSA signature verification failed."
+}

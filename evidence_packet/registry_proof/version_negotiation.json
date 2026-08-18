@@ -6,7 +6,7 @@
     "negotiated_version": "1.0.2",
     "suggested_versions": [],
     "message": "Version 1.0.2 is fully supported.",
-    "timestamp": "2026-08-11T13:04:02.104170+00:00"
+    "timestamp": "2026-08-18T08:29:01.850567+00:00"
   },
   "insightbridge.runtime.intelligence.v1": {
     "service_id": "insightbridge.runtime.intelligence.v1",
@@ -15,7 +15,7 @@
     "negotiated_version": "1.0.2",
     "suggested_versions": [],
     "message": "Version 1.0.2 is fully supported.",
-    "timestamp": "2026-08-11T13:04:02.371133+00:00"
+    "timestamp": "2026-08-18T08:29:02.151934+00:00"
   },
   "insightcore.runtime.intelligence.v1": {
     "service_id": "insightcore.runtime.intelligence.v1",
@@ -24,6 +24,6 @@
     "negotiated_version": "1.0.2",
     "suggested_versions": [],
     "message": "Version 1.0.2 is fully supported.",
-    "timestamp": "2026-08-11T13:04:02.643587+00:00"
+    "timestamp": "2026-08-18T08:29:02.981147+00:00"
   }
 }
