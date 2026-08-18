@@ -1,8 +1,8 @@
 # Engineering Handover Guide — Insight Constitutional Runtime
 
-**Status**: LIVE VERIFIED — All 17 tests passing (2026-08-17)  
+**Status**: LIVE VERIFIED — Replay lineage is valid; `/qcg/verify` remains halted at Trust due to `INVALID_SIGNATURE`  
 **Audience**: Incoming maintainers, system integrators, security reviewers  
-**Access**: Clone repository, read this guide, run `pytest -v`
+**Access**: Clone repository, read this guide, confirm the current Replay evidence and platform constraints
 
 ---
 
@@ -271,13 +271,15 @@ invoke_capability(service_id, operation, payload, version)
 ### Step 3: Verification (QCG Platform)
 ```
 POST /qcg/verify
-  → Replay stage: PASSED (verdict: VALID)
+  → Replay stage: VALID
+  → Keshav Analysis: COMPLETED
   → Trust stage: FAILED (HTTP 422, INVALID_SIGNATURE)
-  
+  → Overall flow: HALTED at Trust
+
 ** IMPORTANT: **
-- Replay works independently
-- Trust/signature verification is a QCG platform ECDSA issue (NOT runtime bug)
-- This is a known limitation, NOT a runtime failure
+- Replay is valid even while the overall `/verify` request halts at Trust.
+- The HTTP 422 is evidence of a Trust/ECDSA signature failure, not a Replay failure.
+- This is a platform-side verification condition, not a runtime Replay regression.
 ```
 
 ### Step 4: Replay Lineage (QCG Platform)
@@ -285,7 +287,7 @@ POST /qcg/verify
 GET /qcg/replay/lineage/{invocation_id}
   → HTTP 200 OK
   → Returns VALID verdict with complete lineage record
-  → Invocation lineage is preserved in canonical replay authority
+  → The canonical lineage record is preserved by QCG replay authority
 ```
 
 ---

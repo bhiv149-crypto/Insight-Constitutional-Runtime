@@ -1,0 +1,19 @@
+{
+  "status": "HEALTHY",
+  "mode": "LOCAL",
+  "heartbeat": {
+    "heartbeat": "ALIVE",
+    "overall_health": "HEALTHY",
+    "total_invocations": 0,
+    "session_seq": 0,
+    "active_capabilities": []
+  },
+  "health": {
+    "overall_health": "HEALTHY",
+    "total_invocations": 0,
+    "capability_health": {},
+    "unhealthy_capabilities": [],
+    "degraded_capabilities": []
+  },
+  "runtime_path": "C:\\Ganesh_149\\Marine-quantum-runtime\\marine_quantum_runtime_capability_platform\\marine_quantum_runtime"
+}

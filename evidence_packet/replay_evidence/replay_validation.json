@@ -1,10 +1,254 @@
 {
-  "status": "NOT_FOUND",
-  "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
-  "trace_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
-  "http_status": 404,
-  "verdict": {},
-  "response": {
-    "detail": "Trace ID not found in replay registry"
+  "insightflow.runtime.intelligence.v1": {
+    "status": "VALID",
+    "invocation_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+    "verification": {
+      "http_status": 422,
+      "status": "PROCESSED",
+      "invocation_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+      "response": {
+        "detail": {
+          "trace_id": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+          "parent_trace_id": null,
+          "flow_status": "HALTED",
+          "stages": {
+            "replay": {
+              "is_valid": true,
+              "status": "VALID",
+              "sequence_number": 10,
+              "verification_hash": "729977c493141ac523b0ea1aa1f5aa79b21b33775f1f9ad46d1619844ffd7974"
+            },
+            "keshav_analysis": {
+              "status": "COMPLETED",
+              "live": true,
+              "trace_id": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+              "root_cause": null,
+              "resolution_signal": null,
+              "impact_score": 0,
+              "severity": "LOW",
+              "timestamp": "2026-08-18T12:19:22Z"
+            },
+            "trust": {
+              "passed": false,
+              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
+              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+            }
+          },
+          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+        }
+      }
+    },
+    "lineage": {
+      "status": "FOUND",
+      "trace_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+      "http_status": 200,
+      "response": {
+        "message_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+        "verdict": {
+          "message_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+          "sequence_number": 10,
+          "status": "VALID",
+          "reason": "",
+          "lineage_record": {
+            "replay_id": "330801eb-1271-52c0-82b9-bb02b0eabdd6",
+            "message_id": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+            "sequence_number": 10,
+            "decision": "VALID",
+            "decision_timestamp": "2026-08-18T12:19:21.982636+00:00",
+            "origin_component": "CanonicalReplayAuthority",
+            "schema_version": "1.0.0",
+            "trace_reference": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+            "parent_reference": "9",
+            "verification_hash": "729977c493141ac523b0ea1aa1f5aa79b21b33775f1f9ad46d1619844ffd7974"
+          }
+        }
+      }
+    },
+    "verdict": {
+      "message_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+      "sequence_number": 10,
+      "status": "VALID",
+      "reason": "",
+      "lineage_record": {
+        "replay_id": "330801eb-1271-52c0-82b9-bb02b0eabdd6",
+        "message_id": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+        "sequence_number": 10,
+        "decision": "VALID",
+        "decision_timestamp": "2026-08-18T12:19:21.982636+00:00",
+        "origin_component": "CanonicalReplayAuthority",
+        "schema_version": "1.0.0",
+        "trace_reference": "4739da5b-a993-4f6b-9e4d-b2a3d9de22c9",
+        "parent_reference": "9",
+        "verification_hash": "729977c493141ac523b0ea1aa1f5aa79b21b33775f1f9ad46d1619844ffd7974"
+      }
+    }
+  },
+  "insightbridge.runtime.intelligence.v1": {
+    "status": "VALID",
+    "invocation_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+    "verification": {
+      "http_status": 422,
+      "status": "PROCESSED",
+      "invocation_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+      "response": {
+        "detail": {
+          "trace_id": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+          "parent_trace_id": null,
+          "flow_status": "HALTED",
+          "stages": {
+            "replay": {
+              "is_valid": true,
+              "status": "VALID",
+              "sequence_number": 11,
+              "verification_hash": "bba17817ca218ef6350567bade6e5d892fcb8d3e09c8de47a086d5e09be45dd3"
+            },
+            "keshav_analysis": {
+              "status": "COMPLETED",
+              "live": true,
+              "trace_id": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+              "root_cause": null,
+              "resolution_signal": null,
+              "impact_score": 0,
+              "severity": "LOW",
+              "timestamp": "2026-08-18T12:19:24Z"
+            },
+            "trust": {
+              "passed": false,
+              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
+              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+            }
+          },
+          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+        }
+      }
+    },
+    "lineage": {
+      "status": "FOUND",
+      "trace_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+      "http_status": 200,
+      "response": {
+        "message_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+        "verdict": {
+          "message_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+          "sequence_number": 11,
+          "status": "VALID",
+          "reason": "",
+          "lineage_record": {
+            "replay_id": "d2c4964e-5566-5343-8441-d8528e18c173",
+            "message_id": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+            "sequence_number": 11,
+            "decision": "VALID",
+            "decision_timestamp": "2026-08-18T12:19:24.034992+00:00",
+            "origin_component": "CanonicalReplayAuthority",
+            "schema_version": "1.0.0",
+            "trace_reference": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+            "parent_reference": "10",
+            "verification_hash": "bba17817ca218ef6350567bade6e5d892fcb8d3e09c8de47a086d5e09be45dd3"
+          }
+        }
+      }
+    },
+    "verdict": {
+      "message_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+      "sequence_number": 11,
+      "status": "VALID",
+      "reason": "",
+      "lineage_record": {
+        "replay_id": "d2c4964e-5566-5343-8441-d8528e18c173",
+        "message_id": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+        "sequence_number": 11,
+        "decision": "VALID",
+        "decision_timestamp": "2026-08-18T12:19:24.034992+00:00",
+        "origin_component": "CanonicalReplayAuthority",
+        "schema_version": "1.0.0",
+        "trace_reference": "255e9442-2f95-45d1-8b1c-80e6d492c985",
+        "parent_reference": "10",
+        "verification_hash": "bba17817ca218ef6350567bade6e5d892fcb8d3e09c8de47a086d5e09be45dd3"
+      }
+    }
+  },
+  "insightcore.runtime.intelligence.v1": {
+    "status": "VALID",
+    "invocation_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+    "verification": {
+      "http_status": 422,
+      "status": "PROCESSED",
+      "invocation_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+      "response": {
+        "detail": {
+          "trace_id": "88234c81-95ad-4781-8477-bb2455b7e4da",
+          "parent_trace_id": null,
+          "flow_status": "HALTED",
+          "stages": {
+            "replay": {
+              "is_valid": true,
+              "status": "VALID",
+              "sequence_number": 12,
+              "verification_hash": "b263a02808a22b9e22d36df9bd678db32492ca127ff330394d73fc0e7cb714c1"
+            },
+            "keshav_analysis": {
+              "status": "COMPLETED",
+              "live": true,
+              "trace_id": "88234c81-95ad-4781-8477-bb2455b7e4da",
+              "root_cause": null,
+              "resolution_signal": null,
+              "impact_score": 0,
+              "severity": "LOW",
+              "timestamp": "2026-08-18T12:19:26Z"
+            },
+            "trust": {
+              "passed": false,
+              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
+              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+            }
+          },
+          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+        }
+      }
+    },
+    "lineage": {
+      "status": "FOUND",
+      "trace_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+      "http_status": 200,
+      "response": {
+        "message_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+        "verdict": {
+          "message_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+          "sequence_number": 12,
+          "status": "VALID",
+          "reason": "",
+          "lineage_record": {
+            "replay_id": "dbc67e51-a7dd-52a7-a8c6-5496cb4aef00",
+            "message_id": "88234c81-95ad-4781-8477-bb2455b7e4da",
+            "sequence_number": 12,
+            "decision": "VALID",
+            "decision_timestamp": "2026-08-18T12:19:25.755668+00:00",
+            "origin_component": "CanonicalReplayAuthority",
+            "schema_version": "1.0.0",
+            "trace_reference": "88234c81-95ad-4781-8477-bb2455b7e4da",
+            "parent_reference": "11",
+            "verification_hash": "b263a02808a22b9e22d36df9bd678db32492ca127ff330394d73fc0e7cb714c1"
+          }
+        }
+      }
+    },
+    "verdict": {
+      "message_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+      "sequence_number": 12,
+      "status": "VALID",
+      "reason": "",
+      "lineage_record": {
+        "replay_id": "dbc67e51-a7dd-52a7-a8c6-5496cb4aef00",
+        "message_id": "88234c81-95ad-4781-8477-bb2455b7e4da",
+        "sequence_number": 12,
+        "decision": "VALID",
+        "decision_timestamp": "2026-08-18T12:19:25.755668+00:00",
+        "origin_component": "CanonicalReplayAuthority",
+        "schema_version": "1.0.0",
+        "trace_reference": "88234c81-95ad-4781-8477-bb2455b7e4da",
+        "parent_reference": "11",
+        "verification_hash": "b263a02808a22b9e22d36df9bd678db32492ca127ff330394d73fc0e7cb714c1"
+      }
+    }
   }
 }

@@ -1,0 +1,127 @@
+{
+  "classification": "LOCAL_VERIFIED",
+  "live_quantum_status": "PENDING / NOT AVAILABLE",
+  "runtime_source": "Marine Quantum Runtime (TANTRA Core)",
+  "adapter_boundary": "src/platform/quantum_adapter.py -> MarineQuantumAdapter",
+  "attached_participant": "InsightBridge (QuantumCommunicationGateway)",
+  "discovered_capabilities": [
+    {
+      "capability_id": "signal",
+      "owner": "Dhiraj Chavan",
+      "version": "4.0.0",
+      "capability_class": "SIGNAL",
+      "inputs": [
+        "node_id",
+        "energy_delta",
+        "iterations",
+        "confidence",
+        "variance"
+      ],
+      "outputs": [
+        "engine_event_version",
+        "node_ref",
+        "transition",
+        "uncertainty_envelope"
+      ],
+      "dependencies": [],
+      "authority_ceiling": "STATE_CLASSIFICATION",
+      "negative_authority": [
+        "Must not enforce execution policy",
+        "Must not control causal ordering",
+        "Must not perform replay decisions",
+        "Must not write to any external store"
+      ],
+      "description": "Quantum node state signal generator.",
+      "descriptor_id": "647277f420be212e89236e8dd81aef1aea8465aee58d50edd5231d703d8ac403"
+    },
+    {
+      "capability_id": "quantum_pipeline",
+      "owner": "Dhiraj Chavan",
+      "version": "1.0.0",
+      "capability_class": "QUANTUM",
+      "inputs": [
+        "salinity",
+        "temperature_celsius",
+        "pH",
+        "material_oxidation_potential",
+        "dissolved_oxygen_mgl",
+        "current_density_mAcm2"
+      ],
+      "outputs": [
+        "degradation_probability",
+        "confidence_score",
+        "recommended_anode_current",
+        "deterministic_event"
+      ],
+      "dependencies": [],
+      "authority_ceiling": "QUANTUM_EXECUTION",
+      "negative_authority": [
+        "Must not make autonomous hull maintenance decisions",
+        "Must not override governance layer",
+        "Must not perform provenance recording",
+        "Must not control replay authority"
+      ],
+      "description": "Marine corrosion quantum pipeline via HEA circuit.",
+      "descriptor_id": "23b8270393ee20e352dff1ba74692600f2cedbe63ead750060ff5d2fa17fa97d"
+    },
+    {
+      "capability_id": "distributed_qapp",
+      "owner": "Dhiraj Chavan / Jaffer Ali",
+      "version": "1.0.0",
+      "capability_class": "DISTRIBUTED",
+      "inputs": [
+        "qapp_id",
+        "node_origin",
+        "sequence_id",
+        "data"
+      ],
+      "outputs": [
+        "consistent",
+        "consensus_hash",
+        "log_hash",
+        "envelope"
+      ],
+      "dependencies": [
+        "signal"
+      ],
+      "authority_ceiling": "DISTRIBUTED_PROPAGATION",
+      "negative_authority": [
+        "Must not own replay authority",
+        "Must not make optimization decisions",
+        "Must not govern execution legitimacy",
+        "Must not act as provenance authority"
+      ],
+      "description": "3-node distributed QApp propagation runtime.",
+      "descriptor_id": "7781e3d68c4b730a0061ded6758b706bee6da5ce432b2c474520ec7309a970f4"
+    },
+    {
+      "capability_id": "operational_monitor",
+      "owner": "Dhiraj Chavan",
+      "version": "1.0.0",
+      "capability_class": "MONITORING",
+      "inputs": [
+        "events"
+      ],
+      "outputs": [
+        "events_ingested",
+        "drift_events",
+        "nodes_monitored",
+        "drift_log"
+      ],
+      "dependencies": [
+        "signal"
+      ],
+      "authority_ceiling": "OBSERVABILITY",
+      "negative_authority": [
+        "Must not trigger remediation actions autonomously",
+        "Must not own execution governance",
+        "Must not persist drift logs to external systems",
+        "Must not control operational schedules"
+      ],
+      "description": "Operational drift monitor \u2014 confidence, variance, state-shift detection.",
+      "descriptor_id": "4b2fbbfe2cdd633f69048505993e7b26cbb501f2afac2801ad1009c01f98122b"
+    }
+  ],
+  "sample_execution_id": "a0e51d4aa5520ce36164030bb51efec800190fe241711b9db84c9d8e467ad6f2",
+  "sample_deterministic_hash": "a886d6438f6b06defb078717c6bf57c3a5524cf352ec27524411fca5cb366b3c"
+}

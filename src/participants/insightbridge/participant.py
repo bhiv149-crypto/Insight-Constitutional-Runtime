@@ -21,6 +21,7 @@ from src.common.constants import (
 )
 
 from .lifecycle import InsightBridgeLifecycle
+from src.platform.quantum_adapter import MarineQuantumAdapter
 
 
 class InsightBridgeParticipant(BaseParticipant):
@@ -52,6 +53,7 @@ class InsightBridgeParticipant(BaseParticipant):
         super().__init__(participant)
 
         self.lifecycle = InsightBridgeLifecycle()
+        self.quantum_adapter = MarineQuantumAdapter()
 
     # ------------------------------------------------------------------
     # Participant Behaviour
@@ -60,7 +62,40 @@ class InsightBridgeParticipant(BaseParticipant):
     def execute(self, payload):
         """
         Execute InsightBridge business logic.
+
+        If payload requests Quantum execution (via target_capability or
+        route="quantum"), delegates to the local Marine Quantum Runtime
+        via MarineQuantumAdapter. Otherwise, processes standard bridge payload.
         """
+        if isinstance(payload, dict) and (
+            payload.get("target_capability")
+            or payload.get("quantum_capability")
+            or payload.get("route") == "quantum"
+        ):
+            cap_id = (
+                payload.get("target_capability")
+                or payload.get("quantum_capability")
+                or "quantum_pipeline"
+            )
+            q_payload = payload.get("quantum_payload")
+            if q_payload is None:
+                # If no nested quantum_payload, extract fields excluding routing keys
+                q_payload = {
+                    k: v
+                    for k, v in payload.items()
+                    if k not in ("route", "target_capability", "quantum_capability", "participant", "operation", "version")
+                }
+            quantum_result = self.quantum_adapter.invoke_capability(cap_id, q_payload)
+            return {
+                "participant": self.name,
+                "runtime_identity": self.identity,
+                "version": self.version,
+                "status": "accepted",
+                "quantum_route": "DELEGATED_LOCAL_QUANTUM",
+                "quantum_capability": cap_id,
+                "quantum_result": quantum_result,
+                "payload": payload,
+            }
 
         return {
             "participant": self.name,
@@ -69,6 +104,18 @@ class InsightBridgeParticipant(BaseParticipant):
             "status": "accepted",
             "payload": payload,
         }
+
+    def invoke_quantum(self, capability_id: str, payload: dict) -> dict:
+        """
+        Direct quantum invocation gateway on InsightBridge.
+        """
+        return self.quantum_adapter.invoke_capability(capability_id, payload)
+
+    def quantum_health(self) -> dict:
+        """
+        Query health of the attached local Quantum Runtime.
+        """
+        return self.quantum_adapter.health()
 
     def health(self):
         """
@@ -82,4 +129,9 @@ class InsightBridgeParticipant(BaseParticipant):
             "participant": self.name,
             "runtime_identity": self.identity,
             "state": self.lifecycle.state.value,
-        }
+            "quantum_gateway": {
+                "attached": True,
+                "runtime": "Marine Quantum Runtime",
+                "mode": self.quantum_adapter.mode,
+            },
+        }

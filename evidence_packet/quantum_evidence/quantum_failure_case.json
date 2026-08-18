@@ -1,0 +1,38 @@
+{
+  "participant": "InsightBridge",
+  "runtime_identity": "insightbridge.runtime.intelligence.v1",
+  "version": "1.0.2",
+  "status": "accepted",
+  "quantum_route": "DELEGATED_LOCAL_QUANTUM",
+  "quantum_capability": "quantum_pipeline",
+  "quantum_result": {
+    "status": "VALIDATION_ERROR",
+    "capability_id": "quantum_pipeline",
+    "invocation_id": "c93abfd890248d44d3f6cf360213a34dc2240ba2cb6710ef3ec0074b57aa169e",
+    "errors": [
+      "Field 'salinity': Value 999.0 above maximum 50.0"
+    ],
+    "attachment_check": {
+      "valid": false,
+      "missing": [],
+      "type_errors": [
+        "Field 'salinity': Value 999.0 above maximum 50.0"
+      ],
+      "capability_id": "quantum_pipeline",
+      "version": "1.0.0",
+      "validation": "TYPED"
+    },
+    "runtime_mode": "LOCAL",
+    "quantum_provider_source": "Marine Quantum Runtime"
+  },
+  "payload": {
+    "route": "quantum",
+    "target_capability": "quantum_pipeline",
+    "salinity": 999.0,
+    "temperature_celsius": 18.5,
+    "pH": 7.8,
+    "material_oxidation_potential": 0.44,
+    "dissolved_oxygen_mgl": 6.5,
+    "current_density_mAcm2": 0.12
+  }
+}

@@ -6,6 +6,8 @@ import logging
 
 from src.platform.live_platform_client import LivePlatformClient
 
+from src.platform.registration_mode import AUTO_REGISTRATION_ENABLED
+
 from src.integration.registration_builder import RegistrationBuilder
 
 from src.participants.insightflow.participant import (
@@ -119,8 +121,23 @@ class PlatformIntegrationService:
 
         try:
             self._create_participants()
-            self._register_runtime()
-            self._register_capabilities()
+
+            if AUTO_REGISTRATION_ENABLED:
+                self.logger.info(
+                    "Automatic Platform registration mode ENABLED."
+                )
+
+                self._ensure_runtime_registration()
+                self._register_capabilities()
+
+            else:
+                self.logger.info(
+                    "Automatic Platform registration mode DISABLED. "
+                    "Using manual registration workflow."
+                )
+
+                self._register_runtime()
+                self._register_capabilities()
             self._discover_services()
             self._validate_platform()
             self._negotiate_versions()
@@ -227,6 +244,135 @@ class PlatformIntegrationService:
                 participant.participant.runtime_identity
             ] = response
 
+    def _ensure_runtime_registration(self):
+        """
+        Reconcile the expected Insight Runtime participants with the
+        live BHIV Platform registry.
+
+        Behaviour:
+            - Existing services are preserved.
+            - Missing services are registered.
+            - Registration is followed by verification.
+            - No duplicate registration is intentionally performed.
+            - This method is used only when AUTO registration mode is enabled.
+
+        Important:
+            This method does not implement a registry.
+            The live BHIV/QCG registry remains the source of truth.
+        """
+        self._require_participants()
+
+        self.logger.info(
+            "Starting automatic runtime registration reconciliation."
+        )
+
+        # ---------------------------------------------------------
+        # 1. Read current live registry state
+        # ---------------------------------------------------------
+        registry_response = self.client.list_services()
+
+        services = registry_response.get("services", [])
+
+        registered_services = {
+            service.get("platform_service_id"): service
+            for service in services
+            if service.get("platform_service_id")
+        }
+
+        self.logger.info(
+            "Live registry currently contains %d service(s).",
+            len(registered_services),
+        )
+
+        # ---------------------------------------------------------
+        # 2. Reconcile each expected Insight participant
+        # ---------------------------------------------------------
+        for participant in self.participants:
+
+            metadata = participant.participant
+            service_id = metadata.runtime_identity
+
+            existing = registered_services.get(service_id)
+
+            # -----------------------------------------------------
+            # Existing registration
+            # -----------------------------------------------------
+            if existing:
+
+                self.logger.info(
+                    "Runtime already registered: %s",
+                    service_id,
+                )
+
+                self.registration_results[service_id] = {
+                    "status": "ALREADY_REGISTERED",
+                    "service_id": service_id,
+                    "version": existing.get("version"),
+                    "registry_record": existing,
+                    "registration_mode": "AUTO",
+                }
+
+                continue
+
+            # -----------------------------------------------------
+            # Missing registration
+            # -----------------------------------------------------
+            self.logger.info(
+                "Runtime missing from live registry; registering: %s",
+                service_id,
+            )
+
+            record = RegistrationBuilder.build_service_record(
+                metadata
+            )
+
+            response = self.client.register_runtime(record)
+
+            self.runtime_records.append(record)
+
+            self.registration_results[service_id] = response
+
+        # ---------------------------------------------------------
+        # 3. Re-read the live registry after reconciliation
+        # ---------------------------------------------------------
+        verification_response = self.client.list_services()
+
+        verified_services = {
+            service.get("platform_service_id"): service
+            for service in verification_response.get("services", [])
+            if service.get("platform_service_id")
+        }
+
+        # ---------------------------------------------------------
+        # 4. Verify every expected participant exists
+        # ---------------------------------------------------------
+        missing_after_registration = []
+
+        for participant in self.participants:
+
+            service_id = participant.participant.runtime_identity
+
+            if service_id not in verified_services:
+                missing_after_registration.append(service_id)
+
+        if missing_after_registration:
+
+            self.logger.error(
+                "Automatic registration verification failed. "
+                "Missing services: %s",
+                ", ".join(missing_after_registration),
+            )
+
+            raise RuntimeError(
+                "Automatic Platform Runtime registration could not be "
+                "verified for: "
+                + ", ".join(missing_after_registration)
+            )
+
+        self.logger.info(
+            "Automatic runtime registration reconciliation completed "
+            "and verified successfully."
+        )
 
     def _register_capabilities(self):
         """
@@ -450,154 +596,195 @@ class PlatformIntegrationService:
 
     def _validate_replay(self):
         """
-        Validate replay against the live QCG Replay Authority.
+        Validate replay through the canonical live QCG pipeline.
 
-        The Insight Runtime does not create or maintain replay state.
-        Replay authority remains owned by the Platform/QCG Runtime.
+        Proven sequence:
 
-        The validation performed here is therefore a read-only lookup
-        of an existing canonical replay lineage.
+            SDK invocation
+                ↓
+            invocation_id
+                ↓
+            POST /qcg/verify
+                ↓
+            Canonical Replay Authority
+                ↓
+            GET /qcg/replay/lineage/{invocation_id}
+
+        IMPORTANT:
+            /qcg/verify may return HTTP 422 because a later trust
+            stage fails. Replay validity is determined independently
+            from the canonical replay verdict.
         """
+
+        self._require_participants()
 
         replay = PlatformReplayAdapter()
 
-        # Use an invocation generated by the live Platform SDK.
-        # The SDK invocation_id is the external runtime identifier
-        # used to resolve the canonical QCG replay lineage.
-        invocation_id = None
+        for participant in self.participants:
 
-        if self.invocation_contexts:
-            invocation_id = self.invocation_contexts[-1].get("invocation_id")
+            service_id = participant.participant.runtime_identity
 
-        if not invocation_id:
-            self.logger.warning(
-                "Replay validation skipped: no live invocation_id available."
+            invocation = self.invocation_results.get(service_id)
+
+            if not invocation:
+                self.replay_results[service_id] = {
+                    "status": "NOT_AVAILABLE",
+                    "reason": "No invocation result available",
+                }
+                continue
+
+            # -------------------------------------------------
+            # Extract SDK invocation ID
+            # -------------------------------------------------
+
+            invocation_id = getattr(
+                invocation,
+                "invocation_id",
+                None,
             )
 
-            self.replay_results = {
-                "status": "SKIPPED",
-                "reason": "NO_INVOCATION_ID",
+            if not invocation_id and isinstance(invocation, dict):
+                invocation_id = invocation.get("invocation_id")
+
+            if not invocation_id:
+                self.replay_results[service_id] = {
+                    "status": "NOT_AVAILABLE",
+                    "reason": "Invocation ID unavailable",
+                }
+                continue
+
+            # -------------------------------------------------
+            # Extract invocation payload
+            # -------------------------------------------------
+
+            payload = {}
+
+            if isinstance(invocation, dict):
+                payload = invocation.get("payload", {}) or {}
+
+            # -------------------------------------------------
+            # QCG verification
+            # -------------------------------------------------
+
+            verification = replay.verify_invocation(
+                service_id=service_id,
+                operation="execute",
+                version=participant.participant.version,
+                payload=payload,
+                invocation_id=invocation_id,
+            )
+
+            # -------------------------------------------------
+            # Replay lineage
+            # -------------------------------------------------
+
+            lineage = replay.lookup(invocation_id)
+
+            verdict = {}
+
+            if lineage["status"] == "FOUND":
+                verdict = (
+                    lineage
+                    .get("response", {})
+                    .get("verdict", {})
+                )
+
+            replay_status = verdict.get("status")
+
+            # -------------------------------------------------
+            # Store complete evidence
+            # -------------------------------------------------
+
+            self.replay_results[service_id] = {
+                "status": (
+                    "VALID"
+                    if replay_status == "VALID"
+                    else "NOT_FOUND"
+                ),
+                "invocation_id": invocation_id,
+                "verification": verification,
+                "lineage": lineage,
+                "verdict": verdict,
             }
-            return
-
-        result = replay.lookup(invocation_id)
-
-        verdict = {}
-
-        if result["status"] == "FOUND":
-            verdict = result["response"].get("verdict", {})
-
-        self.replay_results = {
-            "status": result["status"],
-            "invocation_id": invocation_id,
-            "trace_id": result.get("trace_id"),
-            "http_status": result.get("http_status"),
-            "verdict": verdict,
-            "response": result.get("response"),
-        }
-
-        self.logger.info(
-            "Live replay validation: invocation_id=%s, status=%s",
-            invocation_id,
-            result["status"],
-        )
 
     def _record_telemetry(self):
         """
-        Record execution telemetry correlated with canonical runtime
-        invocation IDs returned by the Platform SDK.
+        Record telemetry for successfully invoked Insight participants.
+
+        Telemetry authority remains owned by the Platform Runtime.
+        This method only uses PlatformTelemetryAdapter and stores the
+        returned evidence locally for integration reporting.
+
+        This method does NOT:
+        - register services
+        - invoke capabilities
+        - perform replay
+        - modify QCG state
+        - implement telemetry storage
         """
+
+        self._require_participants()
 
         telemetry = PlatformTelemetryAdapter()
 
-        contract_id = f"contract-{uuid.uuid4().hex[:12]}"
+        for participant in self.participants:
 
-        execution_traces = []
-        opentelemetry_exports = []
+            service_id = participant.participant.runtime_identity
 
-        for context in self.invocation_contexts:
-            trace_id = f"trace-{uuid.uuid4().hex[:12]}"
+            invocation = self.invocation_results.get(service_id)
 
-            execution = telemetry.record_execution_trace(
-                trace_id,
-                context["service_id"],
-                context["operation"],
-                {
-                    "invocation_id": context["invocation_id"],
-                    "service_id": context["service_id"],
-                    "operation": context["operation"],
-                    "timestamp": context["timestamp"],
-                },
+            if not invocation:
+                self.telemetry_results[service_id] = {
+                    "status": "NOT_AVAILABLE",
+                    "reason": "No invocation result available",
+                }
+                continue
+
+            invocation_id = getattr(
+                invocation,
+                "invocation_id",
+                None,
             )
 
-            otel_export = telemetry.export_opentelemetry(trace_id)
+            if not invocation_id and isinstance(invocation, dict):
+                invocation_id = invocation.get("invocation_id")
 
-            execution_traces.append(
-                {
-                    "service_id": context["service_id"],
-                    "operation": context["operation"],
-                    "invocation_id": context["invocation_id"],
-                    "trace_id": trace_id,
-                    "timestamp": context["timestamp"],
-                    "execution_trace": execution,
+            if not invocation_id:
+                self.telemetry_results[service_id] = {
+                    "status": "NOT_AVAILABLE",
+                    "reason": "Invocation ID unavailable",
                 }
-            )
+                continue
 
-            opentelemetry_exports.append(
-                {
-                    "service_id": context["service_id"],
-                    "invocation_id": context["invocation_id"],
-                    "trace_id": trace_id,
-                    "result": otel_export,
+            try:
+                execution_trace = telemetry.record_execution_trace(
+                    trace_id=invocation_id,
+                    participant=service_id,
+                    operation="execute",
+                    metadata={
+                        "source": "Insight Constitutional Runtime",
+                        "integration": "live_platform",
+                    },
+                )
+
+                self.telemetry_results[service_id] = {
+                    "status": "RECORDED",
+                    "invocation_id": invocation_id,
+                    "execution_trace": execution_trace,
                 }
-            )
 
-        lineage = telemetry.record_contract_lineage(
-            contract_id,
-            "root-insight-contract",
-            {
-                "layer": "Intelligence Layer",
-                "version": "1.0.0",
-            },
-        )
+            except Exception as exc:
+                self.logger.warning(
+                    "Telemetry recording failed for %s: %s",
+                    service_id,
+                    str(exc),
+                )
 
-        bridge_trace = telemetry.record_adapter_trace(
-            "PlatformRuntimeAdapter",
-            "invoke_capability",
-            {
-                "route": "live_sdk",
-                "invocations": [
-                    {
-                        "service_id": context["service_id"],
-                        "invocation_id": context["invocation_id"],
-                    }
-                    for context in self.invocation_contexts
-                ],
-            },
-        )
-
-        self.telemetry_results = {
-            "contract_id": contract_id,
-            "execution_traces": execution_traces,
-            "contract_lineage": lineage,
-            "adapter_trace": bridge_trace,
-            "opentelemetry_exports": opentelemetry_exports,
-            "correlations": [
-                {
-                    "service_id": context["service_id"],
-                    "operation": context["operation"],
-                    "invocation_id": context["invocation_id"],
-                    "trace_id": execution_traces[index]["trace_id"],
-                    "timestamp": context["timestamp"],
+                self.telemetry_results[service_id] = {
+                    "status": "ERROR",
+                    "invocation_id": invocation_id,
+                    "error": str(exc),
                 }
-                for index, context in enumerate(self.invocation_contexts)
-            ],
-        }
-
-        self.logger.info(
-            "Telemetry recorded for %d invocation(s).",
-            len(self.invocation_contexts),
-        )
 
 
     def _exercise_failure_paths(self):

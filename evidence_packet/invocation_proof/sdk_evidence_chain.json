@@ -1,41 +1,41 @@
 [
   {
-    "invocation_id": "35b738a8-c2c4-4146-8f15-dbf3d903298c",
+    "invocation_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
     "service_id": "insightflow.runtime.intelligence.v1",
     "operation": "execute",
-    "request_hash": "60474285b4b91c7c6e74fac41765fe36705259fb9e17a803cb6624a29d0006bc",
-    "response_hash": "1be922d9035fb9b747b0f9ebc0822d19a3a343fb6b708e891b4648c500dd6e18",
+    "request_hash": "368c42a4c860011456277782651c3687a94a36ea3789b9c84d478554e811a00a",
+    "response_hash": "a6baab7a32d58cf2cd90aeb4d22d99f719f867698a87f458f5498db01707e398",
     "trust_method": "CLASSICAL",
-    "duration_ms": 609.6189022064209,
+    "duration_ms": 796.16379737854,
     "status": "SUCCESS",
-    "timestamp": "2026-08-18T08:29:03.590766+00:00",
-    "evidence_hash": "c96fe4622a5c350942b535c375e85354f125ce84c1a3e6235de88ab2af15d4a2",
+    "timestamp": "2026-08-18T12:19:19.852672+00:00",
+    "evidence_hash": "8fe5ed310baf5a01521b96f04cb3ccb07ebb7da8d6fc0c7ab2a094485d1fcbb6",
     "previous_evidence_hash": "af05c09e9a7be20a81cd07438950d152676e85344e19430907ef24e9da1bbcb4"
   },
   {
-    "invocation_id": "2af3d224-25a5-4b82-8332-cf0cd04c30d7",
+    "invocation_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
     "service_id": "insightbridge.runtime.intelligence.v1",
     "operation": "execute",
-    "request_hash": "809d9a161d2bb31a587a01b6376ba9dfb45dee1ec535c82873baf7da8fb51675",
-    "response_hash": "3beb5cec23fdfa6131c56e3fbcda0fcfab818cf9d2f80ed249802b633ce6f294",
+    "request_hash": "7d818a925d39547bc2453aeef1d75f69302f3ca1de4ecd03f1bfea89b3f4bfbc",
+    "response_hash": "eafb92dc84a2aa91f8b539a8416e7092c48e3c17bc14ac51051a66d27b608c6e",
     "trust_method": "CLASSICAL",
-    "duration_ms": 637.906551361084,
+    "duration_ms": 1109.128475189209,
     "status": "SUCCESS",
-    "timestamp": "2026-08-18T08:29:04.229691+00:00",
-    "evidence_hash": "31572822d5245d370006c50a09286165892927af68845754a4b0db15c4eac74d",
-    "previous_evidence_hash": "c96fe4622a5c350942b535c375e85354f125ce84c1a3e6235de88ab2af15d4a2"
+    "timestamp": "2026-08-18T12:19:20.961801+00:00",
+    "evidence_hash": "777b6bf297bad52ae6d1a13fb6680d3860bfd812fbb4e176aa7220d8f894285d",
+    "previous_evidence_hash": "8fe5ed310baf5a01521b96f04cb3ccb07ebb7da8d6fc0c7ab2a094485d1fcbb6"
   },
   {
-    "invocation_id": "16981ec8-747c-4ec6-b277-8fca68f9b2bf",
+    "invocation_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
     "service_id": "insightcore.runtime.intelligence.v1",
     "operation": "execute",
-    "request_hash": "c2a3f7c1e5e2dae8b735b6d412346eb091cdf708d15121858b224d5a2bda7a20",
-    "response_hash": "303b101ad61aa079d9fa141c88f64d6ffae4722b4e82177a9859453ea55b3aec",
+    "request_hash": "9ff3b496a4d91ab8d77f89f196505ef469156b9d0cda97a842f21471fb10e9d4",
+    "response_hash": "40b6a1439391ae44be94b2cfec649a820932a51c271004a8fc3a284cfa347544",
     "trust_method": "CLASSICAL",
-    "duration_ms": 1227.6780605316162,
+    "duration_ms": 665.3225421905518,
     "status": "SUCCESS",
-    "timestamp": "2026-08-18T08:29:05.458380+00:00",
-    "evidence_hash": "f76c6f230c2fa41ca85e67818a5180ea66dd3e9fb95d2016e334acb1682732a7",
-    "previous_evidence_hash": "31572822d5245d370006c50a09286165892927af68845754a4b0db15c4eac74d"
+    "timestamp": "2026-08-18T12:19:21.627123+00:00",
+    "evidence_hash": "abdbefa12539a7a7d06029c5af3c87416bee74fffce012ec5ce22680fe565064",
+    "previous_evidence_hash": "777b6bf297bad52ae6d1a13fb6680d3860bfd812fbb4e176aa7220d8f894285d"
   }
 ]

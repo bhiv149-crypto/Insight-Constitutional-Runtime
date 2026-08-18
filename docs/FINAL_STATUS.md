@@ -1,19 +1,19 @@
-# Final Status (Verified) — Updated 2026-08-17
+# Final Status — Updated 2026-08-18
 
 ## 1. Executive Status
-**OVERALL**: ✓ LIVE INTEGRATION FULLY VERIFIED — **17/17 TESTS PASSING**
+**OVERALL**: Replay is live-verified; the constitutional verification pipeline remains partially halted at the Trust stage.
 
 - **Participants**: 3 (InsightFlow, InsightBridge, InsightCore)
 - **All Services**: LIVE / ACTIVE / VERSION 1.0.2
 - **Service Discovery**: ✓ VERIFIED (all 3 services discoverable via SDK)
 - **SDK Invocation**: ✓ VERIFIED (direct execution working)
-- **Evidence Chain**: ✓ VERIFIED (hash-linked evidence generated and captured)
-- **Health**: ✓ UP (Runtime + QCG platform)
-- **Replay Lineage**: ✓ VERIFIED (HTTP 200 with VALID verdict — endpoint WORKS)
-- **Replay Registry**: ✓ VERIFIED (local replay registry populated correctly)
-- **Verify Endpoint**: ⚠ KNOWN LIMITATION (HTTP 422 on trust/signature stage — platform cryptographic issue, not runtime bug)
-- **Telemetry**: ⚠ STUBBED (local only — awaiting platform contract)
-- **Test Results**: ✓ **ALL 17 TESTS PASSED**
+- **Execution Evidence**: ✓ VERIFIED
+- **Replay Lineage**: ✓ VERIFIED (HTTP 200 with VALID verdict — canonical replay record is returned)
+- **Verify/Trust**: ⚠ HALTED (HTTP 422, `INVALID_SIGNATURE` at Trust stage)
+- **Telemetry**: ⚠ PENDING if the live endpoint remains unavailable
+- **Quantum Runtime E2E**: ⚠ PENDING
+- **Production Certification**: ⚠ PENDING
+- **Current Interpretation**: Replay is not a blocker; the overall `/qcg/verify` flow is still blocked by Trust-stage ECDSA validation.
 
 ---
 
@@ -54,10 +54,10 @@
 
 ---
 
-## 3. Assignment Objective
-**COMPLETED**: Move InsightFlow, InsightBridge, and InsightCore from internally validated integration into true live, plug-and-play TANTRA runtime participation using the Platform SDK.
+## 3. Current Verification Objective
+**CURRENT STATE**: The Insight runtime remains live and integrable, while the constitutional verification pipeline is only partially converged.
 
-**Status**: ✓ OBJECTIVE MET — All three participants are live, registered, discoverable, and invocable via the official Platform SDK.
+**Status**: Replay is verified; the Trust-stage signature check remains failing and prevents final `/verify` success.
 
 ---
 
@@ -93,22 +93,23 @@ Insight Stack has successfully implemented and verified:
 
 ---
 
-## 6. Verification Matrix (All VERIFIED)
+## 6. Current Status Matrix
 
-| Capability | Test | Status | Evidence |
+| Component | Status | Evidence | Remaining issue |
 |---|---|---|---|
-| InsightFlow execution | test_1_insightflow_success | ✓ PASS | Local contract verified |
-| InsightBridge execution | test_2_insightbridge_success | ✓ PASS | Local contract verified |
-| InsightCore execution | test_3_insightcore_success | ✓ PASS | Local contract verified |
-| Error handling | test_4–test_11 | ✓ 9/9 PASS | Negative cases verified |
-| Response contract | test_12_response_contract | ✓ PASS | Schema validated |
-| Platform health | test_server_health | ✓ PASS | Platform UP |
-| Service listing | test_list_services | ✓ PASS | Catalog accessible |
-| SDK discovery | test_sdk_discovers_insight_runtime | ✓ PASS | All services found |
-| SDK invocation | test_sdk_invocation | ✓ PASS | Execution successful |
-| Replay lineage | test_sdk_invocation_verify_and_replay | ✓ PASS | HTTP 200, VALID verdict |
-| Verify endpoint | test_sdk_invocation_verify_and_replay | ⚠ EXPECTED FAILURE | HTTP 422 (trust stage) |
-| **Total** | **17 tests** | **✓ 17/17 PASS** | Command: `pytest -v` |
+| InsightFlow | LIVE | Registered and invocable via SDK | None observed in the current execution path |
+| InsightBridge | LIVE | Registered and invocable via SDK | None observed in the current execution path |
+| InsightCore | LIVE | Registered and invocable via SDK | None observed in the current execution path |
+| QCG Discovery | VERIFIED | Platform registry/service discovery remains reachable | Short-lived network instability can occur |
+| SDK Invocation | VERIFIED | Live invocation succeeds and returns an `invocation_id` | Platform-side verification still pending |
+| Execution Evidence | VERIFIED | Evidence collection and invocation payloads are valid | No production certification claim |
+| Replay | VERIFIED | `POST /qcg/verify` reaches Replay = `VALID`; `GET /qcg/replay/lineage/{invocation_id}` returns HTTP 200 with VALID verdict | Replay is independent and valid, but not the final proof of full verification |
+| Verify/Trust | BLOCKED | HTTP 422 with `INVALID_SIGNATURE` at Trust stage | ECDSA trust validation must be resolved by the platform |
+| Telemetry | PENDING if unavailable | No canonical live telemetry contract confirmed | Awaiting platform contract |
+| Quantum Runtime | PENDING | Not separately validated end-to-end in this audit | Requires independent confirmation |
+| Production Certification | PENDING | Replay is valid; final trust verification is not yet successful | Do not certify production readiness |
+
+**Current summary**: The live Replay stage is verified. The overall constitutional verification contract is not fully converged because the Trust stage remains halted by ECDSA signature verification failure.
 
 ---
 

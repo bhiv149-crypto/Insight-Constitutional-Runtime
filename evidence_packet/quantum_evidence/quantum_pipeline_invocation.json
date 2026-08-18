@@ -1,0 +1,76 @@
+{
+  "participant": "InsightBridge",
+  "runtime_identity": "insightbridge.runtime.intelligence.v1",
+  "version": "1.0.2",
+  "status": "accepted",
+  "quantum_route": "DELEGATED_LOCAL_QUANTUM",
+  "quantum_capability": "quantum_pipeline",
+  "quantum_result": {
+    "status": "SUCCESS",
+    "capability_id": "quantum_pipeline",
+    "invocation_id": "a0e51d4aa5520ce36164030bb51efec800190fe241711b9db84c9d8e467ad6f2",
+    "deterministic_hash": "a886d6438f6b06defb078717c6bf57c3a5524cf352ec27524411fca5cb366b3c",
+    "duration_ms": 4.919,
+    "output": {
+      "degradation_probability": 0.522233,
+      "confidence_score": 0.719981,
+      "recommended_anode_current": 114.4467,
+      "dominant_state": "101100",
+      "measurement_distribution": {
+        "101100": 0.617202,
+        "101101": 0.103518,
+        "001100": 0.132433,
+        "100100": 0.110199,
+        "111100": 0.036648
+      },
+      "shots_used": 4096,
+      "seed": 42,
+      "deterministic_event": {
+        "risk_level": "ELEVATED",
+        "action_required": true,
+        "signal": "INCREASE_ANODE_CURRENT",
+        "confidence": 0.719981
+      }
+    },
+    "errors": [],
+    "replay_authority": {
+      "authority": "CanonicalReplayAuthority",
+      "decision": "PERMIT",
+      "reason": "First execution of this invocation_id",
+      "capability_id": "quantum_pipeline",
+      "invocation_id": "a0e51d4aa5520ce36164030bb51efec800190fe241711b9db84c9d8e467ad6f2"
+    },
+    "provenance_ref": "a0e51d4aa5520ce36164030bb51efec800190fe241711b9db84c9d8e467ad6f2",
+    "metrics": {
+      "risk": "ELEVATED"
+    },
+    "dependency_check": {
+      "valid": true,
+      "capability_id": "quantum_pipeline",
+      "declared_dependencies": [],
+      "resolved": [],
+      "missing_dependencies": []
+    },
+    "authority_check": {
+      "permitted": true,
+      "capability_id": "quantum_pipeline",
+      "action": "run_quantum_circuit",
+      "reason": "Ceiling 'QUANTUM_EXECUTION' satisfies required 'QUANTUM_EXECUTION'",
+      "ceiling": "QUANTUM_EXECUTION",
+      "required": "QUANTUM_EXECUTION",
+      "blocked_by_neg": false
+    },
+    "runtime_mode": "LOCAL",
+    "quantum_provider_source": "Marine Quantum Runtime"
+  },
+  "payload": {
+    "route": "quantum",
+    "target_capability": "quantum_pipeline",
+    "salinity": 35.2,
+    "temperature_celsius": 18.5,
+    "pH": 7.8,
+    "material_oxidation_potential": 0.44,
+    "dissolved_oxygen_mgl": 6.5,
+    "current_density_mAcm2": 0.12
+  }
+}

@@ -1,6 +1,6 @@
 # Insight Constitutional Runtime
 
-**Status**: ✓ LIVE VERIFIED — All 17 tests passing (2026-08-17)
+**Status**: Replay is live-verified; `/qcg/verify` remains halted at Trust due to `INVALID_SIGNATURE`
 
 ## Quick Summary
 
@@ -9,8 +9,8 @@ The **Insight Constitutional Runtime** integrates three intelligence participant
 **What This Repo Contains**:
 - ✓ Three executable intelligence participants
 - ✓ Thin platform adapter layer
-- ✓ Live platform integration (verified)
-- ✓ Complete test suite (17/17 passing)
+- ✓ Live platform integration evidence
+- ✓ Replay lineage verification against the canonical QCG authority
 - ✓ Full audit and evidence trail
 
 **What This Repo Does NOT Contain**:
@@ -77,20 +77,20 @@ python insight_execution_service.py
 | **Service Discovery** | ✓ LIVE VERIFIED | SDK successfully discovers all services |
 | **SDK Invocation** | ✓ LIVE VERIFIED | Direct SDK execution working end-to-end |
 | **Evidence Chain** | ✓ VERIFIED | SDK generates hash-linked evidence |
-| **Replay Lineage** | ✓ LIVE VERIFIED | `/qcg/replay/lineage/{id}` returns HTTP 200 with VALID verdict |
-| **Verify (Trust)** | ⚠ BLOCKED | HTTP 422 on trust/signature stage (platform issue, not runtime bug) |
-| **Full Verification** | ⚠ PARTIAL | Replay works independently, trust verification blocked by platform signature issue |
+| **Replay Lineage** | ✓ LIVE VERIFIED | `/qcg/replay/lineage/{invocation_id}` returns HTTP 200 with VALID verdict |
+| **Verify (Trust)** | ⚠ HALTED | `/qcg/verify` returns HTTP 422 with `INVALID_SIGNATURE` at the Trust stage |
+| **Current Status** | ⚠ PARTIAL | Replay is verified; full `/verify` convergence is still blocked by the platform Trust signature issue |
 
 ---
 
 ## Known Limitations
 
-### 1. Verify Endpoint Returns HTTP 422 (Platform Issue)
-The `/qcg/verify` endpoint returns HTTP 422 with `INVALID_SIGNATURE` at the trust verification stage. This is a QCG platform-level cryptographic validation issue, not a runtime bug.
+### 1. Verify Endpoint Returns HTTP 422 (Trust Stage Halt)
+The `/qcg/verify` endpoint currently returns HTTP 422 with `INVALID_SIGNATURE` at the Trust stage. The latest evidence shows Replay is already `VALID` before the Trust stage halts the overall request.
 
-**Impact**: Direct contract verification fails, but replay lineage works independently and returns HTTP 200 with VALID verdict.
+**Impact**: Direct contract verification is halted by platform-side ECDSA trust validation, while replay lineage is independently verified and returns HTTP 200 with VALID verdict.
 
-**Workaround**: Treat replay as the authoritative source for invocation validation. Use `/qcg/replay/lineage/{id}` for lineage verification.
+**Current evidence**: Replay is live-verified; the overall `/verify` flow remains blocked by the Trust signature issue rather than by Replay failure.
 
 ### 2. Replay Registry is Local-Only (By Design)
 The `replay_registry.json` file stores replay evidence locally for testing. In production, the canonical replay lineage is maintained by the QCG platform via `/qcg/replay/lineage/{id}` endpoint.

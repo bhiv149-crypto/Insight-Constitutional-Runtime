@@ -1,6 +1,6 @@
 {
   "endpoint": "Unknown",
   "status_code": 500,
-  "exception": "'PlatformReplayAdapter' object has no attribute 'submit'",
-  "timestamp": "2026-08-18T08:24:17.968007+00:00"
+  "exception": "'PlatformIntegrationService' object has no attribute '_record_telemetry'",
+  "timestamp": "2026-08-18T12:07:04.119650+00:00"
 }

@@ -17,9 +17,10 @@ This audit reconstructs the **actual** implementation state of the Insight Const
 - The QCG Platform Registry and Capability Registry are **live and verified**.
 - The canonical Platform SDK is **installed and functional**.
 - **Replay reconstruction is LIVE VERIFIED** — `/qcg/replay/lineage/{invocation_id}` returns HTTP 200 with VALID verdict and complete lineage record.
+- **The /verify flow is still halted at the Trust stage** — the platform returns HTTP 422 because ECDSA signature verification fails.
 - **Telemetry is local/stub-only** — no live telemetry backend is configured or reachable (awaiting platform contract).
-- **SDK evidence chain integrity is verified locally** — this is SDK-internal hash-chain integrity, not ecosystem-wide replay certification.
-- **All 17 tests passing** — 12 local execution contract tests + 5 live platform integration tests (verified 2026-08-17).
+- **SDK evidence chain integrity is verified locally** — this is SDK-internal hash-chain integrity, not ecosystem-wide production certification.
+- **Replay is verified; full constitutional verification is not yet converged** because Trust remains blocked.
 
 ---
 
@@ -216,20 +217,18 @@ QCG returns registration receipts with `evidence_id`, `event_type`, `evidence_ha
 
 ## 10. CAN THE CANONICAL REPLAY MECHANISM RECONSTRUCT THE INVOCATION?
 
-**YES. Verified 2026-08-17.**
+**YES. Verified in the current live replay proof flow.**
 
 ### Current state (VERIFIED LIVE):
 1. The canonical QCG endpoint `/qcg/replay/lineage/{invocation_id}` returns **HTTP 200** with a VALID verdict.
-2. Response includes complete lineage record with:
-   - `message_id`: The invocation ID
-   - `verdict.status`: VALID
-   - `lineage_record`: Full execution trace with origin_component, verification_hash, trace_reference
-3. Test evidence: `test_sdk_invocation_verify_and_replay` ✓ PASSES, demonstrating end-to-end replay retrieval.
-4. The QCG health endpoint shows `replay_registry: ONLINE` and the lineage lookup endpoint correctly returns records.
+2. The same invocation flow proceeds through `/qcg/verify`, where Replay is `VALID`, then the overall request halts at the Trust stage with HTTP 422 because `INVALID_SIGNATURE` is reported.
+3. The live proof test `test_sdk_invocation_verify_and_replay` is the authoritative baseline for this behavior: Replay succeeds independently, and the lineage lookup confirms the canonical replay record.
+4. The QCG replay authority therefore demonstrates the `VALID` replay stage even while the final `/verify` contract is not fully successful.
 
 ### Evidence files:
-- Replay reconstruction is **live and verified** via direct HTTP testing and pytest integration tests.
-- Evidence: `test_sdk_invocation_verify_and_replay` documents HTTP 200 response with VALID verdict.
+- Live proof artifact: [evidence_packet/replay_evidence/verify_replay_valid_422_trust.json](../evidence_packet/replay_evidence/verify_replay_valid_422_trust.json)
+- Replay lineage artifact: [evidence_packet/replay_evidence/replay_validation.json](../evidence_packet/replay_evidence/replay_validation.json)
+- The current documented interpretation is: Replay is verified; overall `/verify` remains blocked by the Trust/ECDSA failure.
 
 ---
 
