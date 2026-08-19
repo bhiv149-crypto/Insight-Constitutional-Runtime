@@ -97,7 +97,17 @@ InsightFlow participates in the Constitutional Runtime by orchestrating intellig
 - Platform Runtime registration: 🟢 LIVE VERIFIED
 - Capability discovery: 🟢 LIVE VERIFIED
 - Canonical invocation (SDK + direct): 🟢 LIVE VERIFIED
-- Replay deduplication: 🔴 NOT VERIFIED — canonical endpoint returns 404; adapter missing submit()
-- Telemetry/observability: ⚪ NOT EXPOSED — local stub TraceStore only
+- Replay lineage retrieval: 🟢 VERIFIED-LIVE — canonical lineage returns HTTP 200 with `VALID`
+- Local duplicate replay submission: 🟡 VERIFIED-LOCAL — in-memory authority only
+- Telemetry/observability: 🟡 VERIFIED-LOCAL — `TraceStore` stub; canonical storage not established
 - Failure-path behaviour: 🟢 LIVE VERIFIED (SERVICE_NOT_FOUND, VERSION_REJECTED, INVALID_OP)
 - Version negotiation: 🟢 LIVE VERIFIED
+
+## Boundary and Limitations
+
+- InsightFlow owns workflow execution and local execution evidence.
+- Registration, discovery, invocation infrastructure, replay authority, and telemetry
+	ownership remain Platform concerns delegated through adapters.
+- The live endpoint `https://insight-flow-f5j4.onrender.com/health` reports
+	`service: InsightBridge`; the service identity mismatch is not resolved.
+- No `/enforce` request or response contract is established by the retrieved OpenAPI.

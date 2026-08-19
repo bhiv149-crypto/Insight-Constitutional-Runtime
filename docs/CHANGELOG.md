@@ -2,6 +2,14 @@
 
 All notable changes to the **Insight Constitutional Runtime Integration** project are documented in this file using [Semantic Versioning](https://semver.org/).
 
+## [Documentation Reconciliation] - 2026-08-19
+
+Reconciled Markdown against the current source, recorded `pytest -v` result, live
+endpoint observations, and evidence packet. The current baseline is 27 passed with
+3 warnings. Canonical replay lineage retrieval is live-verified; local duplicate
+replay is stub behavior; Trust-stage verification, Platform telemetry storage,
+production Quantum, and `/enforce` execution remain unestablished.
+
 ---
 
 ## [v1.0.1] - 2026-08-17 (Documentation Hardening)
@@ -26,8 +34,8 @@ All notable changes to the **Insight Constitutional Runtime Integration** projec
 * **Verify Endpoint**: Known limitation (HTTP 422 on trust/signature) documented as platform issue
 
 ### Documentation
-* **HANDOVER_NEW.md**: Created comprehensive 40-point handover guide for new engineers
-* **README.md**: Simplified to entry point; points to HANDOVER_NEW.md for details
+* **HANDOVER.md**: Current operational handover for new engineers
+* **README.md**: Concise entry point; points to HANDOVER.md for details
 * **FINAL_STATUS.md**: Updated with actual 17/17 test results
 * **ARCHITECTURE.md**: Corrected replay status and endpoint documentation
 * **INTEGRATION.md**: Updated summary results to reflect live verification
@@ -80,6 +88,6 @@ All notable changes to the **Insight Constitutional Runtime Integration** projec
 - ⚠ Trust verification (known limitation: HTTP 422)
 - ⚪ Telemetry export (stubbed, awaiting platform contract)
 
-**Production Ready**: Yes, for execution, discovery, and replay validation. Trust verification is blocked by platform-level signature issue.
+**Production certification**: Not claimed. Execution, discovery, invocation, health, and replay lineage are evidenced; Trust, telemetry storage, and Quantum production status remain bounded.
 
 *Note: Shared platform service hardware certification depends on the availability of the shared BHIV Constitutional Runtime services.*

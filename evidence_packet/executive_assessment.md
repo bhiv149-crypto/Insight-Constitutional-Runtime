@@ -13,7 +13,7 @@ The integration adheres 100% to the **thin adapter architectural pattern**, dele
 1. **Zero Infrastructure Duplication**: The Insight Stack consumes canonical BHIV Platform APIs via thin adapters in `src/platform/`, preserving platform ownership boundaries.
 2. **REST Contract Standardization**: Standardized outgoing REST payloads in `LivePlatformClient` to strictly conform with official platform contract schemas (`POST /v1/register` & `POST /register`).
 3. **Empirical Live Server Validation**: Empirically verified against `https://bhiv-qcg.onrender.com` for registration, discovery, health, and invocation. Obtained `HTTP 200` registration receipts and discovered registered services.
-4. **Internal Readiness Score**: 12 execution contract tests passed; 2 live platform tests pass when QCG reachable; integration readiness 17/17 passed.
+4. **Recorded Verification**: The repository records 27 pytest passes with 3 warnings, plus convergence evidence for 3 participants across registration, discovery, negotiation, invocation, evidence, replay, and failure paths.
 
 ---
 
@@ -25,10 +25,10 @@ The integration adheres 100% to the **thin adapter architectural pattern**, dele
 | **Constitutional Contracts** | Declarative Schemas Aligned | 100% | **COMPLETE** |
 | **Platform Adapters** | Thin Adapter Delegation | 100% | **COMPLETE** |
 | **Repository Readiness** | Execution contract tests pass | 12/12 | **PASSED** |
-| **Live Platform Tests** | Health + services when QCG reachable | 2/2 (flaky) | **PASSED WHEN REACHABLE** |
-| **Integration Readiness** | Import/module checks | 17/17 | **PASSED** |
+| **Live Platform Tests** | Health, discovery, invocation and replay | 5/5 recorded | **VERIFIED-LIVE** |
+| **Integration Evidence** | 3 participants through convergence lifecycle | 3/3 | **CAPTURED** |
 | **Live Integration Verification** | Registration, discovery, invocation, health | Verified | **VERIFIED** |
-| **Replay Verification** | Canonical replay reconstruction | 🔴 NOT VERIFIED | **BLOCKED** |
+| **Replay Verification** | Canonical lineage retrieval | 🟢 VERIFIED-LIVE | HTTP 200 with `VALID`; Trust separate |
 | **Telemetry Verification** | Live telemetry export | ⚪ NOT EXPOSED | **BLOCKED** |
 | **Upstream Repository Safety** | Zero edits to `bhiv-QCG-main` | 100% | **PASSED** |
 
@@ -42,11 +42,11 @@ Full hardware-level governance certification depends on the availability of the 
 
 ## Executive Sign-Off & Release Recommendation
 
-The **Insight Constitutional Runtime Integration** is **LIVE AND VERIFIED** for registration, discovery, version negotiation, invocation, execution, and health. Replay reconstruction and live telemetry export are blocked by external dependencies. The repository is structurally sound and recommended for production review with the noted blockers.
+The **Insight Constitutional Runtime Integration** is live-verified for registration, discovery, version negotiation, invocation, execution, health, and replay lineage retrieval. Trust-stage verification and live Platform telemetry storage remain unestablished. The repository is recommended for technical review, not production certification.
 
 * **Repository Implementation**: **COMPLETE**
-* **Integration Readiness**: **PASSED (12/12 execution contract + 17/17 module checks)**
+* **Pytest**: **27 passed, 3 warnings** (recorded run)
 * **Live Integration**: **VERIFIED (registration, discovery, negotiation, invocation, execution, health)**
-* **Replay**: **BLOCKED (canonical endpoint 404; adapter missing submit())**
-* **Telemetry**: **BLOCKED (local stub only; no live backend)**
+* **Replay**: **LINEAGE VERIFIED-LIVE; public submission contract not established**
+* **Telemetry**: **VERIFIED-LOCAL ONLY (local stub; no live Platform backend)**
 * **Overall Assessment**: **APPROVED FOR LIVE INTEGRATION — PRODUCTION CERTIFICATION PENDING EXTERNAL DEPENDENCIES**

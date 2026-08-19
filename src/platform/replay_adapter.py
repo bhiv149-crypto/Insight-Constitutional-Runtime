@@ -11,6 +11,7 @@ not maintain a local replay registry.
 """
 
 import requests
+from src.platform.stubs import CanonicalReplayAuthority
 
 
 class PlatformReplayAdapter:
@@ -28,6 +29,22 @@ class PlatformReplayAdapter:
             base_url or self.DEFAULT_BASE_URL
         ).rstrip("/")
         self.timeout = timeout
+        self.local_authority = CanonicalReplayAuthority()
+
+    def submit(self, message_id=None, issued_at=None, trace_reference=None, **kwargs):
+        """
+        Submit a message/invocation for replay verification.
+        
+        Since live QCG doesn't expose a public replay submission endpoint, 
+        delegates to local CanonicalReplayAuthority for verification testing.
+        """
+        return self.local_authority.submit(
+            message_id=message_id,
+            issued_at=issued_at,
+            trace_reference=trace_reference,
+            **kwargs
+        )
+
 
     # ---------------------------------------------------------
     # Live Replay Lineage

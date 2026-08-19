@@ -96,7 +96,18 @@ InsightBridge participates in the Constitutional Runtime by bridging runtime com
 - Platform Runtime registration: 🟢 LIVE VERIFIED
 - Capability discovery: 🟢 LIVE VERIFIED
 - Canonical invocation (SDK + direct): 🟢 LIVE VERIFIED
-- Replay deduplication: 🔴 NOT VERIFIED — canonical endpoint returns 404; adapter missing submit()
-- Telemetry/observability: ⚪ NOT EXPOSED — local stub TraceStore only
+- Replay lineage retrieval: 🟢 VERIFIED-LIVE — canonical lineage returns HTTP 200 with `VALID`
+- Local duplicate replay submission: 🟡 VERIFIED-LOCAL — in-memory authority only
+- Telemetry/observability: 🟡 VERIFIED-LOCAL — `TraceStore` stub; canonical storage not established
 - Failure-path behaviour: 🟢 LIVE VERIFIED (SERVICE_NOT_FOUND, VERSION_REJECTED, INVALID_OP)
 - Version negotiation: 🟢 LIVE VERIFIED
+
+## Boundary and Limitations
+
+- InsightBridge owns bridge execution and delegates Quantum requests to
+	`MarineQuantumAdapter` in local mode.
+- The Marine Quantum Runtime is not a production or cloud deployment in this repository.
+- Live InsightBridge `POST /ingest` success is separately verified; it is not proof of
+	Platform telemetry storage.
+- The `/enforce` endpoint observed on the separate live service has no verified payload
+	or response schema.

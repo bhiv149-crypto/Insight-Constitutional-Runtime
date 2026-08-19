@@ -1,47 +1,108 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+    "invocation_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "786e99dd-2a69-4c2d-80ab-209b9049ddf5",
+      "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
       "participant": "insightflow.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
-        "integration": "live_platform"
+        "integration": "live_platform",
+        "duration_ms": 917.1204566955566,
+        "status_code": 200
+      },
+      "insightbridge_telemetry": {
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a"
+        }
+      }
+    }
+  },
+  "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+  "execution_trace": {
+    "status": "RECORDED",
+    "type": "execution_trace",
+    "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+    "participant": "insightflow.runtime.intelligence.v1",
+    "operation": "execute",
+    "metadata": {
+      "source": "Insight Constitutional Runtime",
+      "integration": "live_platform",
+      "duration_ms": 917.1204566955566,
+      "status_code": 200
+    },
+    "insightbridge_telemetry": {
+      "status": "SUCCESS",
+      "http_status": 200,
+      "response": {
+        "status": "success",
+        "request_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a"
       }
     }
   },
   "insightbridge.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+    "invocation_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "5022df39-405d-41a9-8f58-3fcfbd3da7ac",
+      "trace_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
       "participant": "insightbridge.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
-        "integration": "live_platform"
+        "integration": "live_platform",
+        "duration_ms": 642.9228782653809,
+        "status_code": 200
+      },
+      "insightbridge_telemetry": {
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1"
+        }
       }
     }
   },
   "insightcore.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+    "invocation_id": "84724f30-c722-4f49-baf0-be578768366b",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "07e1173a-6205-4576-94b9-403dc75d50ef",
+      "trace_id": "84724f30-c722-4f49-baf0-be578768366b",
       "participant": "insightcore.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
-        "integration": "live_platform"
+        "integration": "live_platform",
+        "duration_ms": 661.0503196716309,
+        "status_code": 200
+      },
+      "insightbridge_telemetry": {
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "84724f30-c722-4f49-baf0-be578768366b"
+        }
       }
+    }
+  },
+  "contract_lineage": {
+    "status": "RECORDED",
+    "type": "contract_lineage",
+    "contract_id": "contract-001",
+    "parent_contract": "parent-001",
+    "metadata": {
+      "policy": "strict"
     }
   }
 }

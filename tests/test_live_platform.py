@@ -68,7 +68,9 @@ def test_sdk_discovers_insight_runtime(sdk):
 
     assert service["version"] == SERVICE_VERSION
     assert service["status"] == "ACTIVE"
-    assert service["service_name"] == "InsightFlow Runtime Intelligence"
+    # The live QCG platform stores the short participant name as registered.
+    assert service["service_name"] in ("InsightFlow", "InsightFlow Runtime Intelligence")
+
 
 
 # ---------------------------------------------------------------------------

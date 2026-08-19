@@ -18,7 +18,7 @@
 | 5 | Invocation Results | Canonical invocation through SDK | `invocation_proof/invocation_results.json` |
 | 6 | SDK Evidence Chain | Hash-chained invocation evidence | `invocation_proof/sdk_evidence_chain.json` |
 | 7 | Failure Cases | SERVICE_NOT_FOUND, VERSION, INVALID_OP | `invocation_proof/failure_cases.json` |
-| 8 | Replay Validation | 🔴 NOT VERIFIED — local stub evidence; canonical QCG replay lineage returns 404 | `replay_evidence/replay_validation.json` (🟣 HISTORICAL / STUB-DERIVED) |
+| 8 | Replay Validation | 🟢 Canonical lineage retrieval is VERIFIED-LIVE; local duplicate behavior is separate | `replay_evidence/replay_validation.json` |
 | 9 | Version Negotiation | Version compatibility for all 3 | `registry_proof/version_negotiation.json` |
 | 10 | Health Checks | SDK health for all 3 participants | `registry_proof/health_check.json` |
 | 11 | Registration Response | Platform response to registration | `registry_proof/registration_response.json` |
@@ -53,14 +53,14 @@
 - Evidence: `invocation_proof/sdk_evidence_chain.json`, `telemetry/traces.json`
 
 ### Proof 6: Replay of Recorded Execution
-- First submission with unique message_id → VALID
-- Second submission with same message_id → DUPLICATE (rejected)
+- Canonical lineage lookup → HTTP 200, `VALID`
+- Local duplicate authority path → first `VALID`, second `DUPLICATE`
 - Evidence: `replay_evidence/replay_validation.json`
 
 ### Proof 7: Health & Telemetry Visibility
 - Platform health endpoint returns UP
 - Execution traces, contract lineage, adapter traces recorded
-- OpenTelemetry export available
+- Local telemetry export returns dictionaries; canonical Platform storage is not established
 - Evidence: `registry_proof/health_check.json`, `telemetry/traces.json`
 
 ### Proof 8: Version/Contract Compatibility
@@ -102,6 +102,6 @@ The `code_packet/` directory contains only the specific changed/relevant files:
 
 ## Certification Status
 
-**INTEGRATED — REPLAY AND TELEMETRY BLOCKED**
+**INTEGRATED — REPLAY LINEAGE VERIFIED; TELEMETRY LOCAL ONLY**
 
-The Insight Stack is live and verified as a Platform Runtime participant for registration, discovery, version negotiation, invocation, execution, and health. Replay reconstruction and live telemetry export are blocked by external dependencies. Production certification is not yet claimed.
+The Insight Stack is live and verified as a Platform Runtime participant for registration, discovery, version negotiation, invocation, execution, health, and canonical replay lineage retrieval. `/qcg/verify` remains limited by Trust-stage `INVALID_SIGNATURE`, and live Platform telemetry storage is not established. Production certification is not claimed.

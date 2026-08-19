@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "platform_service_id": "insightflow.runtime.intelligence.v1",
+    "capability_id": "insightflow.runtime.intelligence.v1",
+    "service_name": "InsightFlow",
+    "version": "1.0.2",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "description": "InsightFlow Runtime Participant",
+    "tags": [
+      "insight",
+      "runtime",
+      "constitutional"
+    ],
+    "endpoints": {
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
+    },
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ]
+  },
+  {
+    "platform_service_id": "insightbridge.runtime.intelligence.v1",
+    "capability_id": "insightbridge.runtime.intelligence.v1",
+    "service_name": "InsightBridge",
+    "version": "1.0.2",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "description": "InsightBridge Runtime Participant",
+    "tags": [
+      "insight",
+      "runtime",
+      "constitutional"
+    ],
+    "endpoints": {
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
+    },
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "QuantumCommunicationGateway"
+    ]
+  },
+  {
+    "platform_service_id": "insightcore.runtime.intelligence.v1",
+    "capability_id": "insightcore.runtime.intelligence.v1",
+    "service_name": "InsightCore",
+    "version": "1.0.2",
+    "provider": "Insight Runtime",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "runtime_type": "Constitutional Runtime Participant",
+    "service_classification": "DOMAIN_SERVICE",
+    "capability_category": "INTELLIGENCE",
+    "status": "ACTIVE",
+    "description": "InsightCore Runtime Participant",
+    "tags": [
+      "insight",
+      "runtime",
+      "constitutional"
+    ],
+    "endpoints": {
+      "execution": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "execute": "https://insight-constitutional-runtime.onrender.com/api/v1/execute",
+      "health": "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
+    },
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "ReplayRegistry"
+    ]
+  }
+]

@@ -94,7 +94,16 @@ InsightCore participates in the Constitutional Runtime by providing intelligence
 - Platform Runtime registration: 🟢 LIVE VERIFIED
 - Capability discovery: 🟢 LIVE VERIFIED
 - Canonical invocation (SDK + direct): 🟢 LIVE VERIFIED
-- Replay deduplication: 🔴 NOT VERIFIED — canonical endpoint returns 404; adapter missing submit()
-- Telemetry/observability: ⚪ NOT EXPOSED — local stub TraceStore only
+- Replay lineage retrieval: 🟢 VERIFIED-LIVE — canonical lineage returns HTTP 200 with `VALID`
+- Local duplicate replay submission: 🟡 VERIFIED-LOCAL — in-memory authority only
+- Telemetry/observability: 🟡 VERIFIED-LOCAL — `TraceStore` stub; canonical storage not established
 - Failure-path behaviour: 🟢 LIVE VERIFIED (SERVICE_NOT_FOUND, VERSION_REJECTED, INVALID_OP)
 - Version negotiation: 🟢 LIVE VERIFIED
+
+## Boundary and Limitations
+
+- InsightCore executes inside the shared Insight Execution Service.
+- Platform integration, registration, discovery, health, compatibility, and invocation
+	are verified. No separate external InsightCore service is established.
+- No dedicated `src/platform/insightcore_adapter.py` is required or present under the
+	current architecture; no external InsightCore OpenAPI contract is available.

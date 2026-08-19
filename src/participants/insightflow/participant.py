@@ -18,6 +18,7 @@ from src.common.constants import (
 )
 
 from .lifecycle import InsightFlowLifecycle
+from src.platform.insightflow_adapter import InsightFlowAdapter
 
 
 class InsightFlowParticipant(BaseParticipant):
@@ -50,6 +51,7 @@ class InsightFlowParticipant(BaseParticipant):
         super().__init__(participant)
 
         self.lifecycle = InsightFlowLifecycle()
+        self.flow_adapter = InsightFlowAdapter()
 
     # ------------------------------------------------------------------
     # Participant Behaviour
@@ -63,13 +65,23 @@ class InsightFlowParticipant(BaseParticipant):
         tracing and replay are delegated through BaseParticipant.
         """
 
-        return {
+        flow_health = self.flow_adapter.health()
+        enforce_result = None
+
+        if isinstance(payload, dict) and payload.get("action") == "enforce":
+            enforce_result = self.flow_adapter.enforce(payload)
+
+        result = {
             "participant": self.name,
             "runtime_identity": self.identity,
             "version": self.version,
             "status": "accepted",
             "payload": payload,
+            "flow_health": flow_health,
         }
+        if enforce_result is not None:
+            result["enforce_result"] = enforce_result
+        return result
 
     def health(self):
         """

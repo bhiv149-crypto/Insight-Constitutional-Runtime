@@ -4,7 +4,7 @@
 
 The **Insight Constitutional Runtime Architecture** defines how the Insight Stack operates as reusable, schema-compliant Constitutional Runtime Participants within the Intelligence Layer of the **BHIV Constitutional Platform**.
 
-The architecture adheres strictly to a **thin adapter design pattern**. The Insight Runtime delegates platform-level capabilities—such as service discovery, registration, health monitoring, and evidence generation—to the underlying BHIV Platform via dedicated adapters, avoiding any duplication of core platform infrastructure. Telemetry is currently stubbed; replay is live and verified.
+The architecture adheres strictly to a **thin adapter design pattern**. The Insight Runtime delegates platform-level capabilities—such as service discovery, registration, health monitoring, and evidence generation—to the underlying BHIV Platform via dedicated adapters, avoiding any duplication of core platform infrastructure. Platform telemetry is currently backed by the local `TraceStore` stub; canonical replay lineage retrieval is live-verified, while local duplicate submission is a separate stub path.
 
 ---
 
@@ -12,7 +12,7 @@ The architecture adheres strictly to a **thin adapter design pattern**. The Insi
 
 1. **Strict Ownership Boundaries**: Insight Runtime owns participant business intelligence, execution lifecycle, and contract declarations. The BHIV Platform owns service registration, capability discovery, replay deduplication, telemetry storage, and trust verification.
 2. **Thin Adapter Delegation**: Participant interactions with the platform pass exclusively through thin adapter wrappers located in `src/platform/`.
-3. **Evidence & Determinism**: Every participant execution emits local evidence. Canonical replay reconstruction is NOT yet verified.
+3. **Evidence & Determinism**: Every participant execution emits local evidence. Canonical replay lineage retrieval is verified live, but this does not establish successful Trust-stage verification or production certification.
 4. **Resilient Network Protocol**: All REST communication with live platform endpoints (`https://bhiv-qcg.onrender.com`) incorporates fallback handlers to handle cloud network latency cleanly. QCG exhibits transient timeouts.
 
 ---
@@ -118,11 +118,20 @@ sequenceDiagram
 
 ## Validation Status (Updated 2026-08-17)
 
-* **Test Suite**: ✓ **17/17 PASSED** (12 execution contract + 5 live platform integration)
+* **Test Suite**: ✓ **27 PASSED, 3 WARNINGS** (12 execution contract, 4 InsightBridge Quantum, 6 Quantum adapter, 5 live platform)
 * **Live Integration Execution**: ✓ Verified against `https://bhiv-qcg.onrender.com` for registration, discovery, health, invocation, and replay lineage retrieval.
 * **Replay Status**: ✓ **LIVE VERIFIED** — Replay lineage endpoint (`GET /qcg/replay/lineage/{id}`) returns HTTP 200 with VALID verdict.
 * **Replay Lineage Retrieval**: ✓ Working — canonical lineage endpoint is reachable and provides replay evidence.
 * **Verify Endpoint**: ⚠ Known Limitation — HTTP 422 on trust/signature stage (platform cryptographic validation issue, not runtime bug).
 * **Telemetry Status**: ⚪ Stubbed — `TraceStore` returns local dictionaries; no live backend configured. Awaiting platform telemetry contract.
 * **QCG Connectivity**: ✓ Live platform responds reliably. Transient timeouts are rare and handled by retry logic.
-* **Shared Platform Services Notice**: Full hardware-level governance certification depends on the availability of the shared BHIV Constitutional Runtime services.
+* **Shared Platform Services Notice**: Full Trust-stage and governance certification is not established; the observed `/qcg/verify` response halts at Trust with HTTP 422 and `INVALID_SIGNATURE`.
+
+## Ownership Boundaries
+
+The Insight Runtime owns participant business behavior, local execution, and local
+evidence generation. The Platform owns registration, discovery, invocation infrastructure,
+governance, and the canonical replay authority. Platform telemetry is delegated through
+`PlatformTelemetryAdapter`, but the current provider is `TraceStore` from
+`src.platform.stubs`; production storage is not established. Quantum execution is owned
+by the Marine Quantum Runtime and is reached only from InsightBridge in local mode.

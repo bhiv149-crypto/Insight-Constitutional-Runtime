@@ -67,7 +67,7 @@
 │  │  RegistryAdapter → LivePlatformClient                    │  │
 │  │  DiscoveryAdapter → SDK discover_services()              │  │
 │  │  HealthAdapter → SDK check_health() + Registry health    │  │
-│  │  ReplayAdapter → QCG Replay Lineage (BLOCKED: 404 / submit() missing)  │  │
+│  │  ReplayAdapter → QCG Replay Lineage (HTTP 200 / VALID)                 │  │
 │  │  TelemetryAdapter → TraceStore (LOCAL STUB ONLY)         │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
@@ -110,8 +110,8 @@ PlatformIntegrationService.integrate()
     │       → PlatformSDKAdapter.check_health()
     │
     ├── 8. _validate_replay()
-    │       → 🔴 BLOCKED: PlatformReplayAdapter.submit() missing
-    │       → QCG /qcg/replay/lineage/{trace_id} returns 404
+    │       → QCG /qcg/replay/lineage/{trace_id} returns HTTP 200 / VALID
+    │       → Local duplicate authority is a separate VERIFIED-LOCAL path
     │
     ├── 9. _record_telemetry()
     │       → PlatformTelemetryAdapter.record_*()

@@ -32,6 +32,7 @@ import inspect
 from typing import Any, Dict, Optional
 
 from src.platform.imports import TraceStore
+from src.platform.insightbridge_adapter import InsightBridgeAdapter
 
 
 class PlatformTelemetryAdapter:
@@ -57,6 +58,8 @@ class PlatformTelemetryAdapter:
         #
         # No telemetry state is owned here.
         self.trace_store = trace_store or TraceStore()
+        self.insightbridge_client = InsightBridgeAdapter()
+
 
     # =========================================================
     # Internal Helpers
@@ -131,6 +134,30 @@ class PlatformTelemetryAdapter:
         # Current Platform TraceStore contract
         # -----------------------------------------------------
 
+        # Call live InsightBridge adapter to ingest telemetry
+        ib_result = None
+        try:
+            telemetry_data = {
+                "request_id": trace_id,
+                "path": "/api/v1/execute",
+                "method": "POST",
+                "status_code": metadata.get("status_code", 200),
+                "latency_ms": float(metadata.get("duration_ms") or metadata.get("latency_ms") or 10.0),
+            }
+            ib_metadata = {
+                "user_id": metadata.get("user_id") or metadata.get("source") or "insight-runtime",
+                "app_version": metadata.get("app_version") or "1.0.2",
+                "env": metadata.get("env") or "production",
+            }
+            telemetry_request = {
+                "telemetry_data": telemetry_data,
+                "metadata": ib_metadata,
+            }
+            ib_result = self.insightbridge_client.ingest_telemetry(telemetry_request)
+        except Exception as exc:
+            logger.error("Failed to execute live InsightBridge telemetry ingestion: %s", exc)
+            ib_result = {"status": "FAILED", "error": str(exc)}
+
         if "contract_hash" in params:
 
             contract_hash = self._hash(operation)
@@ -152,13 +179,14 @@ class PlatformTelemetryAdapter:
                 "operation": operation,
                 "sequence": self._sequence(result),
                 "provider": type(self.trace_store).__name__,
+                "insightbridge_telemetry": ib_result,
             }
 
         # -----------------------------------------------------
         # Legacy / alternate Platform contract
         # -----------------------------------------------------
 
-        return self._safe_dict(
+        legacy_res = self._safe_dict(
             method(
                 trace_id=trace_id,
                 participant=participant,
@@ -166,6 +194,9 @@ class PlatformTelemetryAdapter:
                 metadata=metadata,
             )
         )
+        if isinstance(legacy_res, dict):
+            legacy_res["insightbridge_telemetry"] = ib_result
+        return legacy_res
 
     # =========================================================
     # Contract Lineage

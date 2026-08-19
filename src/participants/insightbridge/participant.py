@@ -22,6 +22,7 @@ from src.common.constants import (
 
 from .lifecycle import InsightBridgeLifecycle
 from src.platform.quantum_adapter import MarineQuantumAdapter
+from src.platform.insightbridge_adapter import InsightBridgeAdapter
 
 
 class InsightBridgeParticipant(BaseParticipant):
@@ -54,6 +55,8 @@ class InsightBridgeParticipant(BaseParticipant):
 
         self.lifecycle = InsightBridgeLifecycle()
         self.quantum_adapter = MarineQuantumAdapter()
+        self.bridge_adapter = InsightBridgeAdapter()
+
 
     # ------------------------------------------------------------------
     # Participant Behaviour
@@ -125,6 +128,8 @@ class InsightBridgeParticipant(BaseParticipant):
         distinct from Platform Runtime health.
         """
 
+        gateway_health = self.bridge_adapter.health()
+
         return {
             "participant": self.name,
             "runtime_identity": self.identity,
@@ -134,4 +139,6 @@ class InsightBridgeParticipant(BaseParticipant):
                 "runtime": "Marine Quantum Runtime",
                 "mode": self.quantum_adapter.mode,
             },
-        }
+            "gateway_health": gateway_health,
+        }
+

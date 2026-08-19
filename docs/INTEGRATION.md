@@ -218,7 +218,7 @@ sequenceDiagram
 ```json
 {
   "status": "LIVE_VERIFIED",
-  "test_results": "17/17_PASSED",
+  "test_results": "27_PASSED_3_WARNINGS",
   "participants": 3,
   "registered": 3,
   "capabilities": 3,
@@ -228,7 +228,7 @@ sequenceDiagram
     "version": "2.0.0"
   },
   "registration": {
-    "status": "LIVE_VERIFIED",
+    "status": "PARTIALLY_VERIFIED",
     "all_services": "registered_successfully"
   },
   "discovery": {
@@ -246,7 +246,7 @@ sequenceDiagram
     "endpoint": "GET /qcg/replay/lineage/{invocation_id}",
     "http_status": 200,
     "verdict": "VALID",
-    "note": "Replay lineage endpoint is working and returns VALID verdict"
+    "note": "Lineage retrieval is live-verified; /qcg/verify later halts at Trust with HTTP 422"
   },
   "verify": {
     "status": "KNOWN_LIMITATION",
@@ -256,10 +256,10 @@ sequenceDiagram
     "note": "This is a platform-level issue, not a runtime bug. Replay works independently."
   },
   "telemetry": {
-    "status": "STUBBED",
+    "status": "VERIFIED_LOCAL",
     "reason": "TraceStore is a local development stub; platform telemetry contract awaiting"
   }
 }
 ```
 
-*Note: Registration, discovery, negotiation, invocation, execution, health, and replay are live and verified. Trust/signature verification has a known platform limitation but does not block replay. Telemetry is stubbed pending platform contract publication.*
+*Note: Registration, discovery, negotiation, invocation, execution, health, and replay lineage retrieval are live and verified. Trust/signature verification has a known platform limitation. Telemetry is local `TraceStore` behavior pending a canonical Platform contract; live InsightBridge `/ingest` is a separate observation.*

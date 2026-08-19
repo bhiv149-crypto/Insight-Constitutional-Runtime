@@ -125,7 +125,7 @@ Registers through the Platform Service Registry and publishes runtime capabiliti
 
 # Replay Participation
 
-Participates in deterministic replay using the existing Replay Registry. Canonical replay reconstruction via QCG is NOT YET VERIFIED — the lineage endpoint returns 404 and `PlatformReplayAdapter.submit()` is not implemented.
+Participates in deterministic replay using the existing Replay Registry. Canonical lineage retrieval via QCG is VERIFIED-LIVE (HTTP 200, `VALID`); local duplicate submission is separate stub behavior.
 
 ---
 

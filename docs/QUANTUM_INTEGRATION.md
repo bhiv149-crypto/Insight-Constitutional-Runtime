@@ -8,8 +8,8 @@
 | **Provider** | Marine Quantum Runtime (TANTRA Core) |
 | **Adapter Location** | `src/platform/quantum_adapter.py` (`MarineQuantumAdapter`) |
 | **Attached Participant** | `InsightBridge` (`src/participants/insightbridge/participant.py`) |
-| **Platform Integration Status** | **LIVE VERIFIED** (BHIV / QCG SDK) |
-| **Quantum Runtime Status** | **LOCAL VERIFIED** |
+| **Platform Integration Status** | **VERIFIED-LIVE** (BHIV / QCG SDK participant path) |
+| **Quantum Runtime Status** | **VERIFIED-LOCAL** |
 | **Live Quantum Cloud Deployment** | **NOT AVAILABLE / PENDING** |
 
 ---
@@ -112,10 +112,11 @@ response = insight_bridge.execute(payload)
 
 ---
 
-## 5. Rollback Instructions
+## 5. Limitations and Reproduction Boundary
 
-To revert this integration without affecting any prior project state:
-1. Delete `src/platform/quantum_adapter.py`.
-2. Revert `src/participants/insightbridge/participant.py` to its original state.
-3. Delete `tests/test_quantum_adapter.py` and `tests/test_insightbridge_quantum.py`.
-4. Delete `evidence_packet/quantum_evidence/` and `docs/QUANTUM_INTEGRATION.md`.
+The evidence proves local health, capability discovery, invocation, deterministic
+output, malformed-payload handling, unavailable-mode handling, and InsightBridge
+delegation. It does not prove a cloud or production Quantum deployment. The runtime
+path depends on the Marine Quantum Runtime installation outside this repository; its
+exact local path is environment-specific and must be configured before reproducing
+the Quantum tests.
