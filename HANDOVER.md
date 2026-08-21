@@ -1,625 +1,850 @@
 # Engineering Handover Guide — Insight Constitutional Runtime
 
-**Date**: 2026-08-19
-**Status**: LIVE VERIFIED — Replay lineage valid; `/qcg/verify` halted at Trust stage (`INVALID_SIGNATURE`)
-**Audience**: Incoming maintainers, system integrators, security reviewers
-**Access**: Clone repository, read this guide, confirm live health and evidence
+**Task ID:** `BHIV-QC-GANESH-01`  
+**Repository:** `Insight Constitutional Runtime`  
+**Owner:** Ganesh Vishwakarma — Insight Stack  
+**Project:** BHIV / TANTRA Constitutional Runtime — Quantum
+Convergence  
+**Document Status:** FINAL HANDOVER — BOUNDED LIVE VERIFICATION  
+**Last Updated:** 2026-08-21  
+**Certification Level:** Operational integration verified; production
+certification not claimed
 
----
+------------------------------------------------------------------------
 
-## 1. Project Identity
+## 1. Executive Summary
 
-**Repository**: Insight Constitutional Runtime
-**Assignment**: BHIV-QC-GANESH-01
-**Owner**: Ganesh Vishwakarma — Insight Stack
-**Platform**: BHIV Constitutional Platform (https://bhiv-qcg.onrender.com)
-**Deployment**: https://insight-constitutional-runtime.onrender.com
+The **Insight Constitutional Runtime** is an externally deployed FastAPI
+runtime that integrates three Insight Stack participants into the BHIV
+Constitutional Platform:
 
----
+- `insightflow.runtime.intelligence.v1`
+- `insightbridge.runtime.intelligence.v1`
+- `insightcore.runtime.intelligence.v1`
 
-## 2. What This Repository Does
+The core platform integration lifecycle has been implemented and
+exercised:
 
-The **Insight Constitutional Runtime** integrates three Insight Stack intelligence participants
-(`InsightFlow`, `InsightBridge`, `InsightCore`) into the **BHIV Constitutional Platform** as
-reusable, schema-compliant runtime participants.
+**Registration → Capability Registration → Discovery → Version
+Negotiation → Invocation → Health → Replay Lineage → Evidence
+Generation**
 
-The runtime operates as an external service with thin platform adapters. It delegates all
-platform-level concerns (registration, discovery, invocation, telemetry, replay) to the
-canonical Platform services via dedicated adapter modules.
+The live evidence supports working registration, discovery, version
+compatibility, SDK invocation, participant health, and canonical
+replay-lineage retrieval.
 
-**What This Runtime Owns:**
-- Participant business intelligence and execution logic
+The runtime also contains a **local Quantum integration** through
+`MarineQuantumAdapter`, connected to InsightBridge. Local Quantum
+health, capability discovery, invocation, deterministic output
+verification, and malformed-input handling have been exercised
+successfully.
+
+Several capabilities remain externally blocked or intentionally bounded:
+
+- `/qcg/verify` reaches the Replay stage successfully but halts at Trust
+  because of an `INVALID_SIGNATURE` ECDSA verification failure.
+- Canonical Platform telemetry is not live; the current provider is a
+  local `TraceStore` stub.
+- Quantum execution is local only; no production/cloud Quantum endpoint
+  is deployed.
+- `/enforce` was discovered, but its request/response contract is
+  incomplete and therefore is not claimed as integrated.
+- Production certification and full ecosystem convergence are **not
+  claimed**.
+
+This handover deliberately distinguishes **live**, **local**, **stub**,
+and **external/pending** capabilities.
+
+------------------------------------------------------------------------
+
+## 2. Project Identity and Ownership
+
+| Property                 | Value                                                 |
+|--------------------------|-------------------------------------------------------|
+| Repository               | Insight Constitutional Runtime                        |
+| Assignment               | `BHIV-QC-GANESH-01`                                   |
+| Owner                    | Ganesh Vishwakarma — Insight Stack                    |
+| Platform                 | BHIV Constitutional Platform                          |
+| Platform URL             | `https://bhiv-qcg.onrender.com`                       |
+| Runtime Deployment       | `https://insight-constitutional-runtime.onrender.com` |
+| Framework                | FastAPI                                               |
+| Main Entry Point         | `insight_execution_service.py`                        |
+| Quantum Adapter          | `MarineQuantumAdapter`                                |
+| Quantum Mode             | Local subprocess                                      |
+| Production Certification | Not claimed                                           |
+
+------------------------------------------------------------------------
+
+## 3. Scope and Ownership Boundaries
+
+### This Repository Owns
+
+- Participant business/execution logic
 - Insight execution lifecycle
-- Insight evidence generation per invocation
-- Platform adapter layer (thin wrappers in `src/platform/`)
+- Runtime API
+- Platform adapter layer
+- Platform registration/discovery integration
+- SDK invocation integration
+- Replay lineage lookup
+- Health integration
+- Local Quantum delegation through InsightBridge
+- Repository-side evidence generation
 
-**What This Runtime Does NOT Own:**
-- The Platform Runtime itself (external — `bhiv-qcg.onrender.com`)
-- The Platform Registry or service catalog (external platform service)
-- The Canonical Replay Authority or certification endpoints (external QCG)
-- The PlatformCapabilitySDK source code (external — `tantra-platform-sdk`)
-- Telemetry backend storage (Platform-owned; current provider is a local stub)
-- Quantum execution (Marine Quantum Runtime — local mode only)
+### This Repository Does Not Own
 
----
+- BHIV Constitutional Platform runtime
+- Platform registry service
+- Canonical Replay Authority
+- Canonical Trust/certification infrastructure
+- PlatformCapabilitySDK source
+- Canonical telemetry storage/backend
+- Production Quantum cloud infrastructure
+- Platform governance and certification approval
 
-## 3. Architecture
+These boundaries explain why the remaining blockers cannot all be
+resolved from this repository alone.
 
+------------------------------------------------------------------------
+
+## 4. Architecture
+
+``` text
+┌───────────────────────────────────────────────────────────────┐
+│             Insight Constitutional Runtime                   │
+│                                                               │
+│  FastAPI — insight_execution_service.py                      │
+│                                                               │
+│  POST /api/v1/execute                                        │
+│  GET  /api/v1/health                                         │
+│  GET  /api/v1/health/{service_id}                            │
+│  GET  /api/v1/services                                       │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │ Insight Runtime Participants                            │  │
+│  │                                                         │  │
+│  │ InsightFlow       v1.0.2                                │  │
+│  │ InsightBridge     v1.0.2 + Quantum Gateway              │  │
+│  │ InsightCore       v1.0.2                                │  │
+│  └───────────────────────┬─────────────────────────────────┘  │
+│                          │                                    │
+│  ┌───────────────────────▼─────────────────────────────────┐  │
+│  │ Platform Adapters                                       │  │
+│  │ SDK / Registry / Discovery / Replay / Health             │  │
+│  │ Telemetry / Quantum / InsightFlow / InsightBridge        │  │
+│  └───────────────────────┬─────────────────────────────────┘  │
+└──────────────────────────┼────────────────────────────────────┘
+                           │
+             ┌─────────────┴──────────────┐
+             ▼                            ▼
+┌──────────────────────────┐   ┌──────────────────────────────┐
+│ tantra-platform-sdk      │   │ BHIV QCG Platform             │
+│ 1.0.0                    │   │ bhiv-qcg.onrender.com          │
+└──────────────────────────┘   │ Registry / Discovery          │
+                               │ Replay / Verify / Trust        │
+                               └──────────────────────────────┘
 ```
-┌────────────────────────────────────────────────────────────┐
-│  Insight Execution Service (This Repository)               │
-│  (FastAPI — insight_execution_service.py)                  │
-│                                                            │
-│  POST /api/v1/execute    (Capability execution endpoint)   │
-│  GET  /api/v1/health     (Aggregate participant health)    │
-│  GET  /api/v1/health/{service_id}  (Per-service health)    │
-│  GET  /api/v1/services   (List hosted services)            │
-│                                                            │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  Three Constitutional Runtime Participants           │  │
-│  │  - InsightFlow v1.0.2                                │  │
-│  │  - InsightBridge v1.0.2  (+ Quantum Gateway)         │  │
-│  │  - InsightCore v1.0.2                                │  │
-│  └──────────────────┬───────────────────────────────────┘  │
-│                     │                                      │
-│  ┌──────────────────▼───────────────────────────────────┐  │
-│  │  Platform Adapters (src/platform/)                   │  │
-│  │  - PlatformSDKAdapter     (SDK invocation wrapper)   │  │
-│  │  - PlatformRegistryAdapter  (registration)           │  │
-│  │  - PlatformDiscoveryAdapter (discovery)              │  │
-│  │  - PlatformReplayAdapter    (replay lineage lookup)  │  │
-│  │  - PlatformHealthAdapter    (health monitoring)      │  │
-│  │  - PlatformTelemetryAdapter (telemetry — stub)       │  │
-│  │  - InsightFlowAdapter       (live InsightFlow svc)   │  │
-│  │  - InsightBridgeAdapter     (live InsightBridge svc) │  │
-│  │  - MarineQuantumAdapter     (local quantum runtime)  │  │
-│  └──────────────────┬───────────────────────────────────┘  │
-└─────────────────────┼──────────────────────────────────────┘
-                      │
-        ┌─────────────┴──────────────────┐
-        │                                │
-        ▼                                ▼
- PlatformCapabilitySDK           BHIV QCG Platform
- (tantra-platform-sdk 1.0.0)     (https://bhiv-qcg.onrender.com)
-        │                                │
-        └──────────────┬─────────────────┘
-                       │
-         ┌─────────────▼──────────────────┐
-         │  Platform Endpoints:           │
-         │  POST /registry/platform/v1/register │
-         │  GET  /registry/platform/v1/services │
-         │  POST /qcg/verify              │
-         │  GET  /qcg/replay/lineage/{id} │
-         └────────────────────────────────┘
-```
 
-### Ownership Boundaries
+------------------------------------------------------------------------
 
-| Component | Owner | Status |
-|-----------|-------|--------|
-| Insight Execution Service | This Repository | FastAPI on `/api/v1/execute` |
-| InsightFlow, InsightBridge, InsightCore | This Repository | Intelligence participants |
-| Platform Adapters (`src/platform/`) | This Repository | Thin wrappers over platform APIs |
-| Quantum Adapter (`src/platform/quantum_adapter.py`) | This Repository | Local MarineQuantumAdapter |
-| PlatformCapabilitySDK | External (`tantra-platform-sdk` 1.0.0) | Must be pip-installed |
-| Platform Registry | External (bhiv-qcg.onrender.com) | Service registration, discovery |
-| Canonical Replay Authority | External (QCG) | Replay lineage retrieval |
-| Canonical Telemetry Backend | External (Platform Team) | Stub-only; contract not yet published |
-| Marine Quantum Runtime | External (local) | Local subprocess invocation; no cloud deployment |
+## 5. Participant Status
 
----
-
-## 4. Three Participants
+| Participant   | Version | Role                                           | Platform Status | External Service     | Quantum       |
+|---------------|--------:|------------------------------------------------|-----------------|----------------------|---------------|
+| InsightFlow   |   1.0.2 | Workflow orchestration and trace generation    | `VERIFIED-LIVE` | Live/reachable       | None          |
+| InsightBridge |   1.0.2 | Messaging, trace propagation, event forwarding | `VERIFIED-LIVE` | Live/reachable       | Local gateway |
+| InsightCore   |   1.0.2 | Deterministic state validation/intelligence    | `VERIFIED-LIVE` | No dedicated service | None          |
 
 ### InsightFlow
-| Attribute | Value |
-|-----------|-------|
-| Runtime Identity | `insightflow.runtime.intelligence.v1` |
-| Version | 1.0.2 |
-| Role | Workflow orchestration and trace generation |
-| External Adapter | `InsightFlowAdapter` → `https://insight-flow-f5j4.onrender.com` |
-| External Service Health | `status: healthy` (self-identifies as "InsightBridge" — naming inconsistency; see Known Limitations §10.1) |
-| Platform Status | VERIFIED-LIVE |
-| Quantum Gateway | None |
+
+**Runtime identity:** `insightflow.runtime.intelligence.v1`
+
+Configured live service:
+
+`https://insight-flow-f5j4.onrender.com`
+
+The endpoint is reachable and healthy. However, its health payload
+reports `"service": "InsightBridge"` rather than `"InsightFlow"`.
+
+This is retained as an **open naming inconsistency**. It is not treated
+as resolved merely because the endpoint is healthy.
 
 ### InsightBridge
-| Attribute | Value |
-|-----------|-------|
-| Runtime Identity | `insightbridge.runtime.intelligence.v1` |
-| Version | 1.0.2 |
-| Role | Cross-domain messaging, trace propagation, event forwarding |
-| External Adapter | `InsightBridgeAdapter` → `https://insightbridge-phase-4-2-integration-demo.onrender.com` |
-| External Service Health | `status: healthy, version: 4.2` — VERIFIED-LIVE |
-| Platform Status | VERIFIED-LIVE |
-| Quantum Gateway | `MarineQuantumAdapter` — VERIFIED-LOCAL (no cloud Quantum deployment) |
+
+**Runtime identity:** `insightbridge.runtime.intelligence.v1`
+
+Configured live service:
+
+`https://insightbridge-phase-4-2-integration-demo.onrender.com`
+
+Recorded health:
+
+- `status: healthy`
+- `version: 4.2`
+
+InsightBridge is the only participant connected to the Quantum gateway.
 
 ### InsightCore
-| Attribute | Value |
-|-----------|-------|
-| Runtime Identity | `insightcore.runtime.intelligence.v1` |
-| Version | 1.0.2 |
-| Role | Deterministic state validation, intelligence processing |
-| External Adapter | None — no dedicated `insightcore_adapter.py` exists |
-| External Service | NOT ESTABLISHED (no separate external InsightCore service exists in this architecture) |
-| Platform Status | VERIFIED-LIVE (participant fully integrated via `PlatformIntegrationService`) |
-| Notes | InsightCore does not require an external adapter service per current architecture |
 
----
+**Runtime identity:** `insightcore.runtime.intelligence.v1`
 
-## 5. Platform Integration Lifecycle
+InsightCore is integrated directly through the platform integration
+service. No dedicated external InsightCore service or adapter is
+established in the current architecture.
 
-### Registration → Discovery → Invocation → Evidence → Replay → Telemetry
+**Classification:** Platform integration `VERIFIED-LIVE`; external
+InsightCore service
+`NOT-ESTABLISHED / NOT-REQUIRED BY CURRENT ARCHITECTURE`.
 
+------------------------------------------------------------------------
+
+## 6. Platform Integration Lifecycle
+
+``` text
+Registration
+    ↓
+Capability Registration
+    ↓
+Discovery
+    ↓
+Version Negotiation
+    ↓
+SDK Invocation
+    ↓
+Health
+    ↓
+Replay Lineage
+    ↓
+Telemetry Adapter
+    ↓
+Failure Paths
+    ↓
+Evidence Generation
 ```
-PlatformIntegrationService.integrate()
-    ├── 1. _register_runtime()     → POST /registry/platform/v1/register (3 participants)
-    ├── 2. _register_capabilities() → POST /registry/capabilities/register (3 capabilities)
-    ├── 3. _discover_services()    → GET  /registry/platform/v1/services
-    ├── 4. _negotiate_versions()   → SDK negotiate_version() → 3/3 COMPATIBLE
-    ├── 5. _invoke_capabilities()  → SDK invoke_capability() → 3/3 SUCCESS
-    ├── 6. _check_health()         → SDK check_health()
-    ├── 7. _validate_replay()      → PlatformReplayAdapter → QCG replay lineage
-    ├── 8. _record_telemetry()     → PlatformTelemetryAdapter → TraceStore (LOCAL STUB)
-    ├── 9. _exercise_failure_paths() → SERVICE_NOT_FOUND, VERSION_REJECTED, INVALID_OP
-    └── 10. _generate_evidence()   → JSON evidence files
+
+### Registration
+
+`POST /registry/platform/v1/register`
+
+Observed outcomes include:
+
+- `REGISTERED`
+- `ALREADY_REGISTERED`
+
+`ALREADY_REGISTERED` is expected idempotent behavior and is not a
+registration failure.
+
+**Evidence:** `evidence_packet/api_samples/runtime_registration.json`
+
+### Capability Registration
+
+`POST /registry/capabilities/register`
+
+The three participant capabilities have been registered.
+
+**Evidence:** `evidence_packet/api_samples/capability_registration.json`
+
+### Discovery
+
+`GET /registry/platform/v1/services`
+
+The registered Insight participants are discoverable through the
+platform registry.
+
+**Evidence:** `evidence_packet/api_samples/discovered_services.json`
+
+### Version Negotiation
+
+`tantra-platform-sdk==1.0.0` performs version compatibility negotiation.
+
+Recorded integration evidence indicates all three participants were
+compatible.
+
+**Classification:** `VERIFIED-LIVE`
+
+**Evidence:** `evidence_packet/registry_proof/version_negotiation.json`
+
+### SDK Invocation
+
+The SDK invocation path includes circuit-breaker handling, version
+negotiation, HTTP invocation/retries, and evidence-chain recording.
+
+All three participants have been exercised through the integration
+workflow.
+
+**Classification:** `VERIFIED-LIVE`
+
+**Evidence:** `evidence_packet/invocation_proof/invocation_results.json`
+
+------------------------------------------------------------------------
+
+## 7. Replay and Constitutional Verification
+
+Replay and complete constitutional verification are separate claims.
+
+### Canonical Replay Lineage
+
+Endpoint:
+
+`GET /qcg/replay/lineage/{invocation_id}`
+
+Recorded live behavior:
+
+- HTTP `200`
+- `verdict.status = VALID`
+- lineage record available
+- sequence and verification metadata available
+
+**Classification:** `VERIFIED-LIVE`
+
+### `/qcg/verify` Trust Failure
+
+Recorded live behavior:
+
+``` text
+HTTP 422
+flow_status = HALTED
+
+Replay:
+    status = VALID
+
+Trust:
+    passed = false
+    reason = ECDSA signature verification failed
 ```
 
-#### Registration
-- Endpoint: `POST https://bhiv-qcg.onrender.com/registry/platform/v1/register`
-- Response: `{"status": "REGISTERED"}` or `{"status": "ALREADY_REGISTERED"}`
-- **`ALREADY_REGISTERED` is NOT a failure.** It confirms idempotent registration. Subsequent discovery and invocation succeed normally.
-- Evidence: `evidence_packet/api_samples/runtime_registration.json`
+Interpretation:
 
-#### Capability Registration
-- Endpoint: `POST https://bhiv-qcg.onrender.com/registry/capabilities/register`
-- All three participants have registered capabilities.
-- Evidence: `evidence_packet/api_samples/capability_registration.json`
+1.  Replay validation succeeds.
+2.  The request reaches the Trust stage.
+3.  ECDSA signature verification fails.
+4.  The platform halts the verification flow.
 
-#### Discovery
-- Endpoint: `GET https://bhiv-qcg.onrender.com/registry/platform/v1/services`
-- Returns all registered services. All 3 Insight participants are discoverable.
-- Evidence: `evidence_packet/api_samples/discovered_services.json`
+Therefore:
 
-#### SDK Invocation
-- SDK: `tantra-platform-sdk==1.0.0` (`PlatformCapabilitySDK.invoke_capability()`)
-- Pipeline: circuit-breaker check → version negotiation → HTTP invocation with retries → evidence chain recording
-- All 3 participants: VERIFIED-LIVE
-- Evidence: `evidence_packet/invocation_proof/invocation_results.json`
+**`/qcg/verify` = PARTIALLY-VERIFIED**
 
-#### Replay
-- Canonical endpoint: `GET https://bhiv-qcg.onrender.com/qcg/replay/lineage/{invocation_id}`
-- Returns: HTTP 200, `verdict.status = "VALID"`, complete lineage record
-- Status: **VERIFIED-LIVE**
-- `POST /qcg/verify` also passes the Replay stage (`stages.replay.status = "VALID"`) but halts at Trust stage with HTTP 422 (`INVALID_SIGNATURE`). This is a platform-level ECDSA issue, not a replay failure.
-- Evidence: `evidence_packet/replay_evidence/`, `evidence_packet/replay_proof/README.md`
+This is not represented as a replay failure and the HTTP 422 result must
+not be hidden or suppressed.
 
-#### Telemetry
-- Current provider: `TraceStore` from `src/platform/stubs.py`
-- Ownership: `PLATFORM_RUNTIME` (PlatformTelemetryAdapter delegates to Platform)
-- `local_state_owned_by_adapter = False`
-- **This is a local stub, NOT production telemetry storage.**
-- No OTLP collector, Jaeger, Zipkin, or canonical telemetry backend is configured.
-- Live InsightBridge telemetry ingestion (`POST /ingest` on the live InsightBridge service) is separately verified (status: SUCCESS, request_id: live-integration-test-001) — this is distinct from the Platform telemetry infrastructure.
-- Evidence: `evidence_packet/telemetry/traces.json` (STUB-DERIVED — local dict returns only)
+**Evidence:**
+`evidence_packet/replay_evidence/verify_replay_valid_422_trust.json`
 
----
+------------------------------------------------------------------------
 
-## 6. Live Deployment
+## 8. Quantum Integration
 
-| Service | URL | Status |
-|---------|-----|--------|
-| Insight Constitutional Runtime | `https://insight-constitutional-runtime.onrender.com` | VERIFIED-LIVE |
-| BHIV QCG Platform | `https://bhiv-qcg.onrender.com` | VERIFIED-LIVE |
-| InsightFlow Live Service | `https://insight-flow-f5j4.onrender.com` | VERIFIED-LIVE (naming quirk; see §10.1) |
-| InsightBridge Live Service | `https://insightbridge-phase-4-2-integration-demo.onrender.com` | VERIFIED-LIVE |
+### Architecture
 
-### Live Health Verification
+``` text
+InsightBridgeParticipant
+        ↓
+MarineQuantumAdapter
+        ↓
+Marine Quantum Runtime
+        ↓
+Local subprocess
+```
 
-```powershell
-# Constitutional Runtime participant health (live)
+### Verified Local Behavior
+
+The following have been exercised locally:
+
+- Runtime health
+- Capability discovery
+- `quantum_pipeline`
+- `signal`
+- `distributed_qapp`
+- `operational_monitor`
+- Quantum invocation
+- Deterministic hash verification
+- InsightBridge delegation
+- Invalid/boundary input handling
+
+A controlled invalid-input case using `salinity=999.0` was used for
+failure-path validation.
+
+### Boundary
+
+| Capability                         | Classification   |
+|------------------------------------|------------------|
+| Quantum adapter implementation     | `IMPLEMENTED`    |
+| Quantum local health               | `VERIFIED-LOCAL` |
+| Quantum local discovery            | `VERIFIED-LOCAL` |
+| Quantum local invocation           | `VERIFIED-LOCAL` |
+| InsightBridge → Quantum delegation | `VERIFIED-LOCAL` |
+| Cloud Quantum execution            | `NOT-DEPLOYED`   |
+| Production Quantum certification   | `NOT-CLAIMED`    |
+
+**Evidence:** `evidence_packet/quantum_evidence/`
+
+------------------------------------------------------------------------
+
+## 9. Telemetry and Observability
+
+The runtime contains a `PlatformTelemetryAdapter`, but the current
+provider is:
+
+`TraceStore`
+
+from:
+
+`src/platform/stubs.py`
+
+The adapter reports Platform ownership and does not own an independent
+production telemetry store.
+
+### Current Status
+
+The current provider is a **local stub**.
+
+There is no evidence in the current runtime configuration of a
+production:
+
+- OTLP collector
+- Jaeger backend
+- Zipkin backend
+- canonical Platform telemetry endpoint
+- canonical production trace store
+
+Telemetry methods currently return local dictionary-based results.
+
+Therefore:
+
+- Telemetry adapter: `IMPLEMENTED`
+- Current provider: `STUB-DERIVED`
+- Canonical live telemetry: `NOT-ESTABLISHED`
+- Live OpenTelemetry export: `NOT-ESTABLISHED`
+
+### Separate InsightBridge Ingestion
+
+The live InsightBridge service’s `POST /ingest` endpoint has separately
+been exercised successfully with:
+
+`request_id = live-integration-test-001`
+
+This proves that specific live ingestion endpoint accepted the test
+request.
+
+It does **not** prove that canonical BHIV Platform telemetry storage or
+OpenTelemetry export is live.
+
+------------------------------------------------------------------------
+
+## 10. Live Deployment
+
+| Service                          | URL                                                             | Classification                   |
+|----------------------------------|-----------------------------------------------------------------|----------------------------------|
+| Insight Constitutional Runtime   | `https://insight-constitutional-runtime.onrender.com`           | `VERIFIED-LIVE`                  |
+| BHIV QCG Platform                | `https://bhiv-qcg.onrender.com`                                 | `VERIFIED-LIVE`                  |
+| InsightFlow configured service   | `https://insight-flow-f5j4.onrender.com`                        | `VERIFIED-LIVE` + naming finding |
+| InsightBridge configured service | `https://insightbridge-phase-4-2-integration-demo.onrender.com` | `VERIFIED-LIVE`                  |
+
+### Live Health Checks
+
+``` powershell
+Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health"
+
 Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
-# → { status: UP, version: 1.0.2, state: ACTIVE }
 
 Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
-# → { status: UP, version: 1.0.2, state: ACTIVE }
 
 Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
-# → { status: UP, version: 1.0.2, state: ACTIVE }
-
-# InsightFlow live service health
-Invoke-RestMethod -Uri "https://insight-flow-f5j4.onrender.com/health"
-# → { status: "healthy", service: "InsightBridge" }   ← NOTE: naming inconsistency (see §10.1)
-
-# InsightBridge live service health
-Invoke-RestMethod -Uri "https://insightbridge-phase-4-2-integration-demo.onrender.com/health"
-# → { status: "healthy", version: "4.2" }
 ```
 
----
+Recorded participant health:
 
-## 7. Quantum Integration
-
-**Boundary**: InsightBridge is the sole participant with a Quantum gateway.
-
-```
-InsightBridgeParticipant
-    ↓
-MarineQuantumAdapter (src/platform/quantum_adapter.py)
-    ↓
-Marine Quantum Runtime (local subprocess)
+``` text
+status: UP
+version: 1.0.2
+state: ACTIVE
 ```
 
-**Current Mode**: `local` (subprocess invocation — no cloud Quantum deployment)
+------------------------------------------------------------------------
 
-**Verified (VERIFIED-LOCAL):**
-- Health: `ALIVE / HEALTHY`
-- Capability discovery: `quantum_pipeline`, `signal`, `distributed_qapp`, `operational_monitor`
-- Invocation: deterministic hash verified
-- InsightBridge delegation to Quantum adapter: working
-- Malformed payload handling: validated boundary errors (e.g., `salinity=999.0`)
+## 11. Test Verification
 
-**NOT VERIFIED:**
-- Production/cloud Quantum Runtime deployment
-- Live external Quantum execution
+The recorded successful verification snapshot is:
 
-InsightFlow and InsightCore have **zero quantum coupling**.
+**27 passed, 3 warnings**
 
-Evidence: `evidence_packet/quantum_evidence/`
+Warnings recorded:
 
----
+- `pytest-asyncio` default fixture loop scope
+- Starlette multipart import deprecation
+- FastAPI `on_event` lifecycle deprecation
 
-## 8. Telemetry Ownership and Provider
+These are framework/deprecation warnings, not test failures.
 
-**Insight Runtime does NOT own telemetry storage.**
+### Important Reproducibility Note
 
-| Property | Value |
-|----------|-------|
-| Provider | `TraceStore` |
-| Provider Module | `src.platform.stubs` |
-| Ownership | `PLATFORM_RUNTIME` |
-| Local state owned by adapter | False |
-| Production telemetry | NOT ESTABLISHED |
+A later documentation-audit run did not reproduce the earlier successful
+27-pass snapshot because the live QCG environment was not consistently
+available/registered and live tests encountered external
+failures/timeouts.
 
-The `PlatformTelemetryAdapter` delegates to the Platform. The current Platform provider is `TraceStore` from `src/platform/stubs.py`. All telemetry method calls (`record_execution_trace()`, `export_opentelemetry()`, etc.) return local dictionaries only — they do not connect to any external system.
+Therefore the handover uses the following precise wording:
 
-**Live InsightBridge telemetry ingestion** (`POST /ingest` on the InsightBridge live service) is a separate, independently verified integration:
-- Status: `success`
-- `request_id`: `live-integration-test-001`
+> **27 passed / 3 warnings is the recorded successful verification
+> snapshot. Live-platform tests remain environment-dependent and must be
+> rerun against an available, correctly registered QCG environment.**
 
-Do not confuse these two distinct telemetry mechanisms.
+This avoids presenting a historical successful run as a permanent
+guarantee.
 
----
+### Test Breakdown
 
-## 9. Test Verification
+| Test File                       | Tests | Environment | Purpose                          |
+|---------------------------------|------:|-------------|----------------------------------|
+| `test_execution_contract.py`    |    12 | Local       | Participant execution contracts  |
+| `test_insightbridge_quantum.py` |     4 | Local       | InsightBridge Quantum delegation |
+| `test_quantum_adapter.py`       |     6 | Local       | MarineQuantumAdapter             |
+| `test_live_platform.py`         |     5 | Live        | Platform integration             |
 
-### Current Test Suite: 27 passed, 3 warnings
+------------------------------------------------------------------------
 
-This is the recorded verification result supplied for this handover and represented
-by the checked-in evidence. A rerun during this documentation audit produced 22 local
-passes plus 4 live-platform failures and 3 warnings because QCG timed out or did not
-have the participants registered. The live failures are therefore documented as
-environment-dependent, not silently counted as passes.
+## 12. Live Convergence Status
 
-```powershell
-pytest -v
+| Stage                      | Result                       |
+|----------------------------|------------------------------|
+| Registration               | `VERIFIED-LIVE`              |
+| Capability registration    | `VERIFIED-LIVE`              |
+| Discovery                  | `VERIFIED-LIVE`              |
+| Version negotiation        | `VERIFIED-LIVE`              |
+| SDK invocation             | `VERIFIED-LIVE`              |
+| Participant health         | `VERIFIED-LIVE`              |
+| Replay lineage             | `VERIFIED-LIVE`              |
+| `/qcg/verify` Replay stage | `VALID`                      |
+| `/qcg/verify` Trust stage  | `HALTED / INVALID_SIGNATURE` |
+| Canonical telemetry        | `NOT-ESTABLISHED`            |
+| Quantum local execution    | `VERIFIED-LOCAL`             |
+| Quantum cloud execution    | `NOT-DEPLOYED`               |
+| Production certification   | `NOT-CLAIMED`                |
+
+------------------------------------------------------------------------
+
+## 13. Evidence Packet
+
+The authoritative repository-side evidence location is:
+
+``` text
+evidence_packet/
 ```
 
-**Expected**: 27 passed, 3 warnings (no failures)
+Key areas:
 
-### Warnings (NOT failures)
-
-| Warning | Source |
-|---------|--------|
-| `asyncio_default_fixture_loop_scope` unset | `pytest-asyncio` — future deprecation notice |
-| `Please use import python_multipart instead` | Starlette multipart pending deprecation |
-| `on_event is deprecated, use lifespan event handlers` | FastAPI startup handler deprecation |
-
-These are framework-level deprecation notices. None affect test results.
-
-### Test Breakdown (27 total)
-
-| File | Tests | Environment | Purpose |
-|------|-------|-------------|---------|
-| `test_execution_contract.py` | 12 | Local (no platform) | Participant execution contract validation |
-| `test_insightbridge_quantum.py` | 4 | Local | InsightBridge quantum delegation |
-| `test_quantum_adapter.py` | 6 | Local | MarineQuantumAdapter verification |
-| `test_live_platform.py` | 5 | Live (requires bhiv-qcg.onrender.com) | Live platform integration |
-
-#### test_execution_contract.py (12 tests — VERIFIED-LOCAL)
-- test_1_insightflow_success ✓
-- test_2_insightbridge_success ✓
-- test_3_insightcore_success ✓
-- test_4_unknown_service ✓
-- test_5_unknown_operation ✓
-- test_6_missing_service_id ✓
-- test_7_missing_operation ✓
-- test_8_missing_payload ✓
-- test_9_missing_version ✓
-- test_10_missing_invocation_id ✓
-- test_11_unsupported_version ✓
-- test_12_response_contract ✓
-
-#### test_insightbridge_quantum.py (4 tests — VERIFIED-LOCAL)
-- test_insightbridge_standard_execution_untouched ✓
-- test_insightflow_and_insightcore_unaffected ✓
-- test_insightbridge_quantum_forwarding ✓
-- test_insightbridge_health ✓
-
-#### test_quantum_adapter.py (6 tests — VERIFIED-LOCAL)
-- test_quantum_adapter_health ✓
-- test_quantum_adapter_list_capabilities ✓
-- test_quantum_adapter_discover_capability ✓
-- test_quantum_adapter_invocation_quantum_pipeline ✓
-- test_quantum_adapter_malformed_payload ✓
-- test_quantum_adapter_unavailable_mode ✓
-
-#### test_live_platform.py (5 tests — VERIFIED-LIVE)
-- test_server_health ✓
-- test_list_services ✓
-- test_sdk_discovers_insight_runtime ✓
-- test_sdk_invocation ✓
-- test_sdk_invocation_verify_and_replay ✓ (correctly documents HTTP 422 on `/verify`; HTTP 200 on `/replay`)
-
----
-
-## 10. Live Convergence Verification
-
-From `PlatformIntegrationService` (verified by test suite and live integration run):
-
-| Stage | Result |
-|-------|--------|
-| Registration | 3 participants registered |
-| Discovery | 3 participants discovered |
-| Invocation | 3/3 SUCCESS |
-| Evidence chain | 3 records |
-| Replay | VALID → DUPLICATE (idempotent deduplication) |
-| Version negotiation | 3/3 COMPATIBLE |
-| Failure paths | service-not-found, version-incompatibility, invalid-operation — all captured |
-| Overall | SUCCESS — "ALL PROOFS CAPTURED / Live Runtime Convergence VERIFIED" |
-
----
-
-## 11. Known Limitations and Open Findings
-
-### 10.1 InsightFlow Health Endpoint Returns "InsightBridge" Service Name
-
-**Observed**: `GET https://insight-flow-f5j4.onrender.com/health` returns `{ "status": "healthy", "service": "InsightBridge" }`
-
-**Finding**: The URL is named `insight-flow-f5j4.onrender.com` but the service self-identifies as `InsightBridge` in its health response. This is a naming inconsistency — either a deployment naming issue or a service identity issue in the live InsightFlow service configuration.
-
-**Classification**: Open finding — not resolved by available repository evidence. The endpoint is reachable and returns healthy. The self-reported service name does not match the URL.
-
-**Impact**: The `InsightFlowAdapter` uses this endpoint. Health reads as healthy. Functional behavior is unaffected. The naming inconsistency should be investigated with the live service owner.
-
-### 10.2 `/enforce` Endpoint — Partial Contract Only
-
-**Observed**: The live OpenAPI at `https://insight-flow-f5j4.onrender.com/openapi.json` (OpenAPI 3.1.0, title: "InsightBridge") exposes:
-- `GET /health`
-- `POST /login` — accepts `username` and `password` as query parameters
-- `POST /enforce` — requires HTTP Bearer authentication
-
-**What is verified**:
-- Endpoint existence: VERIFIED
-- Authentication mechanism (Bearer): VERIFIED
-
-**What is NOT verified**:
-- `/enforce` request body schema: NOT VERIFIED (OpenAPI schema is empty)
-- `/enforce` response contract: NOT VERIFIED
-- Successful real enforcement execution: NOT VERIFIED
-
-**Do NOT** claim `/enforce` is fully integrated. Do NOT invent a payload format.
-
-### 10.3 Telemetry Provider is a Local Stub
-
-**Observed**: `PlatformTelemetryAdapter.provider_info()` returns:
-```
-provider = TraceStore
-provider_module = src.platform.stubs
-ownership = PLATFORM_RUNTIME
-local_state_owned_by_adapter = False
+``` text
+evidence_packet/
+├── api_samples/
+├── code_packet/
+├── deployment_proof/
+├── invocation_proof/
+├── observability_proof/
+├── production_readiness/
+├── quantum_evidence/
+├── registry_proof/
+├── replay_evidence/
+├── replay_proof/
+├── runtime_logs/
+├── screenshots/
+├── telemetry/
+├── certification_report.md
+├── executive_assessment.md
+├── integration_map.md
+├── integration_summary.json
+├── review_packet.md
+└── runtime_identity_cards.md
 ```
 
-**Classification**: VERIFIED-LOCAL (stub). No production telemetry backend is configured. Canonical telemetry contract is not yet published by the Platform team.
+The evidence packet should be treated as the primary audit/evidence
+location. A duplicate legacy evidence directory should not be treated as
+an independent source of truth.
 
-### 10.4 Quantum Runtime — Local Only
+------------------------------------------------------------------------
 
-**Current mode**: `local` (Marine Quantum Runtime runs as a local subprocess).
-No live cloud Quantum deployment exists. The documentation must not describe this as "production Quantum" or "live external Quantum deployment."
+## 14. Evidence Map
 
-### 10.5 InsightCore — No External Adapter Service
+| Evidence                 | Location                                                             | Classification                    |
+|--------------------------|----------------------------------------------------------------------|-----------------------------------|
+| Runtime registration     | `evidence_packet/api_samples/runtime_registration.json`              | `VERIFIED-LIVE`                   |
+| Capability registration  | `evidence_packet/api_samples/capability_registration.json`           | `VERIFIED-LIVE`                   |
+| Service discovery        | `evidence_packet/api_samples/discovered_services.json`               | `VERIFIED-LIVE`                   |
+| SDK invocation           | `evidence_packet/invocation_proof/invocation_results.json`           | `VERIFIED-LIVE`                   |
+| SDK evidence chain       | `evidence_packet/invocation_proof/sdk_evidence_chain.json`           | `VERIFIED-LOCAL / session-scoped` |
+| Failure cases            | `evidence_packet/invocation_proof/failure_cases.json`                | `VERIFIED-LIVE`                   |
+| Replay lineage           | `evidence_packet/replay_evidence/replay_validation.json`             | `VERIFIED-LIVE`                   |
+| Verify + Replay behavior | `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json` | `VERIFIED-LIVE`                   |
+| Version negotiation      | `evidence_packet/registry_proof/version_negotiation.json`            | `VERIFIED-LIVE`                   |
+| Health checks            | `evidence_packet/registry_proof/health_check.json`                   | `VERIFIED-LIVE`                   |
+| Telemetry traces         | `evidence_packet/telemetry/traces.json`                              | `STUB-DERIVED`                    |
+| Deployment proof         | `evidence_packet/deployment_proof/`                                  | `VERIFIED-LIVE`                   |
+| Quantum health           | `evidence_packet/quantum_evidence/quantum_local_health.json`         | `VERIFIED-LOCAL`                  |
+| Quantum invocation       | `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json`  | `VERIFIED-LOCAL`                  |
+| Quantum failure          | `evidence_packet/quantum_evidence/quantum_failure_case.json`         | `VERIFIED-LOCAL`                  |
+| Quantum provenance       | `evidence_packet/quantum_evidence/quantum_provenance_summary.json`   | `VERIFIED-LOCAL`                  |
+| Runtime logs             | `evidence_packet/runtime_logs/`                                      | `VERIFIED-LOCAL`                  |
+| Integration summary      | `evidence_packet/integration_summary.json`                           | `VERIFIED-LIVE`                   |
 
-InsightCore is fully integrated as a Platform participant. However:
-- No `insightcore_adapter.py` exists in `src/platform/`
-- No separate external InsightCore service has been established
-- No external InsightCore OpenAPI contract exists
+------------------------------------------------------------------------
 
-**Classification**: `InsightCore Platform integration = VERIFIED-LIVE`. `Dedicated external InsightCore adapter = NOT REQUIRED / NOT ESTABLISHED BY CURRENT ARCHITECTURE`.
+## 15. Known Findings and Limitations
 
-### 10.6 `/qcg/verify` — Halted at Trust Stage
+### 15.1 InsightFlow Health Identity
 
-**Observed**: `POST /qcg/verify` returns HTTP 422 with `INVALID_SIGNATURE`.
+`https://insight-flow-f5j4.onrender.com/health` reports
+`"service": "InsightBridge"`.
 
-The stages breakdown shows:
-- `stages.replay.status = "VALID"` — Replay passes
-- `stages.trust.passed = false` — Trust stage fails (ECDSA signature verification)
-- `detail.halt_reason` includes `HALT:INVALID_SIGNATURE`
+The endpoint is reachable and healthy, but the returned identity does
+not match the configured InsightFlow identity.
 
-**Classification**: Platform-level cryptographic validation issue; NOT a runtime bug.
-**Impact**: Overall `/verify` is halted. Replay is independently valid.
-**Evidence**: `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json`
+**Classification:** `PARTIALLY-VERIFIED`
 
----
+**Action:** Confirm with the live service owner.
 
-## 12. Evidence Map
+### 15.2 `/enforce` Contract
 
-| Evidence Type | Location | Classification |
-|---------------|----------|----------------|
-| Runtime registration | `evidence_packet/api_samples/runtime_registration.json` | VERIFIED-LIVE |
-| Capability registration | `evidence_packet/api_samples/capability_registration.json` | VERIFIED-LIVE |
-| Service discovery | `evidence_packet/api_samples/discovered_services.json` | VERIFIED-LIVE |
-| SDK invocation results | `evidence_packet/invocation_proof/invocation_results.json` | VERIFIED-LIVE |
-| SDK evidence chain | `evidence_packet/invocation_proof/sdk_evidence_chain.json` | VERIFIED-LOCAL (session-scoped) |
-| Failure cases | `evidence_packet/invocation_proof/failure_cases.json` | VERIFIED-LIVE |
-| Replay lineage | `evidence_packet/replay_evidence/replay_validation.json` | VERIFIED-LIVE |
-| Verify + Replay (422+200) | `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json` | VERIFIED-LIVE |
-| Version negotiation | `evidence_packet/registry_proof/version_negotiation.json` | VERIFIED-LIVE |
-| Health checks | `evidence_packet/registry_proof/health_check.json` | VERIFIED-LIVE |
-| Telemetry traces | `evidence_packet/telemetry/traces.json` | STUB-DERIVED (local dicts only) |
-| Deployment status | `evidence_packet/deployment_proof/` | VERIFIED-LIVE |
-| Quantum health | `evidence_packet/quantum_evidence/quantum_local_health.json` | VERIFIED-LOCAL |
-| Quantum invocation | `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json` | VERIFIED-LOCAL |
-| Runtime logs | `evidence_packet/runtime_logs/` | VERIFIED-LOCAL |
-| Integration summary | `evidence_packet/integration_summary.json` | VERIFIED-LIVE |
+The live OpenAPI exposes `/enforce` and indicates Bearer authentication.
 
----
+Verified:
 
-## 13. Current Status Matrix
+- Endpoint exists
+- Bearer authentication is required
 
-| Component | Implementation | Runtime Status | Environment | Evidence | Limitation |
-|-----------|---------------|----------------|-------------|----------|------------|
-| InsightFlow | VERIFIED | UP/ACTIVE | VERIFIED-LIVE | Health endpoint + test suite | Naming quirk on live service |
-| InsightBridge | VERIFIED | UP/ACTIVE | VERIFIED-LIVE | Health endpoint + test suite | None current |
-| InsightCore | VERIFIED | UP/ACTIVE | VERIFIED-LIVE | Health endpoint + test suite | No external adapter/service |
-| Platform registration | VERIFIED | REGISTERED | VERIFIED-LIVE | `registry_proof/` | ALREADY_REGISTERED is idempotent |
-| Platform discovery | VERIFIED | ACTIVE | VERIFIED-LIVE | `api_samples/` | Transient cloud latency possible |
-| SDK invocation | VERIFIED | SUCCESS | VERIFIED-LIVE | `invocation_proof/` | None current |
-| Replay lineage | VERIFIED | VALID | VERIFIED-LIVE | `replay_evidence/` | None current |
-| `/qcg/verify` (Trust) | NOT VERIFIED | HALTED (HTTP 422) | PARTIALLY-VERIFIED | `replay_evidence/verify_...json` | ECDSA signature failure — platform issue |
-| Telemetry | IMPLEMENTED | STUB | VERIFIED-LOCAL | `telemetry/traces.json` | No live backend; local stub only |
-| Quantum | IMPLEMENTED | LOCAL | VERIFIED-LOCAL | `quantum_evidence/` | No cloud deployment |
-| InsightFlow live service | REACHABLE | HEALTHY | VERIFIED-LIVE | `/health` endpoint | Self-identifies as "InsightBridge" |
-| InsightBridge live service | REACHABLE | HEALTHY (v4.2) | VERIFIED-LIVE | `/health` endpoint | None current |
-| `/enforce` endpoint | DISCOVERED | UNKNOWN | PARTIALLY-VERIFIED | OpenAPI schema | Body/response contract not established |
-| Deployment | ACTIVE | UP | VERIFIED-LIVE | Render deployment + health endpoint | None current |
+Not verified:
 
----
+- Request body schema
+- Response schema
+- Successful enforcement execution
 
-## 14. Pending Work
+**Classification:** `PENDING-CONTRACT`
 
-1. **ECDSA Signature Verification** (QCG Team)
-   - Resolve trust stage failure so `/qcg/verify` returns success
-   - Impact: final constitutional verification convergence
+The runtime must not invent or assume an undocumented payload contract.
 
-2. **Canonical Telemetry Backend** (Platform Team)
-   - Publish telemetry ingestion contract and endpoint
-   - Impact: enable live trace export from `PlatformTelemetryAdapter`
+### 15.3 Canonical Telemetry
 
-3. **Manifest Forwarding** (Platform Team)
-   - Platform HTTP registration handler currently does not forward the manifest field
-   - Impact: minimal (registration succeeds; manifest metadata may be null)
+The telemetry adapter exists, but the current provider is a local stub.
 
-4. **InsightFlow Service Naming Investigation**
-   - Determine whether `insight-flow-f5j4.onrender.com` serving "InsightBridge" is intentional
-   - Impact: clarity of live service identity
+**Classification:** `IMPLEMENTED-NOT-LIVE`
 
-5. **`/enforce` Contract Publication**
-   - Publish documented request/response schema for `/enforce`
-   - Impact: enforcement integration cannot be completed without a contract
+### 15.4 Quantum
 
----
+Marine Quantum Runtime is local only.
 
-## 15. Paused Work
+**Classification:** `VERIFIED-LOCAL`
 
-- **Quantum Cloud Deployment**: Marine Quantum Runtime is verified in local mode only. Production Quantum cloud deployment is paused pending Dhiraj/Pritesh availability.
-- **Production Certification**: Certification depends on external platform/governance requirements. Not claimed.
+### 15.5 QCG Trust
 
----
+Replay is valid, but `/qcg/verify` halts at Trust because of ECDSA
+signature verification failure.
 
-## 16. What Is NOT Implemented
+**Classification:** `PARTIALLY-VERIFIED`
 
-- No live telemetry export (stub only)
-- No `/enforce` integration (endpoint discovered, contract not available)
-- No production Quantum execution (local mode only)
-- No cross-session SDK evidence persistence (SDK evidence chain is session-scoped; resets per instance)
-- No external InsightCore service (not required per current architecture)
+### 15.6 SDK Evidence Persistence
 
----
+SDK evidence-chain state is session-scoped and should not be represented
+as persistent cross-session storage.
 
-## 17. Reproduction Instructions
+------------------------------------------------------------------------
+
+## 16. Current Status Matrix
+
+| Area                     | Implementation | Runtime Status | Environment | Evidence           | Boundary                     |
+|--------------------------|----------------|----------------|-------------|--------------------|------------------------------|
+| InsightFlow              | Verified       | UP/ACTIVE      | Live        | Health/invocation  | Naming inconsistency         |
+| InsightBridge            | Verified       | UP/ACTIVE      | Live        | Health/invocation  | None identified              |
+| InsightCore              | Verified       | UP/ACTIVE      | Live        | Health/invocation  | No external service          |
+| Registration             | Verified       | Registered     | Live        | Registry proof     | Platform-owned               |
+| Discovery                | Verified       | Active         | Live        | Discovery proof    | Cloud latency possible       |
+| Version negotiation      | Verified       | Compatible     | Live        | Registry proof     | None identified              |
+| SDK invocation           | Verified       | Success        | Live        | Invocation proof   | None identified              |
+| Replay lineage           | Verified       | Valid          | Live        | Replay proof       | None identified              |
+| `/qcg/verify` Replay     | Verified       | Valid          | Live        | Verify evidence    | Trust remains                |
+| `/qcg/verify` Trust      | Not verified   | Halted         | Live        | HTTP 422 evidence  | ECDSA failure                |
+| Telemetry adapter        | Implemented    | Stub           | Local       | Telemetry evidence | Backend unavailable          |
+| Quantum adapter          | Implemented    | Operational    | Local       | Quantum evidence   | No cloud deployment          |
+| `/enforce`               | Discovered     | Unknown        | Partial     | OpenAPI evidence   | Contract unavailable         |
+| Deployment               | Verified       | Up             | Live        | Deployment proof   | None identified              |
+| Production certification | Not claimed    | —              | —           | —                  | Governance/platform approval |
+
+------------------------------------------------------------------------
+
+## 17. Remaining External Blockers
+
+### Blocker 1 — QCG ECDSA Trust Verification
+
+**Owner:** QCG / Platform team
+
+Required:
+
+- Resolve ECDSA signature verification failure.
+- Re-run `/qcg/verify`.
+- Confirm Trust stage passes.
+- Capture updated evidence.
+
+**Impact:** Complete constitutional verification convergence.
+
+### Blocker 2 — Canonical Platform Telemetry
+
+**Owner:** Platform team
+
+Required:
+
+- Publish telemetry ingestion contract.
+- Provide live endpoint/provider.
+- Establish OpenTelemetry export.
+- Replace/connect the current stub-backed provider.
+- Capture live trace evidence.
+
+**Impact:** Live canonical observability verification.
+
+### Blocker 3 — Manifest Forwarding
+
+**Owner:** Platform team
+
+The observed platform registration handler does not forward the manifest
+field.
+
+Registration itself succeeds, so this is primarily a metadata
+completeness issue.
+
+### Blocker 4 — InsightFlow Service Identity
+
+**Owner:** InsightFlow/live service owner
+
+Confirm why the configured InsightFlow endpoint reports
+`"InsightBridge"`.
+
+**Impact:** Service identity/documentation clarity.
+
+### Blocker 5 — `/enforce` Contract
+
+**Owner:** Relevant service/platform owner
+
+Required:
+
+- Request schema
+- Response schema
+- Authentication expectations
+- Successful execution example
+
+**Impact:** Responsible enforcement integration.
+
+------------------------------------------------------------------------
+
+## 18. Paused Work
+
+### Quantum Cloud Deployment
+
+Production/cloud Quantum deployment is paused.
+
+Current evidence is limited to local Marine Quantum Runtime execution.
+
+### Production Certification
+
+Production certification is not claimed and remains dependent on
+external platform, security, governance, and verification requirements.
+
+------------------------------------------------------------------------
+
+## 19. What Is Implemented
+
+The repository currently contains:
+
+- Three platform-integrated Insight participants
+- FastAPI execution service
+- Platform registration integration
+- Capability registration workflow
+- Discovery adapter
+- SDK invocation integration
+- Health adapter
+- Replay adapter
+- Telemetry adapter boundary
+- InsightFlow live adapter
+- InsightBridge live adapter
+- Marine Quantum adapter
+- Local Quantum verification
+- Failure-path handling
+- Replay lineage evidence
+- Runtime/evidence generation
+- Deployment configuration
+- Local and live integration tests
+- Evidence packet
+- Handover documentation
+
+------------------------------------------------------------------------
+
+## 20. What Is Not Established
+
+The following must remain explicitly unclaimed:
+
+- Canonical production telemetry storage
+- Live OpenTelemetry export
+- Production/cloud Quantum execution
+- Successful QCG Trust-stage verification
+- Fully specified `/enforce` integration
+- External InsightCore service
+- Production certification
+- Full ecosystem-wide constitutional convergence
+
+------------------------------------------------------------------------
+
+## 21. Reproduction Guide
 
 ### Prerequisites
-- Python 3.10+ (tested with 3.12.4)
-- Network access to `https://bhiv-qcg.onrender.com`
+
+- Python 3.10+
+- Tested with Python 3.12.x
 - pip
+- Network access to BHIV QCG Platform
 
-### Setup (5 minutes)
+### Setup
 
-```powershell
-# 1. Clone and enter repository
+``` powershell
 git clone <repo-url>
 cd Insight_Constitutional_Runtime
 
-# 2. Create virtual environment
 python -m venv venv
-venv\Scripts\activate
+venv\Scriptsctivate
 
-# 3. Install dependencies
 pip install -r requirements.txt
-
-# 4. Install external SDK (CRITICAL)
 pip install tantra-platform-sdk==1.0.0
 
-# 5. Verify SDK loaded
 python -c "from tantra_platform_sdk import PlatformCapabilitySDK; print('SDK OK')"
+```
 
-# 6. Run full test suite
+### Run Tests
+
+``` powershell
 pytest -v
-# Expected: 27 passed, 3 warnings (no failures)
+```
 
-# 7. Start runtime locally (optional)
+Live-platform tests depend on current external QCG availability and
+registration state.
+
+### Start Runtime Locally
+
+``` powershell
 python insight_execution_service.py
-# Binds to http://0.0.0.0:8003 by default
+```
+
+Default:
+
+``` text
+http://0.0.0.0:8003
 ```
 
 ### Environment Variables
 
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `INSIGHT_SERVICE_URL` | Yes (for registration) | Public URL of deployed Insight service |
-| `PORT` | No | Server bind port (default: 8003) |
-| `HOST` | No | Server bind interface (default: 0.0.0.0) |
+| Variable              | Required             | Purpose                           |
+|-----------------------|----------------------|-----------------------------------|
+| `INSIGHT_SERVICE_URL` | Yes for registration | Public runtime URL                |
+| `PORT`                | No                   | Runtime port; default `8003`      |
+| `HOST`                | No                   | Bind interface; default `0.0.0.0` |
 
-### Live Health Verification
+------------------------------------------------------------------------
 
-```powershell
-# Insight service aggregate health
-Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health"
+## 22. Live Invocation Example
 
-# Per-participant health
-Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightflow.runtime.intelligence.v1"
-Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightbridge.runtime.intelligence.v1"
-Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/health/insightcore.runtime.intelligence.v1"
-# Expected: { status: UP, version: 1.0.2, state: ACTIVE } for all three
-
-# Platform registry health
-Invoke-RestMethod -Uri "https://bhiv-qcg.onrender.com/registry/platform/v1/health"
-```
-
-### Platform Registration
-
-```powershell
-$body = @{
-  service_id = "insightflow.runtime.intelligence.v1"
-  version = "1.0.2"
-  status = "ACTIVE"
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "https://bhiv-qcg.onrender.com/registry/platform/v1/register" `
-  -Method POST -ContentType "application/json" -Body $body
-# → { status: "REGISTERED" } or { status: "ALREADY_REGISTERED" }
-# ALREADY_REGISTERED is NOT a failure — idempotent behavior
-```
-
-### Discovery
-
-```powershell
-Invoke-RestMethod -Uri "https://bhiv-qcg.onrender.com/registry/platform/v1/services"
-# → lists all registered services including the 3 Insight participants
-```
-
-### Invocation
-
-```powershell
+``` powershell
 $body = @{
   service_id = "insightflow.runtime.intelligence.v1"
   operation = "execute"
@@ -628,192 +853,262 @@ $body = @{
   invocation_id = [guid]::NewGuid().ToString()
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/execute" `
-  -Method POST -ContentType "application/json" -Body $body
-# → 200 OK, { status: SUCCESS, invocation_id: ..., evidence: {...} }
+Invoke-RestMethod `
+  -Uri "https://insight-constitutional-runtime.onrender.com/api/v1/execute" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body $body
 ```
 
-### Replay Validation
+### Replay Example
 
-```powershell
-# Get replay lineage for a live invocation_id (replace with actual UUID from invocation)
-$invocation_id = "<uuid-from-invoke>"
-Invoke-RestMethod -Uri "https://bhiv-qcg.onrender.com/qcg/replay/lineage/$invocation_id"
-# → 200 OK, { verdict: { status: "VALID", lineage_record: {...} } }
+``` powershell
+$invocation_id = "<live-invocation-id>"
+
+Invoke-RestMethod `
+  -Uri "https://bhiv-qcg.onrender.com/qcg/replay/lineage/$invocation_id"
 ```
 
-### Telemetry Verification (Local Stub Only)
+Expected recorded behavior:
 
-```powershell
+``` text
+HTTP 200
+verdict.status = VALID
+lineage_record = available
+```
+
+### Telemetry Stub Example
+
+``` powershell
 python -c "
 from src.platform.imports import TraceStore
 ts = TraceStore()
-result = ts.record_execution_trace(trace_id='t1', participant='InsightFlow', operation='execute')
+result = ts.record_execution_trace(
+    trace_id='t1',
+    participant='InsightFlow',
+    operation='execute'
+)
 print(result)
-# Returns: local dict with status=RECORDED — NOT a live export
 "
 ```
 
-### Quantum Local Verification
+This verifies only the local telemetry stub.
 
-```powershell
+### Quantum Local Example
+
+``` powershell
 python -c "
 from src.platform.quantum_adapter import MarineQuantumAdapter
 q = MarineQuantumAdapter()
 print('Mode:', q.mode)
 print('Health:', q.health())
-# → mode: local, status: HEALTHY
 "
 ```
 
-### Evidence Generation
+Expected:
 
-```powershell
-# The evidence files in evidence_packet/ are generated by PlatformIntegrationService
-python -c "
-from src.integration.platform_integration_service import PlatformIntegrationService
-svc = PlatformIntegrationService()
-result = svc.integrate()
-print(result)
-"
+``` text
+Mode: local
+Health: HEALTHY
 ```
 
----
+------------------------------------------------------------------------
 
-## 18. Repository Structure
+## 23. Repository Structure
 
-```
+``` text
 .
-├── insight_execution_service.py    Main FastAPI application
-├── requirements.txt                Python dependencies
-├── render.yaml                     Render deployment config
-├── replay_registry.json            Local replay registry (dev only)
+├── insight_execution_service.py
+├── requirements.txt
+├── render.yaml
+├── replay_registry.json
 │
 ├── src/
-│   ├── common/                     Shared interfaces and models
-│   │   ├── base_participant.py     BaseParticipant class
-│   │   ├── constants.py            Service IDs and versions
-│   │   ├── exceptions.py           Exception types
-│   │   └── models.py               Request/response schemas
-│   │
-│   ├── participants/               Runtime participant implementations
+│   ├── common/
+│   ├── participants/
 │   │   ├── insightflow/
-│   │   │   ├── participant.py      InsightFlowParticipant
-│   │   │   └── lifecycle.py        State machine
 │   │   ├── insightbridge/
-│   │   │   ├── participant.py      InsightBridgeParticipant (+ Quantum gateway)
-│   │   │   └── lifecycle.py        State machine
 │   │   └── insightcore/
-│   │       ├── participant.py      InsightCoreParticipant
-│   │       └── lifecycle.py        State machine
-│   │
-│   ├── integration/                Integration orchestration
-│   │   ├── platform_integration_service.py  Main integration workflow
-│   │   └── registration_builder.py          Payload builder
-│   │
+│   ├── integration/
 │   ├── config/
-│   │   └── platform_config.py      Platform URLs and SDK configuration
-│   │
-│   └── platform/                   Platform adapters (thin wrappers)
-│       ├── sdk_adapter.py          PlatformCapabilitySDK wrapper
-│       ├── registry_adapter.py     Service registration
-│       ├── discovery_adapter.py    Service discovery
-│       ├── replay_adapter.py       Replay lineage
-│       ├── health_adapter.py       Health monitoring
-│       ├── telemetry_adapter.py    Telemetry (stub-backed)
-│       ├── quantum_adapter.py      Marine Quantum Runtime (local)
-│       ├── insightflow_adapter.py  Live InsightFlow service adapter
-│       ├── insightbridge_adapter.py Live InsightBridge service adapter
-│       ├── live_platform_client.py REST client for QCG endpoints
-│       ├── runtime_adapter.py      Runtime adapter
-│       ├── runtime_config.py       SDK configuration
-│       ├── stubs.py                TraceStore, CanonicalReplayAuthority stubs
-│       └── imports.py              Centralized imports
+│   └── platform/
 │
 ├── tests/
-│   ├── test_execution_contract.py  (12 tests) Local execution contract
-│   ├── test_insightbridge_quantum.py (4 tests) InsightBridge quantum delegation
-│   ├── test_quantum_adapter.py     (6 tests) MarineQuantumAdapter
-│   ├── test_live_platform.py       (5 tests) Live platform integration
-│   ├── test_live_integration.py    (NOT in pytest suite) Full integration workflow
-│   ├── test_failure_cases.py       (NOT in pytest suite) Failure path tests
-│   ├── test_integration_readiness.py (NOT in pytest suite) Module checks
-│   ├── test_runtime_validation.py  (NOT in pytest suite) Runtime validation
-│   └── test_production_startup.py  (NOT in pytest suite) Subprocess-based startup
+│   ├── test_execution_contract.py
+│   ├── test_insightbridge_quantum.py
+│   ├── test_quantum_adapter.py
+│   ├── test_live_platform.py
+│   └── additional integration/readiness tests
 │
-├── contracts/                      Constitutional participant contracts
-├── runtime_identity/               Runtime identity cards
-├── dependency_mapping/             Dependency ownership mapping
-├── docs/                           Detailed documentation
-├── evidence_packet/                Generated evidence and audit materials
-└── integration_doc/                Runtime integration plan
+├── contracts/
+├── runtime_identity/
+├── dependency_mapping/
+├── docs/
+├── evidence_packet/
+└── integration_doc/
 ```
 
----
+------------------------------------------------------------------------
 
-## 19. Safe Change Boundaries
+## 24. Safe Change Boundaries
 
-**SAFE to change:**
-- Participant business logic in `src/participants/*/participant.py`
-- Environment variables in `.env`
-- Documentation in `*.md` files
-- Test evidence in `evidence_packet/` (when re-generating from live runs)
+### Safe to Change
 
-**DO NOT change without understanding full impact:**
-- Service IDs in `src/common/constants.py` — changing breaks capability tracking
-- Platform adapter interfaces — mapped to official platform contracts
-- Test assertions in `tests/test_live_platform.py` — they are the verification evidence
-- `insight_execution_service.py` API endpoints — changing breaks SDK invocation
+- Participant business logic while preserving platform contracts
+- Environment configuration
+- Documentation
+- Regenerated evidence from valid verification runs
+- Tests when they reflect an actual contract change
 
-## 20. Status Vocabulary and Final Certification
+### Change Only With Full Contract Awareness
 
-Use these classifications in future updates: `VERIFIED-LIVE`, `VERIFIED-LOCAL`,
-`VERIFIED-MOCK`, `IMPLEMENTED-NOT-LIVE`, `PARTIALLY-VERIFIED`, `PENDING-CONTRACT`,
-`PAUSED`, `NOT-IMPLEMENTED`, and `NOT-APPLICABLE`. Do not replace them with vague
-claims such as “fully integrated” or “production ready”.
+- Service IDs
+- Runtime versions
+- Platform adapter interfaces
+- SDK invocation behavior
+- Execution API schema
+- Registry payloads
+- Replay/trust handling
+- Evidence classification
 
-The current evidence certifies live registration, capability registration, discovery,
-version compatibility, SDK invocation, participant health, failure paths, and canonical
-replay lineage retrieval. It does not certify Trust-stage success, Platform telemetry
-storage, production Quantum execution, or `/enforce` execution. Local duplicate replay
-(`VALID` then `DUPLICATE`) is stub authority behavior, distinct from canonical lineage.
+Changing platform-facing identifiers or contracts can invalidate
+existing registration, discovery, invocation, and evidence records.
 
-The live `insight-flow-f5j4.onrender.com/health` response reports `service: InsightBridge`;
-this naming inconsistency is unresolved. InsightCore is Platform-integrated and does not
-have an established external service or dedicated adapter. The recorded test result is
-27 passed with 3 warnings; the warnings are pytest-asyncio, Starlette multipart, and
-FastAPI lifecycle deprecations, not test failures.
+------------------------------------------------------------------------
 
-**Final certification statement:** The repository is documented as an operationally
-integrated runtime with bounded live verification. Production certification is not claimed.
+## 25. Status Vocabulary
 
-**NEVER:**
-- Fake or suppress the HTTP 422 trust failure
-- Present local Quantum results as production Quantum execution
-- Remove the stub classification from telemetry
-- Claim production certification without platform/governance approval
+| Classification         | Meaning                                                    |
+|------------------------|------------------------------------------------------------|
+| `VERIFIED-LIVE`        | Directly exercised against a live deployed service         |
+| `VERIFIED-LOCAL`       | Directly exercised locally                                 |
+| `VERIFIED-MOCK`        | Verified through a mock/stub environment                   |
+| `IMPLEMENTED-NOT-LIVE` | Code exists but required live deployment/backend is absent |
+| `PARTIALLY-VERIFIED`   | Some required stages verified; another remains unresolved  |
+| `PENDING-CONTRACT`     | External contract is incomplete                            |
+| `PAUSED`               | Intentionally deferred                                     |
+| `NOT-IMPLEMENTED`      | Capability is not implemented                              |
+| `NOT-APPLICABLE`       | Outside current architecture/scope                         |
+| `NOT-CLAIMED`          | No production/certification claim is being made            |
 
----
+------------------------------------------------------------------------
 
-## 20. Final Certification Statement
+## 26. Final Certification Position
 
-The Insight Constitutional Runtime is **LIVE AND INTEGRATED** as a BHIV Constitutional Platform participant.
+### Verified Live
 
-**VERIFIED-LIVE**: Registration, discovery, version negotiation, SDK invocation, direct execution, health (all three participants), replay lineage retrieval.
+The evidence supports:
 
-**VERIFIED-LOCAL**: MarineQuantumAdapter (health, discovery, invocation, error handling). SDK evidence chain integrity (session-scoped).
+- Runtime deployment reachability
+- Three Insight participants integrated into the platform-facing runtime
+- Registration
+- Capability registration
+- Discovery
+- Version compatibility
+- SDK invocation
+- Participant health
+- Canonical replay lineage retrieval
+- Failure-path exercise
+- Repository-side evidence generation
 
-**PARTIALLY-VERIFIED**: `/qcg/verify` — Replay stage passes (VALID); Trust stage halted (HTTP 422, INVALID_SIGNATURE). This is a platform-level ECDSA issue.
+### Verified Local
 
-**NOT ESTABLISHED**: Live telemetry export (local stub only). Production Quantum cloud deployment. `/enforce` request/response contract. External InsightCore service.
+The evidence supports:
 
-**NOT CLAIMED**: Full ecosystem convergence. Production Certification.
+- Marine Quantum Runtime health
+- Quantum capability discovery
+- Quantum pipeline invocation
+- Deterministic Quantum verification
+- InsightBridge-to-Quantum delegation
+- Quantum invalid-input handling
+- Local telemetry stub behavior
 
-> Full constitutional verification convergence and Production Certification are NOT yet claimed. They depend on external platform changes: ECDSA signature verification (QCG team), canonical telemetry backend (Platform team), and platform-wide governance approval.
+### Partially Verified
 
----
+- `/qcg/verify`: Replay passes; Trust fails with `INVALID_SIGNATURE`
+- InsightFlow external service identity: endpoint healthy, identity
+  inconsistent
+- `/enforce`: endpoint discovered/authenticated, contract incomplete
 
-**Last Updated**: 2026-08-19
-**Test Status**: 27 passed, 3 warnings
-**Live Platform**: VERIFIED
-**Documentation**: CURRENT
+### Not Established
+
+- Canonical production telemetry backend
+- Live OpenTelemetry export
+- Cloud/production Quantum execution
+- Successful QCG Trust-stage verification
+- Fully specified `/enforce` integration
+- External InsightCore service
+
+### Not Claimed
+
+- Production certification
+- Full ecosystem constitutional convergence
+- Production Quantum certification
+- Production-grade canonical telemetry certification
+
+------------------------------------------------------------------------
+
+## 27. Final Handover Statement
+
+The **Insight Constitutional Runtime** is an **operationally integrated
+BHIV Constitutional Platform participant with bounded live
+verification**.
+
+The repository has completed the implementation and verification work
+within its current scope. Live evidence demonstrates working platform
+registration, discovery, version compatibility, SDK invocation,
+participant health, and canonical replay lineage retrieval.
+
+The remaining gaps are explicitly bounded and primarily depend on
+external platform/service owners:
+
+1.  QCG ECDSA Trust verification
+2.  Canonical Platform telemetry/OpenTelemetry backend
+3.  Manifest forwarding behavior
+4.  InsightFlow service identity clarification
+5.  `/enforce` contract publication
+6.  Optional future Quantum cloud deployment
+7.  External production/certification governance
+
+### Final Status
+
+> **LIVE AND INTEGRATED — BOUNDED VERIFICATION COMPLETE; EXTERNAL
+> CERTIFICATION BLOCKERS REMAIN.**
+
+This statement intentionally does **not** claim full certification,
+production Quantum, canonical live telemetry, or complete ecosystem-wide
+constitutional convergence.
+
+------------------------------------------------------------------------
+
+## 28. Submission Checklist
+
+- [x] Runtime implementation completed
+- [x] Platform integration implemented
+- [x] Live deployment available
+- [x] Registration evidence captured
+- [x] Capability registration evidence captured
+- [x] Discovery evidence captured
+- [x] Invocation evidence captured
+- [x] Health evidence captured
+- [x] Replay lineage evidence captured
+- [x] Quantum local evidence captured
+- [x] Failure evidence captured
+- [x] Telemetry limitations documented
+- [x] `/qcg/verify` Trust failure documented honestly
+- [x] `/enforce` limitation documented
+- [x] InsightFlow naming inconsistency documented
+- [x] Production certification explicitly not claimed
+- [x] Evidence packet organized as the primary evidence location
+- [x] Final handover documentation prepared
+
+------------------------------------------------------------------------
+
+**Document Status:** FINAL  
+**Last Updated:** 2026-08-21  
+**Live Runtime:** `VERIFIED-LIVE`  
+**Replay Lineage:** `VERIFIED-LIVE`  
+**Quantum:** `VERIFIED-LOCAL`  
+**Canonical Telemetry:** `NOT-ESTABLISHED`  
+**QCG Trust:** `PARTIALLY-VERIFIED — INVALID_SIGNATURE`  
+**Production Certification:** `NOT-CLAIMED`

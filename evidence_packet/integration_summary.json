@@ -19,8 +19,8 @@
   "platform_health": {
     "status": "UP",
     "version": "2.0.0",
-    "uptime_seconds": 3309.03,
-    "total_requests": 173,
+    "uptime_seconds": 758.12,
+    "total_requests": 82,
     "registry_version": "1.0.0"
   },
   "version_negotiation": {
@@ -31,7 +31,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-19T08:28:17.950701+00:00"
+      "timestamp": "2026-08-21T09:29:28.490712+00:00"
     },
     "insightbridge.runtime.intelligence.v1": {
       "service_id": "insightbridge.runtime.intelligence.v1",
@@ -40,7 +40,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-19T08:28:18.229372+00:00"
+      "timestamp": "2026-08-21T09:29:28.977268+00:00"
     },
     "insightcore.runtime.intelligence.v1": {
       "service_id": "insightcore.runtime.intelligence.v1",
@@ -49,7 +49,7 @@
       "negotiated_version": "1.0.2",
       "suggested_versions": [],
       "message": "Version 1.0.2 is fully supported.",
-      "timestamp": "2026-08-19T08:28:18.484655+00:00"
+      "timestamp": "2026-08-21T09:29:29.261307+00:00"
     }
   },
   "health_checks": {
@@ -59,7 +59,7 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-19T08:28:20.979311+00:00"
+      "timestamp": "2026-08-21T09:29:37.501612+00:00"
     },
     "insightbridge.runtime.intelligence.v1": {
       "service_id": "insightbridge.runtime.intelligence.v1",
@@ -67,7 +67,7 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-19T08:28:21.752109+00:00"
+      "timestamp": "2026-08-21T09:29:39.837172+00:00"
     },
     "insightcore.runtime.intelligence.v1": {
       "service_id": "insightcore.runtime.intelligence.v1",
@@ -75,38 +75,38 @@
       "version": "1.0.2",
       "uptime_seconds": 0.0,
       "dependencies": {},
-      "timestamp": "2026-08-19T08:28:22.032389+00:00"
+      "timestamp": "2026-08-21T09:29:40.094565+00:00"
     }
   },
   "replay": {
     "insightflow.runtime.intelligence.v1": {
       "status": "VALID",
-      "invocation_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+      "invocation_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
       "verification": {
         "http_status": 422,
         "status": "PROCESSED",
-        "invocation_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+        "invocation_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
         "response": {
           "detail": {
-            "trace_id": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
+            "trace_id": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
             "parent_trace_id": null,
             "flow_status": "HALTED",
             "stages": {
               "replay": {
                 "is_valid": true,
                 "status": "VALID",
-                "sequence_number": 22,
-                "verification_hash": "2682ed65ba9a7da524ad4f4ab232f8b24ab024a1f7b8dc43ea83f5891c81d7eb"
+                "sequence_number": 12,
+                "verification_hash": "c7277d235f0eedfd675abceb96dfe76f09dab8c4fe8e9e964759f3dc596d0128"
               },
               "keshav_analysis": {
                 "status": "COMPLETED",
                 "live": true,
-                "trace_id": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
+                "trace_id": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
                 "root_cause": null,
                 "resolution_signal": null,
                 "impact_score": 0,
                 "severity": "LOW",
-                "timestamp": "2026-08-19T08:28:22Z"
+                "timestamp": "2026-08-21T09:29:41Z"
               },
               "trust": {
                 "passed": false,
@@ -120,77 +120,77 @@
       },
       "lineage": {
         "status": "FOUND",
-        "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+        "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
         "http_status": 200,
         "response": {
-          "message_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+          "message_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
           "verdict": {
-            "message_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
-            "sequence_number": 22,
+            "message_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+            "sequence_number": 12,
             "status": "VALID",
             "reason": "",
             "lineage_record": {
-              "replay_id": "92612a86-701c-5005-8a58-c620d74910ec",
-              "message_id": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
-              "sequence_number": 22,
+              "replay_id": "792e5803-488f-5d0d-b635-50d068fc5909",
+              "message_id": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
+              "sequence_number": 12,
               "decision": "VALID",
-              "decision_timestamp": "2026-08-19T08:28:22.195568+00:00",
+              "decision_timestamp": "2026-08-21T09:29:40.935062+00:00",
               "origin_component": "CanonicalReplayAuthority",
               "schema_version": "1.0.0",
-              "trace_reference": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
-              "parent_reference": "21",
-              "verification_hash": "2682ed65ba9a7da524ad4f4ab232f8b24ab024a1f7b8dc43ea83f5891c81d7eb"
+              "trace_reference": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
+              "parent_reference": "11",
+              "verification_hash": "c7277d235f0eedfd675abceb96dfe76f09dab8c4fe8e9e964759f3dc596d0128"
             }
           }
         }
       },
       "verdict": {
-        "message_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
-        "sequence_number": 22,
+        "message_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+        "sequence_number": 12,
         "status": "VALID",
         "reason": "",
         "lineage_record": {
-          "replay_id": "92612a86-701c-5005-8a58-c620d74910ec",
-          "message_id": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
-          "sequence_number": 22,
+          "replay_id": "792e5803-488f-5d0d-b635-50d068fc5909",
+          "message_id": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
+          "sequence_number": 12,
           "decision": "VALID",
-          "decision_timestamp": "2026-08-19T08:28:22.195568+00:00",
+          "decision_timestamp": "2026-08-21T09:29:40.935062+00:00",
           "origin_component": "CanonicalReplayAuthority",
           "schema_version": "1.0.0",
-          "trace_reference": "204400ec-490d-4ff8-a8bc-29a09d59e0b0",
-          "parent_reference": "21",
-          "verification_hash": "2682ed65ba9a7da524ad4f4ab232f8b24ab024a1f7b8dc43ea83f5891c81d7eb"
+          "trace_reference": "d619f135-a6dd-48f2-a2c6-5b723e0fe3ed",
+          "parent_reference": "11",
+          "verification_hash": "c7277d235f0eedfd675abceb96dfe76f09dab8c4fe8e9e964759f3dc596d0128"
         }
       }
     },
     "insightbridge.runtime.intelligence.v1": {
       "status": "VALID",
-      "invocation_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+      "invocation_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
       "verification": {
         "http_status": 422,
         "status": "PROCESSED",
-        "invocation_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+        "invocation_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
         "response": {
           "detail": {
-            "trace_id": "8b40e7be-1452-48f6-b9de-dc9499977279",
+            "trace_id": "40acca14-9877-4ce5-a77c-3dd8d4635759",
             "parent_trace_id": null,
             "flow_status": "HALTED",
             "stages": {
               "replay": {
                 "is_valid": true,
                 "status": "VALID",
-                "sequence_number": 23,
-                "verification_hash": "32920cd66027fcb15999c54b6b26f9a22c5dfbababc5c5f8c54fb7ebfd0eb086"
+                "sequence_number": 13,
+                "verification_hash": "d91123810fda3e5fdff1d1eec7c3bfc5096077294bea1b460decf5b78b5daa3d"
               },
               "keshav_analysis": {
                 "status": "COMPLETED",
                 "live": true,
-                "trace_id": "8b40e7be-1452-48f6-b9de-dc9499977279",
+                "trace_id": "40acca14-9877-4ce5-a77c-3dd8d4635759",
                 "root_cause": null,
                 "resolution_signal": null,
                 "impact_score": 0,
                 "severity": "LOW",
-                "timestamp": "2026-08-19T08:28:24Z"
+                "timestamp": "2026-08-21T09:29:43Z"
               },
               "trust": {
                 "passed": false,
@@ -204,77 +204,77 @@
       },
       "lineage": {
         "status": "FOUND",
-        "trace_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+        "trace_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
         "http_status": 200,
         "response": {
-          "message_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+          "message_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
           "verdict": {
-            "message_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
-            "sequence_number": 23,
+            "message_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
+            "sequence_number": 13,
             "status": "VALID",
             "reason": "",
             "lineage_record": {
-              "replay_id": "45d4a276-1735-5c12-85a2-3b92c0a43ddd",
-              "message_id": "8b40e7be-1452-48f6-b9de-dc9499977279",
-              "sequence_number": 23,
+              "replay_id": "ce46f19d-a7ca-5a1f-8b3c-9e45375cafe8",
+              "message_id": "40acca14-9877-4ce5-a77c-3dd8d4635759",
+              "sequence_number": 13,
               "decision": "VALID",
-              "decision_timestamp": "2026-08-19T08:28:24.269394+00:00",
+              "decision_timestamp": "2026-08-21T09:29:43.161145+00:00",
               "origin_component": "CanonicalReplayAuthority",
               "schema_version": "1.0.0",
-              "trace_reference": "8b40e7be-1452-48f6-b9de-dc9499977279",
-              "parent_reference": "22",
-              "verification_hash": "32920cd66027fcb15999c54b6b26f9a22c5dfbababc5c5f8c54fb7ebfd0eb086"
+              "trace_reference": "40acca14-9877-4ce5-a77c-3dd8d4635759",
+              "parent_reference": "12",
+              "verification_hash": "d91123810fda3e5fdff1d1eec7c3bfc5096077294bea1b460decf5b78b5daa3d"
             }
           }
         }
       },
       "verdict": {
-        "message_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
-        "sequence_number": 23,
+        "message_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
+        "sequence_number": 13,
         "status": "VALID",
         "reason": "",
         "lineage_record": {
-          "replay_id": "45d4a276-1735-5c12-85a2-3b92c0a43ddd",
-          "message_id": "8b40e7be-1452-48f6-b9de-dc9499977279",
-          "sequence_number": 23,
+          "replay_id": "ce46f19d-a7ca-5a1f-8b3c-9e45375cafe8",
+          "message_id": "40acca14-9877-4ce5-a77c-3dd8d4635759",
+          "sequence_number": 13,
           "decision": "VALID",
-          "decision_timestamp": "2026-08-19T08:28:24.269394+00:00",
+          "decision_timestamp": "2026-08-21T09:29:43.161145+00:00",
           "origin_component": "CanonicalReplayAuthority",
           "schema_version": "1.0.0",
-          "trace_reference": "8b40e7be-1452-48f6-b9de-dc9499977279",
-          "parent_reference": "22",
-          "verification_hash": "32920cd66027fcb15999c54b6b26f9a22c5dfbababc5c5f8c54fb7ebfd0eb086"
+          "trace_reference": "40acca14-9877-4ce5-a77c-3dd8d4635759",
+          "parent_reference": "12",
+          "verification_hash": "d91123810fda3e5fdff1d1eec7c3bfc5096077294bea1b460decf5b78b5daa3d"
         }
       }
     },
     "insightcore.runtime.intelligence.v1": {
       "status": "VALID",
-      "invocation_id": "84724f30-c722-4f49-baf0-be578768366b",
+      "invocation_id": "43c71c32-edd9-4673-a95e-c23114706f96",
       "verification": {
         "http_status": 422,
         "status": "PROCESSED",
-        "invocation_id": "84724f30-c722-4f49-baf0-be578768366b",
+        "invocation_id": "43c71c32-edd9-4673-a95e-c23114706f96",
         "response": {
           "detail": {
-            "trace_id": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
+            "trace_id": "ab1f6753-31fc-4995-90a6-b053467de765",
             "parent_trace_id": null,
             "flow_status": "HALTED",
             "stages": {
               "replay": {
                 "is_valid": true,
                 "status": "VALID",
-                "sequence_number": 24,
-                "verification_hash": "176748801846084b170bfa006f2044038c3dd4ba188e0b161e937d70f79d8c37"
+                "sequence_number": 14,
+                "verification_hash": "a0f7f926751086836578e55b4144e28850ca5b04e9c82764a777399220524c83"
               },
               "keshav_analysis": {
                 "status": "COMPLETED",
                 "live": true,
-                "trace_id": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
+                "trace_id": "ab1f6753-31fc-4995-90a6-b053467de765",
                 "root_cause": null,
                 "resolution_signal": null,
                 "impact_score": 0,
                 "severity": "LOW",
-                "timestamp": "2026-08-19T08:28:26Z"
+                "timestamp": "2026-08-21T09:29:46Z"
               },
               "trust": {
                 "passed": false,
@@ -288,46 +288,46 @@
       },
       "lineage": {
         "status": "FOUND",
-        "trace_id": "84724f30-c722-4f49-baf0-be578768366b",
+        "trace_id": "43c71c32-edd9-4673-a95e-c23114706f96",
         "http_status": 200,
         "response": {
-          "message_id": "84724f30-c722-4f49-baf0-be578768366b",
+          "message_id": "43c71c32-edd9-4673-a95e-c23114706f96",
           "verdict": {
-            "message_id": "84724f30-c722-4f49-baf0-be578768366b",
-            "sequence_number": 24,
+            "message_id": "43c71c32-edd9-4673-a95e-c23114706f96",
+            "sequence_number": 14,
             "status": "VALID",
             "reason": "",
             "lineage_record": {
-              "replay_id": "b9d3bb66-e617-5d37-aaba-b3dba245b81c",
-              "message_id": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
-              "sequence_number": 24,
+              "replay_id": "93f7f809-5c98-5651-a773-4f66051cc35a",
+              "message_id": "ab1f6753-31fc-4995-90a6-b053467de765",
+              "sequence_number": 14,
               "decision": "VALID",
-              "decision_timestamp": "2026-08-19T08:28:26.529776+00:00",
+              "decision_timestamp": "2026-08-21T09:29:46.484484+00:00",
               "origin_component": "CanonicalReplayAuthority",
               "schema_version": "1.0.0",
-              "trace_reference": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
-              "parent_reference": "23",
-              "verification_hash": "176748801846084b170bfa006f2044038c3dd4ba188e0b161e937d70f79d8c37"
+              "trace_reference": "ab1f6753-31fc-4995-90a6-b053467de765",
+              "parent_reference": "13",
+              "verification_hash": "a0f7f926751086836578e55b4144e28850ca5b04e9c82764a777399220524c83"
             }
           }
         }
       },
       "verdict": {
-        "message_id": "84724f30-c722-4f49-baf0-be578768366b",
-        "sequence_number": 24,
+        "message_id": "43c71c32-edd9-4673-a95e-c23114706f96",
+        "sequence_number": 14,
         "status": "VALID",
         "reason": "",
         "lineage_record": {
-          "replay_id": "b9d3bb66-e617-5d37-aaba-b3dba245b81c",
-          "message_id": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
-          "sequence_number": 24,
+          "replay_id": "93f7f809-5c98-5651-a773-4f66051cc35a",
+          "message_id": "ab1f6753-31fc-4995-90a6-b053467de765",
+          "sequence_number": 14,
           "decision": "VALID",
-          "decision_timestamp": "2026-08-19T08:28:26.529776+00:00",
+          "decision_timestamp": "2026-08-21T09:29:46.484484+00:00",
           "origin_component": "CanonicalReplayAuthority",
           "schema_version": "1.0.0",
-          "trace_reference": "e6a5164d-bb10-4834-8ab4-d40ce1201ce5",
-          "parent_reference": "23",
-          "verification_hash": "176748801846084b170bfa006f2044038c3dd4ba188e0b161e937d70f79d8c37"
+          "trace_reference": "ab1f6753-31fc-4995-90a6-b053467de765",
+          "parent_reference": "13",
+          "verification_hash": "a0f7f926751086836578e55b4144e28850ca5b04e9c82764a777399220524c83"
         }
       }
     },
@@ -339,104 +339,92 @@
     "submission_2": {
       "status": "DUPLICATE",
       "sequence": 0,
-      "reason": "message_id 'msg-live-test-4b77a17e' has already been processed"
+      "reason": "message_id 'msg-live-test-559c3c31' has already been processed"
     }
   },
   "telemetry": {
     "insightflow.runtime.intelligence.v1": {
       "status": "RECORDED",
-      "invocation_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+      "invocation_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
       "execution_trace": {
         "status": "RECORDED",
         "type": "execution_trace",
-        "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+        "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
         "participant": "insightflow.runtime.intelligence.v1",
         "operation": "execute",
         "metadata": {
           "source": "Insight Constitutional Runtime",
           "integration": "live_platform",
-          "duration_ms": 917.1204566955566,
+          "duration_ms": 2552.9396533966064,
           "status_code": 200
         },
         "insightbridge_telemetry": {
-          "status": "SUCCESS",
-          "http_status": 200,
-          "response": {
-            "status": "success",
-            "request_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a"
-          }
+          "status": "FAILED",
+          "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
+          "http_status": 503
         }
       }
     },
-    "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+    "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a",
+      "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
       "participant": "insightflow.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 917.1204566955566,
+        "duration_ms": 2552.9396533966064,
         "status_code": 200
       },
       "insightbridge_telemetry": {
-        "status": "SUCCESS",
-        "http_status": 200,
-        "response": {
-          "status": "success",
-          "request_id": "6c0e5e8c-6a66-4ab0-b586-f1698112380a"
-        }
+        "status": "FAILED",
+        "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
+        "http_status": 503
       }
     },
     "insightbridge.runtime.intelligence.v1": {
       "status": "RECORDED",
-      "invocation_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+      "invocation_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
       "execution_trace": {
         "status": "RECORDED",
         "type": "execution_trace",
-        "trace_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1",
+        "trace_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
         "participant": "insightbridge.runtime.intelligence.v1",
         "operation": "execute",
         "metadata": {
           "source": "Insight Constitutional Runtime",
           "integration": "live_platform",
-          "duration_ms": 642.9228782653809,
+          "duration_ms": 1289.1261577606201,
           "status_code": 200
         },
         "insightbridge_telemetry": {
-          "status": "SUCCESS",
-          "http_status": 200,
-          "response": {
-            "status": "success",
-            "request_id": "e23e46b3-7061-4012-a2d7-6ce75db2ebc1"
-          }
+          "status": "FAILED",
+          "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
+          "http_status": 503
         }
       }
     },
     "insightcore.runtime.intelligence.v1": {
       "status": "RECORDED",
-      "invocation_id": "84724f30-c722-4f49-baf0-be578768366b",
+      "invocation_id": "43c71c32-edd9-4673-a95e-c23114706f96",
       "execution_trace": {
         "status": "RECORDED",
         "type": "execution_trace",
-        "trace_id": "84724f30-c722-4f49-baf0-be578768366b",
+        "trace_id": "43c71c32-edd9-4673-a95e-c23114706f96",
         "participant": "insightcore.runtime.intelligence.v1",
         "operation": "execute",
         "metadata": {
           "source": "Insight Constitutional Runtime",
           "integration": "live_platform",
-          "duration_ms": 661.0503196716309,
+          "duration_ms": 4130.36036491394,
           "status_code": 200
         },
         "insightbridge_telemetry": {
-          "status": "SUCCESS",
-          "http_status": 200,
-          "response": {
-            "status": "success",
-            "request_id": "84724f30-c722-4f49-baf0-be578768366b"
-          }
+          "status": "FAILED",
+          "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
+          "http_status": 503
         }
       }
     },
@@ -455,17 +443,17 @@
       "test": "invoke non-existent service",
       "service_id": "nonexistent.service.v999",
       "result": {
-        "invocation_id": "29c1a5b2-e2f9-465c-8e8e-00a6018bb316",
+        "invocation_id": "a87b9bce-3937-461a-9bf7-7a3240078b4a",
         "service_id": "nonexistent.service.v999",
         "operation": "execute",
         "status": "SERVICE_NOT_FOUND",
         "response": {},
-        "duration_ms": 550.6908893585205,
+        "duration_ms": 570.6732273101807,
         "trust_method": "CLASSICAL",
         "evidence": null,
         "error": "Service 'nonexistent.service.v999' not found in any discovery node",
         "retry_count": 0,
-        "timestamp": "2026-08-19T08:28:30.572972+00:00"
+        "timestamp": "2026-08-21T09:29:52.776352+00:00"
       }
     },
     "version_negotiation_unsupported": {
@@ -481,7 +469,7 @@
           "1.0.2"
         ],
         "message": "Version 999.0.0 is not recognised. Available versions: ['1.0.2']",
-        "timestamp": "2026-08-19T08:28:30.820577+00:00"
+        "timestamp": "2026-08-21T09:29:53.051260+00:00"
       }
     },
     "invalid_operation": {
@@ -489,29 +477,29 @@
       "service_id": "insightflow.runtime.intelligence.v1",
       "operation": "invalid_operation",
       "result": {
-        "invocation_id": "8d113b7a-1e69-4c20-be39-e72993a84396",
+        "invocation_id": "533117f5-d2bb-47d5-94cc-00d5f216eae0",
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "invalid_operation",
         "status": "FAILED",
         "response": {},
-        "duration_ms": 6441.641569137573,
+        "duration_ms": 7435.851097106934,
         "trust_method": "CLASSICAL",
         "evidence": {
-          "invocation_id": "8d113b7a-1e69-4c20-be39-e72993a84396",
+          "invocation_id": "533117f5-d2bb-47d5-94cc-00d5f216eae0",
           "service_id": "insightflow.runtime.intelligence.v1",
           "operation": "invalid_operation",
-          "request_hash": "d50fd7fae4bc58e7a85b3ad8d4ff3b43677cccd81c657deb34f8cc2a69a05833",
+          "request_hash": "18bea03597caa0e9254627ce2f738ab1915f006434bdd8895d0c1db37ade82ba",
           "response_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
           "trust_method": "CLASSICAL",
-          "duration_ms": 6441.641569137573,
+          "duration_ms": 7435.851097106934,
           "status": "FAILED",
-          "timestamp": "2026-08-19T08:28:37.263219+00:00",
-          "evidence_hash": "5c1c703a4c91e0bd00d810e98091924f36003ffd5a814a17c2ae1b588b95db7f",
+          "timestamp": "2026-08-21T09:30:00.487111+00:00",
+          "evidence_hash": "5f920260eef003856a86df2e89089c7680a33031189190facd46c0f5987a06e1",
           "previous_evidence_hash": "af05c09e9a7be20a81cd07438950d152676e85344e19430907ef24e9da1bbcb4"
         },
         "error": "HTTP Error 400: Bad Request",
         "retry_count": 4,
-        "timestamp": "2026-08-19T08:28:37.263219+00:00"
+        "timestamp": "2026-08-21T09:30:00.487111+00:00"
       }
     }
   },

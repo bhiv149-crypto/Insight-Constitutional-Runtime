@@ -1,0 +1,8 @@
+{
+  "missing_trace": {
+    "status": 404,
+    "response": {
+      "detail": "Trace ID not found in replay registry"
+    }
+  }
+}

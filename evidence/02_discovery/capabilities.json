@@ -1,0 +1,248 @@
+[
+  {
+    "manifest_id": "insightflow.runtime.intelligence.v1.manifest",
+    "service_name": "InsightFlow",
+    "capability_id": "insightflow.runtime.intelligence.v1",
+    "capability_name": "INSIGHTFLOW",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.2",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "PlatformRegistry",
+      "RuntimeCore"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST"
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "consumers": [],
+    "documentation_reference": "InsightFlow.md"
+  },
+  {
+    "manifest_id": "insightbridge.runtime.intelligence.v1.manifest",
+    "service_name": "InsightBridge",
+    "capability_id": "insightbridge.runtime.intelligence.v1",
+    "capability_name": "INSIGHTBRIDGE",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.2",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "QuantumCommunicationGateway"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST"
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "consumers": [],
+    "documentation_reference": "InsightBridge.md"
+  },
+  {
+    "manifest_id": "insightcore.runtime.intelligence.v1.manifest",
+    "service_name": "InsightCore",
+    "capability_id": "insightcore.runtime.intelligence.v1",
+    "capability_name": "INSIGHTCORE",
+    "owner": {
+      "team": "Insight Stack",
+      "contact": "insight-runtime@bhiv.internal"
+    },
+    "version": "1.0.2",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "supported_operations": [
+      {
+        "operation_name": "execute",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "operation_name": "health",
+        "input_contract": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        },
+        "output_contract": {
+          "type": "object",
+          "properties": {
+            "participant": {
+              "type": "string"
+            },
+            "runtime_identity": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "execution_modes": [
+      "REST"
+    ],
+    "dependencies": [
+      "PlatformCapabilitySDK",
+      "PlatformDiscovery",
+      "RuntimeCore",
+      "ReplayRegistry"
+    ],
+    "attachment_rules": {
+      "attachment_type": "embedded",
+      "protocol": "REST"
+    },
+    "authority_limits": {
+      "owns": [
+        "Insight execution",
+        "Evidence generation"
+      ],
+      "does_not_own": [
+        "Platform governance",
+        "Quantum execution"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "consumers": [],
+    "documentation_reference": "InsightCore.md"
+  }
+]

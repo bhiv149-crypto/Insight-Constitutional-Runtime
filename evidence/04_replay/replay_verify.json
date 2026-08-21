@@ -1,0 +1,34 @@
+{
+  "http_status": 422,
+  "response": {
+    "detail": {
+      "trace_id": "37664881-7e9a-45f3-96a0-d08f4ea60feb",
+      "parent_trace_id": null,
+      "flow_status": "HALTED",
+      "stages": {
+        "replay": {
+          "is_valid": true,
+          "status": "VALID",
+          "sequence_number": 17,
+          "verification_hash": "645a8bb0b24baf04a745293c9bc8cc875f15001d59191653fbe3d54a5a995a77"
+        },
+        "keshav_analysis": {
+          "status": "COMPLETED",
+          "live": true,
+          "trace_id": "37664881-7e9a-45f3-96a0-d08f4ea60feb",
+          "root_cause": null,
+          "resolution_signal": null,
+          "impact_score": 0,
+          "severity": "LOW",
+          "timestamp": "2026-08-21T09:33:45Z"
+        },
+        "trust": {
+          "passed": false,
+          "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
+          "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+        }
+      },
+      "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+    }
+  }
+}
