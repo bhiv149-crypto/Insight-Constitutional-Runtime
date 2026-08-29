@@ -1,0 +1,8 @@
+ENDPOINT: /qcg/verify
+REQUEST: {"invocation_id": "<captured_id>"}
+RESULT: HTTP 422
+STAGE RESULTS:
+- Replay: Reached successfully.
+- Trust: FAILED (INVALID_SIGNATURE)
+CLASSIFICATION: VERIFIED NEGATIVE-PATH TRUST RESULT
+NOTE: This is retained as verified Trust/authentication-failure evidence. The test does not bypass or fabricate the trust result.

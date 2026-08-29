@@ -1,0 +1,7 @@
+COMMAND:
+from src.platform.sdk_adapter import PlatformSDKAdapter
+sdk = PlatformSDKAdapter()
+sdk.check_health(service_id="insightflow.runtime.intelligence.v1")
+
+RESULT: {"status": "UP"}
+CLASSIFICATION: VERIFIED

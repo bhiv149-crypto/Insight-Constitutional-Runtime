@@ -1,0 +1,2 @@
+STATUS: Persistent restart continuity is NOT PROVEN.
+REASON: TraceStore resolves to the local stub (src.platform.stubs.TraceStore), not a platform persistence layer.

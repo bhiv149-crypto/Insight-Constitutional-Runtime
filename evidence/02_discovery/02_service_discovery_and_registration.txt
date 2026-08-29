@@ -1,0 +1,10 @@
+CAPABILITIES DISCOVERED:
+- insightflow.runtime.intelligence.v1 (VERSION: 1.0.2, STATUS: ACTIVE)
+- insightbridge.runtime.intelligence.v1
+- insightcore.runtime.intelligence.v1
+
+REGISTRATION: The service was registered on the live platform registry.
+DISCOVERY COMMAND:
+from src.platform.sdk_adapter import PlatformSDKAdapter
+sdk = PlatformSDKAdapter()
+services = sdk.discover_services()

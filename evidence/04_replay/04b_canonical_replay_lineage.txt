@@ -1,0 +1,4 @@
+ENDPOINT: /qcg/replay/lineage/{invocation_id}
+RESULT: Canonical Replay Evidence returned.
+SUMMARY: The replay objective is evaluated through the canonical replay lineage endpoint using the generated invocation_id independently from the Trust failure response.
+CLASSIFICATION: VERIFIED REPLAY LINEAGE

@@ -1,17 +1,17 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+    "invocation_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+      "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
       "participant": "insightflow.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 2552.9396533966064,
+        "duration_ms": 1124.737024307251,
         "status_code": 200
       },
       "insightbridge_telemetry": {
@@ -21,17 +21,17 @@
       }
     }
   },
-  "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+  "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
   "execution_trace": {
     "status": "RECORDED",
     "type": "execution_trace",
-    "trace_id": "d67ef6b2-9330-4f97-b860-e969774639ca",
+    "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
     "participant": "insightflow.runtime.intelligence.v1",
     "operation": "execute",
     "metadata": {
       "source": "Insight Constitutional Runtime",
       "integration": "live_platform",
-      "duration_ms": 2552.9396533966064,
+      "duration_ms": 1124.737024307251,
       "status_code": 200
     },
     "insightbridge_telemetry": {
@@ -42,17 +42,17 @@
   },
   "insightbridge.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
+    "invocation_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "ca30bdab-4e45-430b-bec8-784f86f3349a",
+      "trace_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
       "participant": "insightbridge.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 1289.1261577606201,
+        "duration_ms": 770.9836959838867,
         "status_code": 200
       },
       "insightbridge_telemetry": {
@@ -64,17 +64,17 @@
   },
   "insightcore.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "43c71c32-edd9-4673-a95e-c23114706f96",
+    "invocation_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "43c71c32-edd9-4673-a95e-c23114706f96",
+      "trace_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
       "participant": "insightcore.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 4130.36036491394,
+        "duration_ms": 595.8590507507324,
         "status_code": 200
       },
       "insightbridge_telemetry": {

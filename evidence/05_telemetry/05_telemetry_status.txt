@@ -1,0 +1,2 @@
+STATUS: NOT PROVEN
+TraceStore resolves to src.platform.stubs.TraceStore. Transient in-memory telemetry simulated via local python dictionary stubs.

@@ -3,17 +3,17 @@
     "test": "invoke non-existent service",
     "service_id": "nonexistent.service.v999",
     "result": {
-      "invocation_id": "a87b9bce-3937-461a-9bf7-7a3240078b4a",
+      "invocation_id": "8e2e16d5-16c2-4f85-bb4b-c34e9d7626c2",
       "service_id": "nonexistent.service.v999",
       "operation": "execute",
       "status": "SERVICE_NOT_FOUND",
       "response": {},
-      "duration_ms": 570.6732273101807,
+      "duration_ms": 522.8204727172852,
       "trust_method": "CLASSICAL",
       "evidence": null,
       "error": "Service 'nonexistent.service.v999' not found in any discovery node",
       "retry_count": 0,
-      "timestamp": "2026-08-21T09:29:52.776352+00:00"
+      "timestamp": "2026-08-25T11:19:24.532483+00:00"
     }
   },
   "version_negotiation_unsupported": {
@@ -29,7 +29,7 @@
         "1.0.2"
       ],
       "message": "Version 999.0.0 is not recognised. Available versions: ['1.0.2']",
-      "timestamp": "2026-08-21T09:29:53.051260+00:00"
+      "timestamp": "2026-08-25T11:19:24.788114+00:00"
     }
   },
   "invalid_operation": {
@@ -37,29 +37,29 @@
     "service_id": "insightflow.runtime.intelligence.v1",
     "operation": "invalid_operation",
     "result": {
-      "invocation_id": "533117f5-d2bb-47d5-94cc-00d5f216eae0",
+      "invocation_id": "b243091b-83c1-4e1c-addd-8e4781c5bcda",
       "service_id": "insightflow.runtime.intelligence.v1",
       "operation": "invalid_operation",
       "status": "FAILED",
       "response": {},
-      "duration_ms": 7435.851097106934,
+      "duration_ms": 5673.975467681885,
       "trust_method": "CLASSICAL",
       "evidence": {
-        "invocation_id": "533117f5-d2bb-47d5-94cc-00d5f216eae0",
+        "invocation_id": "b243091b-83c1-4e1c-addd-8e4781c5bcda",
         "service_id": "insightflow.runtime.intelligence.v1",
         "operation": "invalid_operation",
-        "request_hash": "18bea03597caa0e9254627ce2f738ab1915f006434bdd8895d0c1db37ade82ba",
+        "request_hash": "f1185e0ba7bde6ba0e839f3885e531ece299015d394077a1e5254b410967cd49",
         "response_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
         "trust_method": "CLASSICAL",
-        "duration_ms": 7435.851097106934,
+        "duration_ms": 5673.975467681885,
         "status": "FAILED",
-        "timestamp": "2026-08-21T09:30:00.487111+00:00",
-        "evidence_hash": "5f920260eef003856a86df2e89089c7680a33031189190facd46c0f5987a06e1",
+        "timestamp": "2026-08-25T11:19:30.462089+00:00",
+        "evidence_hash": "af4121fe9f19c9fc84fc0b15362d70ef541fc3a83fedb5076b521cd2219ac364",
         "previous_evidence_hash": "af05c09e9a7be20a81cd07438950d152676e85344e19430907ef24e9da1bbcb4"
       },
       "error": "HTTP Error 400: Bad Request",
       "retry_count": 4,
-      "timestamp": "2026-08-21T09:30:00.487111+00:00"
+      "timestamp": "2026-08-25T11:19:30.462089+00:00"
     }
   }
 }

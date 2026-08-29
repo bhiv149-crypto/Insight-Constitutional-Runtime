@@ -1,37 +1,115 @@
 # Insight Constitutional Runtime
 
-**Status**: LIVE VERIFIED — Replay lineage valid (HTTP 200); `/qcg/verify` halted at Trust stage (`INVALID_SIGNATURE`)
+**Status**: 27/27 tests pass · Live platform verified · Quantum execution is local classical simulation
+
+A thin integration layer connecting three Insight Stack participants (`InsightFlow`, `InsightBridge`, `InsightCore`) to the BHIV Constitutional Platform, with an isolated local quantum execution boundary via the Marine Quantum Runtime.
 
 ---
 
-## What This Is
+## 1. Current Status
 
-The **Insight Constitutional Runtime** integrates three Insight Stack intelligence participants
-(`InsightFlow`, `InsightBridge`, `InsightCore`) into the **BHIV Constitutional Platform** as
-reusable, schema-compliant runtime participants.
+| Capability                       | Status                          | Classification                              |
+| -------------------------------- | ------------------------------- | ------------------------------------------- |
+| Participant execution            | Verified                        | `LOCAL` (12/12 contract tests pass)         |
+| Platform registration            | Verified                        | `LIVE` (3/3 services registered)            |
+| Capability discovery             | Verified                        | `LIVE` (SDK + REST discovery functional)     |
+| SDK invocation                   | Verified                        | `LIVE` (3/3 SUCCESS via `tantra-platform-sdk`) |
+| Health                           | Verified                        | `LIVE` (Insight service + QCG UP)           |
+| Replay lineage                   | Verified                        | `LIVE` (`GET /qcg/replay/lineage/{id}` → HTTP 200, VALID) |
+| `/qcg/verify`                    | Verified negative path          | `PARTIAL` (Replay stage VALID; Trust stage HTTP 422 `INVALID_SIGNATURE`) |
+| Quantum execution                | Verified locally                | `QUANTUM_LOCAL` (classical deterministic simulation) |
+| Live cloud quantum provider      | Not attached / not proven       | `BLOCKED` / `NOT PROVEN`                    |
+| Telemetry export                 | Verified locally                | `LOCAL` (`TraceStore` stub; no live backend) |
+| Persistent replay across restart | Not proven                      | `NOT PROVEN` (`TraceStore` is local stub)   |
+| Quantum-network execution        | Not proven                      | `NOT PROVEN` (bounded contract only)        |
+| Classical fallback               | Verified                        | `FALLBACK` (local simulator always available) |
+| Production certification         | Not claimed                     | `NOT CLAIMED`                                |
 
-The runtime uses a thin adapter architecture — it delegates platform-level concerns
-(registration, discovery, invocation, replay, telemetry) to canonical Platform services
-via dedicated adapters in `src/platform/`.
+---
 
-**Repository contains:**
-- Three executable intelligence participants (InsightFlow, InsightBridge, InsightCore)
+## 2. Architecture
+
+```text
+BHIV Workload
+      |
+      v
+Capability Discovery
+      |
+      v
+Suitability / Routing
+      |
+      +----------------------+
+      |                      |
+      v                      v
+Classical Path        Quantum Path
+      |                      |
+      |               Marine Quantum Runtime
+      |               (localhost:8000)
+      |                      |
+      |               Classical deterministic
+      |               simulation (seed-based)
+      |               execution_classification
+      |               = QUANTUM_LOCAL
+      |                      |
+      +----------+-----------+
+                 |
+                 v
+        Normalized Result
+                 |
+                 v
+          QCG Boundary
+       Validation / Replay
+                 |
+      +----------+-----------+
+      |                      |
+      v                      v
+/verify (422)        /replay/lineage (200)
+Trust HALTED         Replay VALID
+      |                      |
+      +----------+-----------+
+                 |
+                 v
+       Insight Observability
+                 |
+                 v
+       Quantum-Network Integration
+       (bounded contract;
+        not verified live)
+                 |
+                 v
+          Provenance
+```
+
+### Key boundaries
+
+- **Quantum Runtime** computes workloads; it does not govern.
+- **QCG** owns contract validation, trust, and canonical replay.
+- **Insight** owns routing, observability, and participant behavior.
+- **Quantum Network** is a bounded integration contract, not a verified live execution path.
+
+---
+
+## 3. What This Repository Contains
+
+- Three executable participants: `InsightFlow`, `InsightBridge`, `InsightCore`
 - Thin platform adapter layer (`src/platform/`)
+- Local Marine Quantum Runtime integration (InsightBridge only)
 - Live platform integration evidence (`evidence_packet/`)
-- Replay lineage verification against the canonical QCG authority
-- Local Marine Quantum Runtime integration via InsightBridge
+- Canonical replay lineage verification against QCG
 
-**Repository does NOT contain:**
+### What This Repository Does NOT Contain
+
 - The Platform Runtime itself (external — `bhiv-qcg.onrender.com`)
 - The Platform SDK source (external — `tantra-platform-sdk`)
-- Canonical Telemetry Backend (external — stub only; contract not published)
-- Production Quantum Runtime deployment (local mode only)
+- Canonical telemetry backend (external — stub only; contract not published)
+- Live cloud quantum deployment (local mode only)
 
 ---
 
-## Quick Start
+## 4. Quick Start
 
 ### Prerequisites
+
 - Python 3.10+ (tested with 3.12.4)
 - Network access to `https://bhiv-qcg.onrender.com` (for live tests)
 
@@ -55,7 +133,7 @@ python -c "from tantra_platform_sdk import PlatformCapabilitySDK; print('SDK OK'
 
 # Run tests
 pytest -v
-# Recorded baseline: 27 passed, 3 warnings (live tests require QCG connectivity; a rerun may fail on QCG timeout or registration state)
+# Current result: 27 passed, 3 warnings
 
 # Start local server (optional)
 python insight_execution_service.py
@@ -64,56 +142,15 @@ python insight_execution_service.py
 
 ---
 
-## Architecture
+## 5. Test Status
 
-```
-┌──────────────────────────────────────────────┐
-│  Insight Execution Service (This Repository) │
-│  - InsightFlow, InsightBridge, InsightCore   │
-│  - Thin platform adapters (src/platform/)    │
-│  - Local Marine Quantum (InsightBridge only) │
-└───────────┬──────────────────────────────────┘
-            │
-    (PlatformCapabilitySDK / tantra-platform-sdk)
-            │
-    ┌───────▼──────────────────────┐
-    │  BHIV QCG Platform           │
-    │  (External Service)          │
-    │  - Registry / Discovery      │
-    │  - Replay Lineage Authority  │
-    │  - Trust Verification (*)    │
-    └──────────────────────────────┘
-
-(*) /qcg/verify halted at Trust stage — platform ECDSA issue
-```
-
----
-
-## Three Participants
-
-| Service ID | Name | Version | Role | Status |
-|---|---|---|---|---|
-| `insightflow.runtime.intelligence.v1` | InsightFlow | 1.0.2 | Workflow orchestration | ACTIVE |
-| `insightbridge.runtime.intelligence.v1` | InsightBridge | 1.0.2 | Cross-domain messaging + Quantum gateway | ACTIVE |
-| `insightcore.runtime.intelligence.v1` | InsightCore | 1.0.2 | Deterministic state validation | ACTIVE |
-
-Live health:
-```
-GET https://insight-constitutional-runtime.onrender.com/api/v1/health/{service_id}
-→ { status: UP, version: 1.0.2, state: ACTIVE }
-```
-
----
-
-## Test Status
-
-| Test Suite | Count | Environment | Status |
+| Test Suite | Count | Environment | Result |
 |-----------|-------|-------------|--------|
-| `test_execution_contract.py` | 12 | Local | ✓ Always pass |
-| `test_insightbridge_quantum.py` | 4 | Local | ✓ Always pass |
-| `test_quantum_adapter.py` | 6 | Local | ✓ Always pass |
-| `test_live_platform.py` | 5 | Live (QCG) | ✓ Pass when QCG reachable; may timeout on cold start |
-| **Total** | **27** | — | **27 passed, 3 warnings (stable run)** |
+| `test_execution_contract.py` | 12 | Local | 12/12 PASS |
+| `test_insightbridge_quantum.py` | 4 | Local (mocked HTTP) | 4/4 PASS |
+| `test_live_platform.py` | 5 | Live (QCG) | 5/5 PASS |
+| `test_quantum_adapter.py` | 6 | Local (real HTTP to localhost:8000) | 6/6 PASS |
+| **Total** | **27** | — | **27 passed, 3 warnings** |
 
 **Run**: `pytest -v`
 
@@ -124,87 +161,238 @@ GET https://insight-constitutional-runtime.onrender.com/api/v1/health/{service_i
 
 ---
 
-## Live Integration Status
+## 6. Evidence Sequence
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| **Runtime Health** | VERIFIED-LIVE | All 3 participants UP/ACTIVE |
-| **Platform Registration** | VERIFIED-LIVE | All 3 registered; `ALREADY_REGISTERED` = idempotent (not a failure) |
-| **Platform Discovery** | VERIFIED-LIVE | All 3 discoverable via SDK |
-| **SDK Invocation** | VERIFIED-LIVE | 3/3 SUCCESS via `PlatformCapabilitySDK` |
-| **Replay Lineage** | VERIFIED-LIVE | `GET /qcg/replay/lineage/{id}` → HTTP 200, VALID verdict |
-| **Trust Verification** | PARTIALLY-VERIFIED | `POST /qcg/verify` → HTTP 422 (Trust stage ECDSA failure) |
-| **Telemetry** | VERIFIED-LOCAL | `TraceStore` stub — no live backend configured |
-| **Quantum** | VERIFIED-LOCAL | Marine Quantum Runtime — local subprocess only |
+The verified live integration follows this sequence:
+
+```text
+1. Service Registration
+        ↓
+2. Service Discovery
+        ↓
+3. Health Check
+        ↓
+4. Capability Discovery
+        ↓
+5. Invocation
+        ↓
+6. Verification (/qcg/verify)
+        ↓
+7. Replay Lineage (/qcg/replay/lineage/{id})
+        ↓
+8. Failure/Fallback Tests
+        ↓
+9. Full Test Suite
+```
+
+### Step-by-step commands
+
+**1. Service Registration**
+```powershell
+python -c "from src.integration.platform_integration_service import PlatformIntegrationService; PlatformIntegrationService().integrate()"
+```
+Expected: 3 services registered (`ALREADY_REGISTERED` is idempotent)
+Classification: `LIVE`
+Evidence: `evidence_packet/api_samples/runtime_registration.json`
+
+**2. Service Discovery**
+```powershell
+python -c "from src.platform.sdk_adapter import PlatformSDKAdapter; sdk = PlatformSDKAdapter(); print(sdk.discover_services())"
+```
+Expected: List containing `insightflow.runtime.intelligence.v1`
+Classification: `LIVE`
+Evidence: `evidence_packet/api_samples/discovered_services.json`
+
+**3. Health Check**
+```powershell
+python -c "import requests; print(requests.get('https://bhiv-qcg.onrender.com/registry/platform/v1/health', timeout=20).json())"
+```
+Expected: `{"status": "UP", ...}`
+Classification: `LIVE`
+
+**4. Capability Discovery**
+```powershell
+python -c "import requests; print(requests.get('http://localhost:8000/api/v1/capabilities', headers={'X-API-Key': 'dev-insecure-key'}, timeout=10).json())"
+```
+Expected: List with `quantum_pipeline`, `signal`, etc.
+Classification: `LOCAL`
+
+**5. Invocation**
+```powershell
+python -c "from src.platform.quantum_adapter import MarineQuantumAdapter; a = MarineQuantumAdapter(); print(a.invoke_capability('quantum_pipeline', {'salinity': 35.2, 'temperature_celsius': 18.5, 'pH': 7.8, 'material_oxidation_potential': 0.44, 'dissolved_oxygen_mgl': 6.5, 'current_density_mAcm2': 0.12}))"
+```
+Expected: `status: SUCCESS`, `runtime_mode: LOCAL`, `execution_classification: QUANTUM_LOCAL`
+Classification: `LOCAL` (classical deterministic simulation)
+Evidence: `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json`
+
+**6. Verification**
+```powershell
+python -c "import requests; print(requests.post('https://bhiv-qcg.onrender.com/qcg/verify', json={'invocation_id': '<id>'}, timeout=30).status_code)"
+```
+Expected: HTTP 422, `INVALID_SIGNATURE` at Trust stage
+Classification: `PARTIAL` (Replay stage reached and VALID; Trust rejects)
+Evidence: `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json`
+
+**7. Replay Lineage**
+```powershell
+python -c "import requests; print(requests.get('https://bhiv-qcg.onrender.com/qcg/replay/lineage/{invocation_id}', timeout=20).status_code)"
+```
+Expected: HTTP 200 with `VERDICT.STATUS = VALID`
+Classification: `LIVE`
+Evidence: `evidence_packet/replay_evidence/replay_validation.json`
 
 ---
 
-## Known Limitations
+## 7. Verify vs Replay — Precise Distinction
 
-### 1. InsightFlow Live Service — Naming Inconsistency
-`GET https://insight-flow-f5j4.onrender.com/health` returns `{ "service": "InsightBridge" }`.
-The endpoint is reachable and healthy, but the self-reported service name does not match the URL.
-This is an open finding — not resolved by available evidence.
+This repository must distinguish two separate QCG boundaries:
 
-### 2. `/qcg/verify` — Trust Stage Halted (HTTP 422)
-`POST /qcg/verify` halts with `INVALID_SIGNATURE` at the Trust stage.
-Replay stage passes (`VALID`). This is a platform-level ECDSA issue, not a runtime bug.
-Replay lineage (`GET /qcg/replay/lineage/{id}`) works independently.
+### `/qcg/verify`
 
-### 3. Telemetry — Local Stub Only
-`PlatformTelemetryAdapter` uses `TraceStore` from `src/platform/stubs.py`.
-All telemetry returns local dictionaries. No live backend configured.
-Live InsightBridge `/ingest` endpoint is separately verified and is distinct from Platform telemetry.
+- Returns **HTTP 422** with `INVALID_SIGNATURE`
+- The Replay stage inside `/verify` is reached and returns `VALID`
+- The Trust stage rejects the verification because ECDSA signature verification fails
+- **This is a verified negative Trust-path result. It is NOT verification success.**
 
-### 4. Quantum — Local Mode Only
-Marine Quantum Runtime runs as a local subprocess.
-No production cloud Quantum deployment exists.
+### `/qcg/replay/lineage/{invocation_id}`
 
-### 5. `/enforce` — Partial Contract
-The OpenAPI at `https://insight-flow-f5j4.onrender.com/openapi.json` exposes `/enforce` (requires Bearer auth).
-Request/response schema is empty in the spec. Full enforcement integration NOT verified.
+- Returns **HTTP 200** with canonical replay lineage
+- Replay verdict is `VALID`
+- Lineage record contains `replay_id`, `verification_hash`, `trace_reference`
+- **This independently proves the canonical replay authority recorded the execution.**
 
-### 6. InsightCore — No External Adapter
-InsightCore is fully integrated via Platform. No dedicated `insightcore_adapter.py` or external InsightCore service exists. This is by design for the current architecture.
+The correct interpretation is:
 
-### 7. QCG Transient Network Timeouts
-Live tests may fail with `ReadTimeout` when QCG is cold-starting. This is transient — retry resolves it.
+```text
+/verify
+   |
+   +--> Replay stage reached (VALID)
+   |
+   +--> Trust rejects verification (HTTP 422, INVALID_SIGNATURE)
+
+/replay/lineage/{invocation_id}
+   |
+   +--> Canonical replay lineage (HTTP 200, VALID)
+```
+
+Do not describe `/verify` as "passed" or "successful." The Trust-stage failure is a platform-level issue, not a runtime bug.
 
 ---
 
-## Key Endpoints
+## 8. Known Limitations
 
-### Live Runtime (deployed on Render)
-```
-POST  https://insight-constitutional-runtime.onrender.com/api/v1/execute
-GET   https://insight-constitutional-runtime.onrender.com/api/v1/health
-GET   https://insight-constitutional-runtime.onrender.com/api/v1/health/{service_id}
-GET   https://insight-constitutional-runtime.onrender.com/api/v1/services
-GET   https://insight-constitutional-runtime.onrender.com/openapi.json
-```
+### Quantum execution
 
-### BHIV QCG Platform
-```
-GET   https://bhiv-qcg.onrender.com/registry/platform/v1/services
-POST  https://bhiv-qcg.onrender.com/registry/platform/v1/register
-POST  https://bhiv-qcg.onrender.com/qcg/verify
-GET   https://bhiv-qcg.onrender.com/qcg/replay/lineage/{invocation_id}
-```
+The `quantum_pipeline` capability executes locally via the Marine Quantum Runtime. The underlying mechanism is a **classical deterministic simulation** (seed-based random distribution). The adapter classifies this as `QUANTUM_LOCAL`, but no quantum hardware or live cloud quantum provider is involved.
 
-### Local Development
-```
-POST  http://localhost:8003/api/v1/execute
-GET   http://localhost:8003/api/v1/health
-GET   http://localhost:8003/docs
-```
+### Live cloud quantum provider
+
+No live quantum provider is attached or proven. The provider abstraction exists and is extensible, but:
+- `aer` provider: `qiskit-aer` is not installed
+- `ibm_runtime` provider: requires SDK, credentials, and network egress (not available)
+- `ionq` provider: requires API key and network egress (not available)
+
+### Telemetry
+
+`PlatformTelemetryAdapter` delegates to `TraceStore` from `src/platform/stubs.py`. All telemetry returns local dictionaries. No live telemetry backend is configured. The separate InsightBridge `/ingest` endpoint is live-verified but is distinct from Platform telemetry.
+
+### Persistent replay across restart
+
+`NOT PROVEN`. The current `TraceStore` and `CanonicalReplayAuthority` are local in-memory stubs. Evidence does not survive process restart.
+
+### Quantum-network integration
+
+`NOT PROVEN`. No quantum-network execution path is implemented. The boundary exists as a bounded integration contract only.
+
+### `/enforce` endpoint
+
+The OpenAPI at `https://insight-flow-f5j4.onrender.com/openapi.json` exposes `/enforce` (requires Bearer auth). Request/response schema is empty in the spec. Full enforcement integration is not verified.
 
 ---
 
-## Documentation Map
+## 9. Evidence Location
+
+| Evidence Type | Location | Classification |
+|---------------|----------|----------------|
+| Registration | `evidence_packet/api_samples/runtime_registration.json` | LIVE |
+| Discovery | `evidence_packet/api_samples/discovered_services.json` | LIVE |
+| Invocation | `evidence_packet/invocation_proof/invocation_results.json` | LIVE |
+| Replay validation | `evidence_packet/replay_evidence/replay_validation.json` | LIVE |
+| Verify/Trust negative path | `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json` | LIVE (negative path) |
+| Quantum health | `evidence_packet/quantum_evidence/quantum_local_health.json` | LOCAL |
+| Quantum invocation | `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json` | LOCAL |
+| Quantum failure | `evidence_packet/quantum_evidence/quantum_failure_case.json` | LOCAL |
+| Quantum provenance | `evidence_packet/quantum_evidence/quantum_provenance_summary.json` | LOCAL |
+| Telemetry | `evidence_packet/telemetry/traces.json` | LOCAL (stub) |
+| Deployment | `evidence_packet/deployment_proof/` | LIVE |
+| Screenshots | `evidence_packet/screenshots/` | LIVE/LOCAL as labeled |
+
+---
+
+## 10. Code Map
+
+```
+src/
+├── integration/      → platform integration/orchestration
+├── platform/         → platform adapters, quantum adapter, replay, telemetry
+├── participants/     → InsightFlow, InsightBridge, InsightCore
+├── common/           → shared models, constants, exceptions
+└── config/           → runtime configuration
+
+tests/                → pytest suite (27 tests)
+evidence_packet/      → integration evidence artifacts
+docs/                 → detailed architecture and audit documents
+contracts/            → constitutional contracts per participant
+runtime_identity/     → runtime identity cards
+```
+
+### Key files
+
+| File | Purpose |
+|------|---------|
+| `src/platform/quantum_adapter.py` | Marine Quantum Runtime HTTP adapter |
+| `src/platform/sdk_adapter.py` | Thin wrapper over `tantra-platform-sdk` |
+| `src/platform/live_platform_client.py` | REST client for live QCG platform |
+| `src/platform/replay_adapter.py` | QCG replay authority + local stub fallback |
+| `src/platform/telemetry_adapter.py` | Platform telemetry boundary (local stub) |
+| `src/platform/stubs.py` | Development stubs: `TraceStore`, `CanonicalReplayAuthority` |
+| `src/integration/platform_integration_service.py` | Full convergence workflow |
+| `insight_execution_service.py` | FastAPI service for live deployment |
+
+---
+
+## 11. Authority Boundaries
+
+| Component       | Authority                                  |
+| --------------- | ------------------------------------------ |
+| Quantum Runtime | Computes quantum workloads                 |
+| QCG             | Contract validation, trust/replay boundary |
+| Insight         | Routing and observability                  |
+| Quantum Network | Quantum communication coordination         |
+| TMS             | Strategy/convergence                       |
+| GC              | Governance/authority                       |
+| MDU             | Schema/provenance/replay continuity        |
+
+**Negative-authority principle**: Quantum runtime computes; it does not govern.
+
+---
+
+## 12. Troubleshooting
+
+| Issue | Cause | Resolution |
+|-------|-------|------------|
+| `ModuleNotFoundError: tantra_platform_sdk` | SDK not installed | `pip install tantra-platform-sdk==1.0.0` |
+| Live tests timeout | QCG cold start / Render latency | Retry — transient instability |
+| `ALREADY_REGISTERED` on registration | Service already registered | Not an error — idempotent |
+| Quantum adapter connection refused | Marine runtime not running on localhost:8000 | Start `uvicorn api_server:app --port 8000` in `marine_quantum_runtime` |
+
+---
+
+## 13. Documentation Map
 
 | Document | Purpose |
 |----------|---------|
-| **`HANDOVER.md`** | Complete operational handover — start here |
+| **`HANDOVER.md`** | Operational handover and reproduction guide — start here |
 | `docs/ARCHITECTURE.md` | Detailed system architecture |
 | `docs/INTEGRATION.md` | Platform integration lifecycle and contracts |
 | `docs/QUANTUM_INTEGRATION.md` | Quantum boundary and local verification |
@@ -218,55 +406,31 @@ GET   http://localhost:8003/docs
 
 ---
 
-## Evidence Location
+## 14. Evidence Philosophy
 
-| Evidence Type | Location | Classification |
-|---------------|----------|----------------|
-| Registration | `evidence_packet/api_samples/` | VERIFIED-LIVE |
-| Discovery | `evidence_packet/api_samples/discovered_services.json` | VERIFIED-LIVE |
-| Invocation | `evidence_packet/invocation_proof/` | VERIFIED-LIVE |
-| Replay | `evidence_packet/replay_evidence/` | VERIFIED-LIVE |
-| Quantum | `evidence_packet/quantum_evidence/` | VERIFIED-LOCAL |
-| Telemetry | `evidence_packet/telemetry/` | STUB-DERIVED |
-| Deployment | `evidence_packet/deployment_proof/` | VERIFIED-LIVE |
+Evidence proves what happened. It does not prove what was intended.
+
+- **Local verification ≠ live deployment**
+- **Simulation ≠ quantum hardware**
+- **Replay ≠ legitimacy**
+- **Health ≠ functional success**
+- **A negative-path test passing ≠ the underlying operation succeeding**
 
 ---
 
-## Troubleshooting
-
-| Issue | Cause | Resolution |
-|-------|-------|------------|
-| `ModuleNotFoundError: tantra_platform_sdk` | SDK not installed | `pip install tantra-platform-sdk==1.0.0` |
-| Live tests timeout | QCG cold start / Render latency | Retry — transient instability; resolves on retry |
-| `ALREADY_REGISTERED` on registration | Service already registered at that version | Not an error — idempotent. Discovery and invocation proceed normally |
-| Live tests show `SERVICE_NOT_FOUND` | Services not registered in QCG on this cold start | Re-register via `PlatformIntegrationService` then retry |
-
----
-
-## Final Status
+## 15. Final Status
 
 **27 passed, 3 warnings** (stable local + live run)
 
-🟢 **VERIFIED-LIVE**: Registration, discovery, SDK invocation, health, replay lineage.
-🟡 **VERIFIED-LOCAL**: Quantum (Marine, local subprocess), SDK evidence chain (session-scoped).
-⚠ **PARTIALLY-VERIFIED**: `/qcg/verify` — Replay VALID, Trust HALTED (HTTP 422, ECDSA).
-⚪ **NOT ESTABLISHED**: Live telemetry export, production Quantum, `/enforce` contract.
+- `LIVE` verified: Registration, discovery, SDK invocation, health, replay lineage
+- `LOCAL` verified: Quantum execution (classical deterministic simulation), telemetry (stub)
+- `PARTIAL` verified: `/qcg/verify` — Replay VALID, Trust HALTED (HTTP 422, ECDSA)
+- `NOT PROVEN`: Persistent replay across restart, quantum-network execution, live cloud quantum provider
+- `NOT CLAIMED`: Production certification
 
 Full ecosystem convergence and Production Certification are **not yet claimed**.
 
 ---
 
-**Last Updated**: 2026-08-19
+**Last Updated**: 2026-08-29
 **See** [HANDOVER.md](HANDOVER.md) for complete operational details.
-
-## Status Vocabulary
-
-`VERIFIED-LIVE` means observed against a reachable external endpoint or live integration
-run. `VERIFIED-LOCAL` means proven by local code, tests, or a local subprocess. `PENDING-CONTRACT`
-means required external request/response information is unavailable. These terms are used
-throughout the documentation to keep local, live, mocked, and unestablished behavior distinct.
-
-The current boundary is precise: registration, discovery, invocation, health, failure paths,
-and replay lineage retrieval are live-verified; Platform telemetry is local `TraceStore`,
-Quantum is local Marine runtime, `/qcg/verify` halts at Trust with HTTP 422, and `/enforce`
-has no verified payload or response schema. Production certification is not claimed.

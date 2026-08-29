@@ -10,6 +10,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import pytest
+from unittest.mock import patch
 from src.participants.insightbridge.participant import InsightBridgeParticipant
 from src.participants.insightflow.participant import InsightFlowParticipant
 from src.participants.insightcore.participant import InsightCoreParticipant
@@ -41,8 +42,15 @@ def test_insightflow_and_insightcore_unaffected():
     assert not hasattr(core, "quantum_adapter")
 
 
-def test_insightbridge_quantum_forwarding():
+@patch('src.platform.quantum_adapter.requests.post')
+def test_insightbridge_quantum_forwarding(mock_post):
     """Ensure InsightBridge delegates quantum payloads to local Marine Quantum Runtime."""
+    mock_post.return_value.json.return_value = {
+        "status": "SUCCESS",
+        "capability_id": "quantum_pipeline",
+        "invocation_id": "mock-id-123",
+        "deterministic_hash": "mock-hash-456",
+    }
     participant = InsightBridgeParticipant()
     payload = {
         "route": "quantum",
@@ -69,8 +77,10 @@ def test_insightbridge_quantum_forwarding():
     assert "deterministic_hash" in q_res
 
 
-def test_insightbridge_health():
+@patch('src.platform.quantum_adapter.requests.get')
+def test_insightbridge_health(mock_get):
     """Ensure InsightBridge health reports participant state and quantum gateway status."""
+    mock_get.return_value.json.return_value = {"status": "HEALTHY", "heartbeat": "ALIVE"}
     participant = InsightBridgeParticipant()
     health = participant.health()
 

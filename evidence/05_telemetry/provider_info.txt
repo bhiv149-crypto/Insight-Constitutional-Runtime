@@ -1,5 +1,0 @@
-{'adapter': 'PlatformTelemetryAdapter',
- 'local_state_owned_by_adapter': False,
- 'ownership': 'PLATFORM_RUNTIME',
- 'provider': 'TraceStore',
- 'provider_module': 'src.platform.stubs'}

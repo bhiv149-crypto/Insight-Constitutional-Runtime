@@ -3,9 +3,9 @@
   "platform_health": {
     "status": "UP",
     "version": "2.0.0",
-    "uptime_seconds": 758.12,
-    "total_requests": 82,
+    "uptime_seconds": 53.79,
+    "total_requests": 26,
     "registry_version": "1.0.0"
   },
-  "timestamp": "2026-08-21T09:30:00+00:00"
+  "timestamp": "2026-08-25T11:19:30+00:00"
 }

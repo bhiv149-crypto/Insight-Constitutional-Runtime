@@ -1,0 +1,4 @@
+INVOCATION CAPABILITY: insightflow.runtime.intelligence.v1
+INVOCATION ID: Captured from SDK invocation successfully.
+CLASSIFICATION: QUANTUM_LOCAL
+PROVENANCE: The invocation successfully flows through the Quantum / Classical route, delegating to the Marine Quantum Adapter locally. No live quantum provider was reached.

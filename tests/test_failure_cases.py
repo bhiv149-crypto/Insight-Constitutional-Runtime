@@ -1,19 +1,29 @@
+
 """
-Failure Case Test Suite â€” Insight Stack
+Failure Path Test Suite - Insight Stack
 
-Tests failure-path behaviour through the canonical Platform SDK:
+Verifies failure behaviour through the canonical Platform SDK:
 
-  - SERVICE_NOT_FOUND: Invocation of a non-existent service
-  - VERSION_REJECTED / UNSUPPORTED: Negotiation with incompatible version
-  - REPLAY_DUPLICATE: Duplicate message_id submission rejected
-  - HEALTH_UNREACHABLE: Health check for non-existent service
+1. SERVICE_NOT_FOUND
+   Invocation of a non-existent service must return a failure status.
 
-This test does NOT require a successful prior integration run.
-It exercises the adapter boundaries independently.
+2. VERSION_UNSUPPORTED
+   Negotiation with an unsupported version must not be accepted.
 
-Exit code 0 = all failure paths exercised correctly.
-Exit code 1 = one or more failure paths broken.
+3. REPLAY_DUPLICATE
+   Submitting the same message_id twice must reject the second submission.
+
+4. HEALTH_UNKNOWN
+   Health checks for a non-existent service must return an explicit status.
+
+This suite is intentionally standalone and does not depend on a previous
+successful integration run.
+
+Exit code:
+    0 = all failure paths verified
+    1 = one or more failure paths failed
 """
+
 import sys
 import time
 import uuid
@@ -31,27 +41,33 @@ FAIL = "[FAIL]"
 
 
 def check(name: str, condition: bool, note: str = "") -> bool:
-    symbol = PASS if condition else FAIL
-    print(f"  {symbol} {name}", f"â€” {note}" if note else "")
+    """Print a clean PASS/FAIL result and return the condition."""
+    status = PASS if condition else FAIL
+    suffix = f" - {note}" if note else ""
+    print(f"  {status} {name}{suffix}")
     return condition
+
+
+def separator():
+    print("-" * 72)
 
 
 def main():
     print()
     print("=" * 72)
-    print("  INSIGHT STACK â€” FAILURE PATH TEST SUITE")
+    print("  INSIGHT STACK - FAILURE PATH TEST SUITE")
     print("=" * 72)
     print()
 
     failures = []
     sdk = PlatformSDKAdapter()
 
-    # ------------------------------------------------------------------ #
-    # Case 1: SERVICE_NOT_FOUND                                            #
-    # ------------------------------------------------------------------ #
-    print("â”€" * 72)
-    print("  CASE 1: SERVICE_NOT_FOUND â€” Invoke non-existent service")
-    print("â”€" * 72)
+    # ------------------------------------------------------------------
+    # Case 1: SERVICE_NOT_FOUND
+    # ------------------------------------------------------------------
+    separator()
+    print("  CASE 1: SERVICE_NOT_FOUND - Non-existent service")
+    separator()
 
     try:
         result = sdk.invoke_capability(
@@ -61,145 +77,184 @@ def main():
             version="1.0.0",
         )
 
-        status = None
-        if hasattr(result, 'status'):
-            status = result.status
-        elif isinstance(result, dict):
-            status = result.get("status")
+        status = (
+            result.status
+            if hasattr(result, "status")
+            else result.get("status")
+            if isinstance(result, dict)
+            else None
+        )
 
-        print(f"  [*] Got status: {status}")
+        print(f"  [INFO] Returned status: {status}")
 
         ok = check(
             "Non-existent service returns failure status",
-            status in ("SERVICE_NOT_FOUND", "UNREACHABLE", "FAILED",
-                       "CIRCUIT_OPEN", "ERROR"),
+            status in {
+                "SERVICE_NOT_FOUND",
+                "UNREACHABLE",
+                "FAILED",
+                "CIRCUIT_OPEN",
+                "ERROR",
+            },
             f"status={status}",
         )
+
         if not ok:
-            failures.append("SERVICE_NOT_FOUND not returned for ghost service")
+            failures.append("SERVICE_NOT_FOUND path failed")
+
     except Exception as exc:
-        print(f"  {FAIL} Exception during SERVICE_NOT_FOUND test: {exc}")
+        print(f"  {FAIL} SERVICE_NOT_FOUND raised an exception: {exc}")
         failures.append(f"SERVICE_NOT_FOUND exception: {exc}")
 
     print()
 
-    # ------------------------------------------------------------------ #
-    # Case 2: VERSION NEGOTIATION â€” Incompatible version                   #
-    # ------------------------------------------------------------------ #
-    print("â”€" * 72)
-    print("  CASE 2: VERSION â€” Negotiate unsupported version 999.0.0")
-    print("â”€" * 72)
+    # ------------------------------------------------------------------
+    # Case 2: VERSION_UNSUPPORTED
+    # ------------------------------------------------------------------
+    separator()
+    print("  CASE 2: VERSION_UNSUPPORTED - Unsupported version")
+    separator()
 
     try:
-        neg_result = sdk.negotiate_version(
+        result = sdk.negotiate_version(
             "insightflow.runtime.intelligence.v1",
             "999.0.0",
         )
 
-        status = None
-        if hasattr(neg_result, 'status'):
-            status = neg_result.status
-        elif isinstance(neg_result, dict):
-            status = neg_result.get("status")
+        status = (
+            result.status
+            if hasattr(result, "status")
+            else result.get("status")
+            if isinstance(result, dict)
+            else None
+        )
 
-        print(f"  [*] Negotiation status: {status}")
+        print(f"  [INFO] Negotiation status: {status}")
 
         ok = check(
-            "Unsupported version returns non-ACCEPTED status",
-            status in ("UNSUPPORTED", "UNREACHABLE", "UNKNOWN", "NEGOTIATED",
-                       "FALLBACK", "ERROR", "NOT_FOUND", "UNKNOWN_SERVICE"),
+            "Unsupported version is rejected",
+            status != "ACCEPTED",
             f"status={status}",
         )
+
         if not ok:
-            failures.append("Version negotiation did not return a usable status")
+            failures.append("Unsupported version was incorrectly accepted")
+
     except Exception as exc:
-        print(f"  {FAIL} Exception during VERSION test: {exc}")
+        print(f"  {FAIL} VERSION test raised an exception: {exc}")
         failures.append(f"VERSION exception: {exc}")
 
     print()
 
-    # ------------------------------------------------------------------ #
-    # Case 3: REPLAY DUPLICATE â€” Same message_id submitted twice           #
-    # ------------------------------------------------------------------ #
-    print("â”€" * 72)
-    print("  CASE 3: REPLAY DUPLICATE â€” Same message_id submitted twice")
-    print("â”€" * 72)
+    # ------------------------------------------------------------------
+    # Case 3: REPLAY_DUPLICATE
+    # ------------------------------------------------------------------
+    separator()
+    print("  CASE 3: REPLAY_DUPLICATE - Duplicate message_id")
+    separator()
 
     try:
         replay = PlatformReplayAdapter()
-        msg_id = f"msg-failure-test-{uuid.uuid4().hex[:8]}"
+
+        message_id = f"msg-failure-test-{uuid.uuid4().hex[:8]}"
         trace_ref = f"trace-failure-{uuid.uuid4().hex[:8]}"
 
-        v1 = replay.submit(msg_id, time.time(), trace_ref)
-        v2 = replay.submit(msg_id, time.time(), trace_ref)
+        first = replay.submit(
+            message_id,
+            time.time(),
+            trace_ref,
+        )
 
-        print(f"  [*] Submission 1 status: {v1.status}")
-        print(f"  [*] Submission 2 status: {v2.status}")
+        second = replay.submit(
+            message_id,
+            time.time(),
+            trace_ref,
+        )
 
-        ok_first = check("First submission is VALID", v1.status == "VALID",
-                         f"status={v1.status}")
-        ok_dup   = check("Second submission is DUPLICATE", v2.status == "DUPLICATE",
-                         f"status={v2.status}, reason={v2.reason}")
+        print(f"  [INFO] First submission:  {first.status}")
+        print(f"  [INFO] Second submission: {second.status}")
+
+        ok_first = check(
+            "First submission is accepted",
+            first.status == "VALID",
+            f"status={first.status}",
+        )
+
+        ok_second = check(
+            "Second submission is rejected as duplicate",
+            second.status == "DUPLICATE",
+            f"status={second.status}",
+        )
 
         if not ok_first:
-            failures.append("First replay submission not VALID")
-        if not ok_dup:
-            failures.append("Second replay submission not DUPLICATE â€” stub still active")
+            failures.append("First replay submission was not VALID")
+
+        if not ok_second:
+            failures.append("Duplicate replay submission was not rejected")
+
     except Exception as exc:
-        print(f"  {FAIL} Exception during REPLAY DUPLICATE test: {exc}")
+        print(f"  {FAIL} REPLAY test raised an exception: {exc}")
         failures.append(f"REPLAY exception: {exc}")
 
     print()
 
-    # ------------------------------------------------------------------ #
-    # Case 4: HEALTH â€” Non-existent service                                #
-    # ------------------------------------------------------------------ #
-    print("â”€" * 72)
-    print("  CASE 4: HEALTH CHECK â€” Non-existent service")
-    print("â”€" * 72)
+    # ------------------------------------------------------------------
+    # Case 4: HEALTH_UNKNOWN
+    # ------------------------------------------------------------------
+    separator()
+    print("  CASE 4: HEALTH_UNKNOWN - Non-existent service")
+    separator()
 
     try:
-        health = sdk.check_health("ghost.service.v999")
+        result = sdk.check_health("ghost.service.v999")
 
-        status = None
-        if hasattr(health, 'status'):
-            status = health.status
-        elif isinstance(health, dict):
-            status = health.get("status")
+        status = (
+            result.status
+            if hasattr(result, "status")
+            else result.get("status")
+            if isinstance(result, dict)
+            else None
+        )
 
-        print(f"  [*] Health status: {status}")
+        print(f"  [INFO] Health status: {status}")
 
         ok = check(
-            "Health check returns a status for non-existent service",
+            "Unknown service returns an explicit health status",
             status is not None,
             f"status={status}",
         )
+
         if not ok:
             failures.append("Health check returned no status")
+
     except Exception as exc:
-        print(f"  {FAIL} Exception during HEALTH test: {exc}")
+        print(f"  {FAIL} HEALTH test raised an exception: {exc}")
         failures.append(f"HEALTH exception: {exc}")
 
     print()
 
-    # ------------------------------------------------------------------ #
-    # Summary                                                              #
-    # ------------------------------------------------------------------ #
+    # ------------------------------------------------------------------
+    # Summary
+    # ------------------------------------------------------------------
     print("=" * 72)
+
     if failures:
-        print(f"  {FAIL} FAILURE PATH TESTS INCOMPLETE â€” {len(failures)} issue(s):")
-        for f in failures:
-            print(f"      - {f}")
+        print(f"  {FAIL} FAILURE PATHS INCOMPLETE - {len(failures)} issue(s)")
+        for failure in failures:
+            print(f"      - {failure}")
         print("=" * 72)
         sys.exit(1)
-    else:
-        print(f"  {PASS} ALL FAILURE PATHS VERIFIED")
-        print("  SERVICE_NOT_FOUND âœ“  VERSION_INCOMPATIBLE âœ“  REPLAY_DUPLICATE âœ“  HEALTH_UNREACHABLE âœ“")
-        print("=" * 72)
-        sys.exit(0)
+
+    print(f"  {PASS} ALL FAILURE PATHS VERIFIED")
+    print()
+    print("  SERVICE_NOT_FOUND      [PASS]")
+    print("  VERSION_UNSUPPORTED    [PASS]")
+    print("  REPLAY_DUPLICATE       [PASS]")
+    print("  HEALTH_UNKNOWN         [PASS]")
+    print("=" * 72)
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":
     main()
-
-

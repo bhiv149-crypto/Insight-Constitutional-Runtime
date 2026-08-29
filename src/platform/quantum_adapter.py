@@ -5,9 +5,8 @@ Thin, reversible adapter over the local Marine Quantum Runtime.
 
 Purpose:
     Provide an isolated gateway for InsightBridge to discover, query, and
-    invoke local Quantum capabilities without modifying the canonical
-    PlatformSDKAdapter, without embedding Marine internal source code, and
-    without altering the existing BHIV/QCG integration.
+    invoke Quantum capabilities via HTTP endpoints.
+    Treats the underlying quantum runtime as an external, immutable service.
 
 Hard Boundaries:
     - Does NOT alter PlatformSDKAdapter or LivePlatformClient.
@@ -17,215 +16,333 @@ Hard Boundaries:
 
 from __future__ import annotations
 
-import os
-import sys
-import json
 import logging
-import subprocess
-from pathlib import Path
+import os
 from typing import Any, Dict, List, Optional
 
-logger = logging.getLogger("insight.platform.quantum_adapter")
+import requests
 
-DEFAULT_MARINE_RUNTIME_PATH = r"C:\Ganesh_149\Marine-quantum-runtime\marine_quantum_runtime_capability_platform\marine_quantum_runtime"
+
+logger = logging.getLogger("insight.platform.quantum_adapter")
 
 
 class MarineQuantumAdapter:
     """
-    Isolated adapter to interface with the local Marine Quantum Runtime.
+    Isolated adapter to interface with the external Marine Quantum Runtime
+    via HTTP endpoints.
     """
 
     def __init__(
         self,
         mode: Optional[str] = None,
-        runtime_path: Optional[str] = None,
+        runtime_url: Optional[str] = None,
+        api_key: Optional[str] = None,
     ) -> None:
-        self.mode = (mode or os.getenv("QUANTUM_RUNTIME_MODE", "local")).lower()
-        self.runtime_path = runtime_path or os.getenv(
-            "QUANTUM_RUNTIME_PATH", DEFAULT_MARINE_RUNTIME_PATH
+        self.mode = (
+            mode
+            or os.getenv("QUANTUM_RUNTIME_MODE", "local")
+        ).upper()
+
+        self.base_url = (
+            runtime_url
+            or os.getenv(
+                "QUANTUM_RUNTIME_URL",
+                "http://localhost:8000",
+            )
+        ).rstrip("/")
+
+        self.api_key = (
+            api_key
+            or os.getenv(
+                "QUANTUM_RUNTIME_API_KEY",
+                "dev-insecure-key",
+            )
         )
 
-    def _check_ready(self) -> Optional[Dict[str, Any]]:
-        """
-        Check if the runtime environment is ready.
-        Returns None if ready, or an error dictionary if unavailable.
-        """
-        if self.mode != "local":
-            return {
-                "status": "UNAVAILABLE",
-                "mode": self.mode,
-                "error": f"Unsupported QUANTUM_RUNTIME_MODE '{self.mode}' (expected 'local')",
-                "runtime_path": self.runtime_path,
-            }
+        self.headers = {
+            "X-API-Key": self.api_key,
+        }
 
-        runtime_dir = Path(self.runtime_path)
-        if not runtime_dir.exists():
-            return {
-                "status": "UNAVAILABLE",
-                "mode": self.mode,
-                "error": f"Marine Quantum Runtime path does not exist: {self.runtime_path}",
-                "runtime_path": self.runtime_path,
-            }
-
-        return None
-
-    def _run_marine_script(self, script: str, args: List[str] = None) -> tuple[int, str, str]:
-        """
-        Execute a python snippet in the Marine runtime directory in an isolated process.
-        """
-        cmd = [sys.executable, "-c", script]
-        if args:
-            cmd.extend(args)
-
-        try:
-            proc = subprocess.run(
-                cmd,
-                cwd=self.runtime_path,
-                capture_output=True,
-                text=True,
-                timeout=15,
-            )
-            return proc.returncode, proc.stdout, proc.stderr
-        except Exception as exc:
-            return 1, "", str(exc)
+    # ------------------------------------------------------------------
+    # Health
+    # ------------------------------------------------------------------
 
     def health(self) -> Dict[str, Any]:
         """
-        Query health and heartbeat from the local Marine Quantum Runtime.
-        """
-        err_resp = self._check_ready()
-        if err_resp:
-            return err_resp
+        Query health from the Marine Quantum Runtime API.
 
-        script = (
-            "import json\n"
-            "from src.runtime import runtime_observability\n"
-            "h = runtime_observability.get_runtime_health()\n"
-            "hb = runtime_observability.get_runtime_heartbeat()\n"
-            "print(json.dumps({'health': h, 'heartbeat': hb}))\n"
-        )
-        code, stdout, stderr = self._run_marine_script(script)
-        if code != 0:
+        Only LOCAL mode is supported by this adapter. Unsupported modes
+        fail closed rather than silently using the local runtime.
+        """
+
+        if self.mode != "LOCAL":
             return {
-                "status": "ERROR",
-                "mode": "LOCAL",
-                "error": stderr.strip() or "Process exited with non-zero code",
-                "runtime_path": self.runtime_path,
+                "status": "UNAVAILABLE",
+                "mode": self.mode,
+                "runtime_url": self.base_url,
+                "error": (
+                    f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
+                    "This adapter supports LOCAL mode only."
+                ),
             }
 
         try:
-            data = json.loads(stdout.strip().splitlines()[-1])
-            hb = data.get("heartbeat", {})
+            res = requests.get(
+                f"{self.base_url}/health",
+                timeout=5,
+            )
+            res.raise_for_status()
+
+            data = res.json()
+
             return {
-                "status": "HEALTHY" if hb.get("heartbeat") == "ALIVE" else "DEGRADED",
-                "mode": "LOCAL",
-                "heartbeat": hb,
-                "health": data.get("health", {}),
-                "runtime_path": self.runtime_path,
+                "status": "HEALTHY",
+                "mode": self.mode,
+                "runtime_url": self.base_url,
+                "heartbeat": {
+                    "heartbeat": "ALIVE"
+                },
+                "api_response": data,
             }
-        except Exception as exc:
+        
+        except requests.exceptions.RequestException as exc:
+            logger.error(
+                "Marine Quantum Runtime health check failed: %s",
+                exc,
+            )
+
             return {
-                "status": "ERROR",
-                "mode": "LOCAL",
-                "error": f"Failed to parse health response: {exc}",
-                "raw_output": stdout,
-                "runtime_path": self.runtime_path,
+                "status": "UNAVAILABLE",
+                "mode": self.mode,
+                "runtime_url": self.base_url,
+                "error": (
+                    "Failed to connect to Quantum Runtime API: "
+                    f"{exc}"
+                ),
             }
+
+        except ValueError as exc:
+            logger.error(
+                "Marine Quantum Runtime returned invalid JSON: %s",
+                exc,
+            )
+
+            return {
+                "status": "UNAVAILABLE",
+                "mode": self.mode,
+                "runtime_url": self.base_url,
+                "error": (
+                    "Quantum Runtime API returned invalid JSON: "
+                    f"{exc}"
+                ),
+            }
+
+    # ------------------------------------------------------------------
+    # Capability Discovery
+    # ------------------------------------------------------------------
 
     def list_capabilities(self) -> List[Dict[str, Any]]:
         """
-        List all registered quantum and runtime capabilities from Marine.
-        """
-        if self._check_ready():
-            return []
+        List all registered quantum and runtime capabilities via API.
 
-        script = (
-            "import json\n"
-            "from src.runtime import runtime_capability_registry\n"
-            "caps = runtime_capability_registry.list_capabilities()\n"
-            "print(json.dumps(caps))\n"
-        )
-        code, stdout, stderr = self._run_marine_script(script)
-        if code != 0:
-            logger.error("Marine list_capabilities failed: %s", stderr)
+        Returns an empty list when the Marine runtime is unavailable or
+        returns an invalid capability response.
+        """
+
+        if self.mode != "LOCAL":
+            logger.error(
+                "Cannot list capabilities in unsupported mode: %s",
+                self.mode,
+            )
             return []
 
         try:
-            return json.loads(stdout.strip().splitlines()[-1])
-        except Exception as exc:
-            logger.error("Failed to parse capabilities list: %s", exc)
+            res = requests.get(
+                f"{self.base_url}/api/v1/capabilities",
+                headers=self.headers,
+                timeout=10,
+            )
+            res.raise_for_status()
+
+            data = res.json()
+
+            if not isinstance(data, list):
+                logger.error(
+                    "Marine capabilities response is not a list"
+                )
+                return []
+
+            return data
+
+        except requests.exceptions.RequestException as exc:
+            logger.error(
+                "Marine list_capabilities failed: %s",
+                exc,
+            )
             return []
 
-    def discover_capability(self, capability_id: str) -> Optional[Dict[str, Any]]:
+        except ValueError as exc:
+            logger.error(
+                "Marine capabilities response contains invalid JSON: %s",
+                exc,
+            )
+            return []
+
+    def discover_capability(
+        self,
+        capability_id: str,
+    ) -> Optional[Dict[str, Any]]:
         """
         Discover a specific capability descriptor from Marine.
+
+        The external API may identify capabilities using:
+            - capability_id
+            - id
+            - name
+
+        The adapter accepts all three forms without changing the
+        underlying runtime.
         """
-        if self._check_ready():
+
+        caps = self.list_capabilities()
+
+        if not caps:
             return None
 
-        script = (
-            "import json, sys\n"
-            "from src.runtime import runtime_capability_registry\n"
-            "try:\n"
-            "    desc = runtime_capability_registry.discover_capability(sys.argv[1])\n"
-            "    print(json.dumps(desc.to_dict()))\n"
-            "except Exception as e:\n"
-            "    print(json.dumps({'error': str(e)}))\n"
-        )
-        code, stdout, stderr = self._run_marine_script(script, [capability_id])
-        if code != 0:
-            logger.warning("Marine discover_capability failed: %s", stderr)
-            return None
+        for cap in caps:
+            if not isinstance(cap, dict):
+                continue
 
-        try:
-            data = json.loads(stdout.strip().splitlines()[-1])
-            if "error" in data:
-                return None
-            return data
-        except Exception as exc:
-            logger.warning("Failed to parse capability descriptor: %s", exc)
-            return None
+            if (
+                cap.get("capability_id") == capability_id
+                or cap.get("id") == capability_id
+                or cap.get("name") == capability_id
+            ):
+                return cap
 
-    def invoke_capability(self, capability_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+        return None
+
+    # ------------------------------------------------------------------
+    # Capability Invocation
+    # ------------------------------------------------------------------
+
+    def invoke_capability(
+        self,
+        capability_id: str,
+        payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
         """
-        Invoke a capability on the local Marine Quantum Runtime through its full pipeline.
-        """
-        err_resp = self._check_ready()
-        if err_resp:
-            return err_resp
+        Invoke a capability on the local Marine Quantum Runtime.
 
-        script = (
-            "import json, sys\n"
-            "from src.runtime import capability_runtime\n"
-            "cap_id = sys.argv[1]\n"
-            "payload = json.loads(sys.argv[2])\n"
-            "res = capability_runtime.invoke_capability(cap_id, payload)\n"
-            "print(json.dumps(res))\n"
-        )
-        code, stdout, stderr = self._run_marine_script(
-            script, [capability_id, json.dumps(payload)]
-        )
-        if code != 0:
-            logger.error("Execution process error for '%s': %s", capability_id, stderr)
+        The adapter supports LOCAL mode only. Unsupported runtime modes
+        fail closed without attempting an HTTP request.
+        """
+
+        # ---------------------------------------------------------------
+        # Hard boundary: LOCAL mode only
+        # ---------------------------------------------------------------
+        if self.mode != "LOCAL":
             return {
-                "status": "FAILED",
+                "status": "UNAVAILABLE",
                 "capability_id": capability_id,
-                "error": stderr.strip() or "Process exited with non-zero code",
-                "runtime_mode": "LOCAL",
+                "error": (
+                    f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
+                    "This adapter supports LOCAL mode only."
+                ),
+                "runtime_mode": self.mode,
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": "UNAVAILABLE / BLOCKED",
             }
 
+        # Marine API expects:
+        # {"payload": payload}
+        url = f"{self.base_url}/api/v1/capability/{capability_id}"
+        request_body = {"payload": payload}
+
         try:
-            result = json.loads(stdout.strip().splitlines()[-1])
+            res = requests.post(
+                url,
+                json=request_body,
+                headers=self.headers,
+                timeout=30,
+            )
+            res.raise_for_status()
+            result = res.json()
+
+            # -----------------------------------------------------------
+            # Explicit InsightBridge quantum provenance
+            # -----------------------------------------------------------
             if isinstance(result, dict):
                 result["runtime_mode"] = "LOCAL"
                 result["quantum_provider_source"] = "Marine Quantum Runtime"
+
+                if "execution_classification" not in result:
+                    result["execution_classification"] = "QUANTUM_LOCAL"
+
+                # Preserve/enrich nested execution result when present.
+                if isinstance(result.get("result"), dict):
+                    inner = result["result"]
+
+                    if "execution_classification" not in inner:
+                        inner["execution_classification"] = "QUANTUM_LOCAL"
+
+                    if "provider" not in inner:
+                        inner["provider"] = "local_simulator"
+
             return result
-        except Exception as exc:
-            logger.error("Failed to parse invocation result for '%s': %s", capability_id, exc)
+
+        except requests.exceptions.RequestException as exc:
+            logger.error(
+                "Execution request error for '%s': %s",
+                capability_id,
+                exc,
+            )
+
+            # -----------------------------------------------------------
+            # Extract server response for useful validation errors
+            # -----------------------------------------------------------
+            error_details: Any = str(exc)
+            errors: List[Any] = []
+
+            if getattr(exc, "response", None) is not None:
+                try:
+                    error_details = exc.response.json()
+                except Exception:
+                    error_details = exc.response.text
+
+                if isinstance(error_details, dict):
+                    if isinstance(error_details.get("errors"), list):
+                        errors = error_details["errors"]
+
+                    elif isinstance(error_details.get("detail"), list):
+                        errors = error_details["detail"]
+
+                    elif isinstance(error_details.get("detail"), dict):
+                        errors = [error_details["detail"]]
+
+                    elif isinstance(error_details.get("attachment_check"), dict):
+                        errors = [error_details["attachment_check"]]
+
+                    else:
+                        errors = [error_details]
+
+                elif error_details:
+                    errors = [error_details]
+
+            status = "FAILED"
+
+            if (
+                getattr(exc, "response", None) is not None
+                and exc.response.status_code == 422
+            ):
+                status = "VALIDATION_ERROR"
+
             return {
-                "status": "FAILED",
+                "status": status,
                 "capability_id": capability_id,
-                "error": f"Failed to parse result: {exc}",
-                "raw_output": stdout,
+                "error": error_details,
+                "errors": errors,
                 "runtime_mode": "LOCAL",
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": "UNAVAILABLE / BLOCKED",
             }

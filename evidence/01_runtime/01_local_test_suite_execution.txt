@@ -1,0 +1,4 @@
+COMMAND: pytest -q -s
+RESULTS: 27 passed, 3 warnings
+CLASSIFICATION: LOCAL (Hybrid Local)
+SUMMARY: The local execution environment correctly processes quantum workloads via QUANTUM_LOCAL fallback routing.

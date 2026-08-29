@@ -1,0 +1,4 @@
+VERIFIED FAILURE PATHS:
+- Trust / Authentication Failure: Verified via QCG `/verify` returning HTTP 422 INVALID_SIGNATURE.
+- Invalid Quantum Input: Verified via `pytest tests/test_quantum_adapter.py`.
+- Unavailable Provider / Mode Fallback: Verified via `QUANTUM_LOCAL` fallback behavior.

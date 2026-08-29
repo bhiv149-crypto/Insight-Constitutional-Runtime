@@ -1,0 +1,4 @@
+QUANTUM EXECUTION STATUS: QUANTUM_LOCAL
+The Marine Quantum Adapter delegates quantum execution locally.
+QUANTUM_LIVE is BLOCKED/NOT PROVEN due to missing live credentials.
+QUANTUM_SIMULATED is distinguished from QUANTUM_LOCAL, and the current verified state is QUANTUM_LOCAL fallback.
