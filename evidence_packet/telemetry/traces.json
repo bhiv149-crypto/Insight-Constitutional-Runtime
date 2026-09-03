@@ -1,86 +1,98 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+    "invocation_id": "6002b782-44eb-43d0-9572-616df80d7097",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+      "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
       "participant": "insightflow.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 1124.737024307251,
+        "duration_ms": 45604.772090911865,
         "status_code": 200
       },
       "insightbridge_telemetry": {
-        "status": "FAILED",
-        "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
-        "http_status": 503
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "6002b782-44eb-43d0-9572-616df80d7097"
+        }
       }
     }
   },
-  "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+  "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
   "execution_trace": {
     "status": "RECORDED",
     "type": "execution_trace",
-    "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+    "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
     "participant": "insightflow.runtime.intelligence.v1",
     "operation": "execute",
     "metadata": {
       "source": "Insight Constitutional Runtime",
       "integration": "live_platform",
-      "duration_ms": 1124.737024307251,
+      "duration_ms": 45604.772090911865,
       "status_code": 200
     },
     "insightbridge_telemetry": {
-      "status": "FAILED",
-      "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
-      "http_status": 503
+      "status": "SUCCESS",
+      "http_status": 200,
+      "response": {
+        "status": "success",
+        "request_id": "6002b782-44eb-43d0-9572-616df80d7097"
+      }
     }
   },
   "insightbridge.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+    "invocation_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+      "trace_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
       "participant": "insightbridge.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 770.9836959838867,
+        "duration_ms": 1127.5863647460938,
         "status_code": 200
       },
       "insightbridge_telemetry": {
-        "status": "FAILED",
-        "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
-        "http_status": 503
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f"
+        }
       }
     }
   },
   "insightcore.runtime.intelligence.v1": {
     "status": "RECORDED",
-    "invocation_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
+    "invocation_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
     "execution_trace": {
       "status": "RECORDED",
       "type": "execution_trace",
-      "trace_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
+      "trace_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
       "participant": "insightcore.runtime.intelligence.v1",
       "operation": "execute",
       "metadata": {
         "source": "Insight Constitutional Runtime",
         "integration": "live_platform",
-        "duration_ms": 595.8590507507324,
+        "duration_ms": 628.5068988800049,
         "status_code": 200
       },
       "insightbridge_telemetry": {
-        "status": "FAILED",
-        "error": "503 Server Error: Service Unavailable for url: https://insightbridge-phase-4-2-integration-demo.onrender.com/ingest",
-        "http_status": 503
+        "status": "SUCCESS",
+        "http_status": 200,
+        "response": {
+          "status": "success",
+          "request_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0"
+        }
       }
     }
   },

@@ -57,7 +57,7 @@ production Quantum, and `/enforce` execution remain unestablished.
 
 ### Validated
 * **Internal Test Suite**: Verified pass rate in automated test suite. Contract tests: 12/12 passed. Live platform tests: 5/5 passed. Integration readiness: 17/17 passed.
-* **Replay Safety**: Local stub `CanonicalReplayAuthority` provides in-memory deduplication. Canonical QCG replay lineage endpoint is live-verified (HTTP 200 with VALID verdict).
+* **Replay Safety**: Local stub `CanonicalReplayAuthority` **removed** — all replay routing now goes to LIVE QCG (`/qcg/verify` and `/qcg/replay/lineage/{id}`). Trust stage verified: `passed: True`.
 * **Telemetry Propagation**: `PlatformTelemetryAdapter` uses local stub `TraceStore`. No live telemetry backend is configured. OpenTelemetry export is local only.
 
 ### Integrated
@@ -88,6 +88,25 @@ production Quantum, and `/enforce` execution remain unestablished.
 - ⚠ Trust verification (known limitation: HTTP 422)
 - ⚪ Telemetry export (stubbed, awaiting platform contract)
 
-**Production certification**: Not claimed. Execution, discovery, invocation, health, and replay lineage are evidenced; Trust, telemetry storage, and Quantum production status remain bounded.
+**Production certification**: Not claimed. Execution, discovery, invocation, health, replay lineage, and Trust validation are evidenced; telemetry storage and live Quantum execution remain bounded.
 
 *Note: Shared platform service hardware certification depends on the availability of the shared BHIV Constitutional Runtime services.*
+
+---
+
+## [1.1.0] — 2026-09-03
+
+### Changed
+* **Replay Adapter Cleanup**: Removed `CanonicalReplayAuthority` and `ReplayRegistry` local stubs from `stubs.py` and `replay_adapter.py`. All replay routing now goes exclusively to LIVE QCG.
+* **Trust Stage Verified**: `test_sdk_invocation_verify_and_replay` now asserts `trust.passed = True` confirming Pritesh resolved the `INVALID_SIGNATURE` blocker.
+* **SDK Import Fixed**: `tantra-platform-sdk==1.0.0` installed from official GitHub (`PriteshPatra-BHIV/QCG_task1`). `imports.py` `_SDK_IMPORT_ERROR` is now `None`.
+* **Test Count**: 27 passed, 0 failed, 3 deprecation warnings.
+
+### Documentation Updated
+* `EXECUTIVE_ASSESSMENT.md` — reflecting resolved Trust and SDK states
+* `HANDOVER.md` — updated SDK install command, blocker table, and final status
+* `README.md` — updated status table and setup instructions
+* `REVIEW_PACKET.md` — full rewrite with current quick-status table
+* `docs/FAILURE_AND_FALLBACK_POLICY.md` — full rewrite with resolved/unresolved table
+* `docs/QUANTUM_RUNTIME_ARCHITECTURE.md` — updated current state diagram
+* `docs/AUTHORITY_BOUNDARIES.md` — expanded with current completion per person

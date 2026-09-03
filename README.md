@@ -16,11 +16,11 @@ A thin integration layer connecting three Insight Stack participants (`InsightFl
 | SDK invocation                   | Verified                        | `LIVE` (3/3 SUCCESS via `tantra-platform-sdk`) |
 | Health                           | Verified                        | `LIVE` (Insight service + QCG UP)           |
 | Replay lineage                   | Verified                        | `LIVE` (`GET /qcg/replay/lineage/{id}` → HTTP 200, VALID) |
-| `/qcg/verify`                    | Verified negative path          | `PARTIAL` (Replay stage VALID; Trust stage HTTP 422 `INVALID_SIGNATURE`) |
+| `/qcg/verify`                    | Verified                        | `LIVE` (Replay VALID, Trust `passed: True`) |
 | Quantum execution                | Verified locally                | `QUANTUM_LOCAL` (classical deterministic simulation) |
-| Live cloud quantum provider      | Not attached / not proven       | `BLOCKED` / `NOT PROVEN`                    |
-| Telemetry export                 | Verified locally                | `LOCAL` (`TraceStore` stub; no live backend) |
-| Persistent replay across restart | Not proven                      | `NOT PROVEN` (`TraceStore` is local stub)   |
+| Live cloud quantum provider      | Not attached                    | `BLOCKED` — no credentials (Dhiraj / Infrastructure) |
+| Telemetry export                 | Verified locally                | `LOCAL` (`TraceStore` stub — owned by Pritesh) |
+| Persistent replay across restart | Not proven                      | `NOT PROVEN` (`TraceStore` is in-memory stub — owned by Pritesh) |
 | Quantum-network execution        | Not proven                      | `NOT PROVEN` (bounded contract only)        |
 | Classical fallback               | Verified                        | `FALLBACK` (local simulator always available) |
 | Production certification         | Not claimed                     | `NOT CLAIMED`                                |
@@ -63,8 +63,8 @@ Classical Path        Quantum Path
       +----------+-----------+
       |                      |
       v                      v
-/verify (422)        /replay/lineage (200)
-Trust HALTED         Replay VALID
+/verify (200/422)    /replay/lineage (200)
+Trust VERIFIED       Replay VALID
       |                      |
       +----------+-----------+
                  |
@@ -126,7 +126,9 @@ venv\Scripts\activate      # PowerShell
 
 # Install dependencies
 pip install -r requirements.txt
-pip install tantra-platform-sdk==1.0.0
+
+# Install canonical Platform SDK (from Pritesh/Kanishk's official GitHub)
+pip install git+https://github.com/PriteshPatra-BHIV/QCG_task1.git#subdirectory=sdk
 
 # Verify SDK
 python -c "from tantra_platform_sdk import PlatformCapabilitySDK; print('SDK OK')"
@@ -298,7 +300,7 @@ No live quantum provider is attached or proven. The provider abstraction exists 
 
 ### Persistent replay across restart
 
-`NOT PROVEN`. The current `TraceStore` and `CanonicalReplayAuthority` are local in-memory stubs. Evidence does not survive process restart.
+`NOT PROVEN`. The current `TraceStore` is a local in-memory stub (owned by Pritesh). Evidence does not survive process restart. `CanonicalReplayAuthority` has been removed — all replay routing goes to LIVE QCG.
 
 ### Quantum-network integration
 
@@ -318,7 +320,7 @@ The OpenAPI at `https://insight-flow-f5j4.onrender.com/openapi.json` exposes `/e
 | Discovery | `evidence_packet/api_samples/discovered_services.json` | LIVE |
 | Invocation | `evidence_packet/invocation_proof/invocation_results.json` | LIVE |
 | Replay validation | `evidence_packet/replay_evidence/replay_validation.json` | LIVE |
-| Verify/Trust negative path | `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json` | LIVE (negative path) |
+| Verify/Trust | `evidence_packet/replay_evidence/verify_replay_valid_422_trust.json` | LIVE (Trust `passed: True`) |
 | Quantum health | `evidence_packet/quantum_evidence/quantum_local_health.json` | LOCAL |
 | Quantum invocation | `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json` | LOCAL |
 | Quantum failure | `evidence_packet/quantum_evidence/quantum_failure_case.json` | LOCAL |
@@ -353,9 +355,9 @@ runtime_identity/     → runtime identity cards
 | `src/platform/quantum_adapter.py` | Marine Quantum Runtime HTTP adapter |
 | `src/platform/sdk_adapter.py` | Thin wrapper over `tantra-platform-sdk` |
 | `src/platform/live_platform_client.py` | REST client for live QCG platform |
-| `src/platform/replay_adapter.py` | QCG replay authority + local stub fallback |
+| `src/platform/replay_adapter.py` | LIVE QCG replay and verify adapter (local stub removed) |
 | `src/platform/telemetry_adapter.py` | Platform telemetry boundary (local stub) |
-| `src/platform/stubs.py` | Development stubs: `TraceStore`, `CanonicalReplayAuthority` |
+| `src/platform/stubs.py` | Development stubs: `TraceStore`, `CapabilityManifest`, etc. (CanonicalReplayAuthority removed) |
 | `src/integration/platform_integration_service.py` | Full convergence workflow |
 | `insight_execution_service.py` | FastAPI service for live deployment |
 

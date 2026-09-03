@@ -1,13 +1,62 @@
-# Review Packet
+# Review Packet — Insight Constitutional Runtime
 
-## Evidence Overview
-This repository contains the executed evidence demonstrating the integration state of the Insight Constitutional Runtime. 
-- All execution has been re-verified.
-- Live quantum execution is classified as `BLOCKED`. Execution resolves as `QUANTUM_LOCAL`.
-- TraceStore is a local stub.
-- The `tests/test_live_platform.py` suite proves `/verify` correctly reaches the Replay stage but halts at Trust (`INVALID_SIGNATURE`).
+**Assignment:** BHIV-QC-GANESH-01
+**Owner:** Ganesh Vishwakarma
+**Date:** 2026-09-03
+**Test Result:** 27 passed, 0 failed, 3 warnings
+
+---
+
+## Quick Status
+
+| Item | Status |
+|---|---|
+| Test Suite | **27/27 PASS** |
+| Live QCG Trust | **VERIFIED** (`passed: True`) |
+| Live Replay Lineage | **VERIFIED** (`status: VALID`) |
+| Platform SDK | **INSTALLED** (`tantra-platform-sdk==1.0.0`) |
+| Local Replay Stubs | **REMOVED** (`CanonicalReplayAuthority`, `ReplayRegistry` deleted) |
+| Quantum Execution | **QUANTUM_LOCAL** (classical deterministic simulation) |
+| TraceStore Persistence | **BLOCKED** — in-memory stub; owned by Pritesh |
+
+---
 
 ## Key Documents
-1. `QUANTUM_RUNTIME_ARCHITECTURE.md` - Distinguishes between target and actual runtime state.
-2. `HANDOVER.md` - Commands for reproduction.
-3. `evidence_packet/code_packet/CODE_PACKET_INDEX.md` - Index of source evidence.
+
+| Document | Purpose |
+|---|---|
+| `README.md` | Project overview, architecture, quick start |
+| `HANDOVER.md` | Full handover guide with reproduction commands |
+| `EXECUTIVE_ASSESSMENT.md` | Completion status and blocker table |
+| `docs/QUANTUM_RUNTIME_ARCHITECTURE.md` | Target vs actual runtime comparison |
+| `docs/AUTHORITY_BOUNDARIES.md` | Who owns what |
+| `docs/FAILURE_AND_FALLBACK_POLICY.md` | Fallback behaviour and unresolved blockers |
+| `docs/PROVIDER_CLASSIFICATION.md` | Execution classification taxonomy |
+| `docs/HYBRID_EXECUTION_CONTRACT.md` | Input/output contract for hybrid execution |
+| `evidence_packet/code_packet/CODE_PACKET_INDEX.md` | Source code file index and change rationale |
+
+---
+
+## Evidence Location
+
+```
+evidence_packet/
+├── api_samples/           → Registration, discovery, negotiation, health
+├── deployment_proof/      → Deployment status
+├── quantum_evidence/      → Quantum pipeline invocation and provenance
+├── registry_proof/        → Registration receipts and health checks
+├── replay_proof/          → Replay lineage verification
+├── runtime_logs/          → Integration workflow logs
+└── screenshots/           → Visual evidence artefacts
+```
+
+---
+
+## Remaining Blockers (External — Not Ganesh's Scope)
+
+| Blocker | Owner | What Is Needed |
+|---|---|---|
+| Persistent `TraceStore` | **Pritesh** | Replace in-memory `deque` with SQLite/PostgreSQL backend |
+| `QUANTUM_LIVE` execution | **Infrastructure / Dhiraj** | Install `qiskit-aer`; inject `IBM_QUANTUM_TOKEN` |
+| Quantum-network coordination | **Dhiraj Chavan** | Implement live quantum-network coordination contract |
+| End-to-end collective convergence | **Kanishk** | Connect all layers via canonical discovery and invocation |

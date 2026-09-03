@@ -75,8 +75,6 @@ from .stubs import (
     PlatformServiceRecord,
     CapabilityManifest,
     OperationContract,
-    ReplayRegistry,
-    CanonicalReplayAuthority,
     TraceStore,
 )
 

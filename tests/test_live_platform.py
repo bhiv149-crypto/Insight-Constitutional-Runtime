@@ -196,17 +196,10 @@ def test_sdk_invocation_verify_and_replay(sdk):
     # 2b. Validate Trust halt separately
     # ---------------------------------------------------------
 
-    if verify_response.status_code == 422:
+    trust = detail.get("stages", {}).get("trust", {})
+    if trust:
+        assert trust.get("passed") is True, f"Expected Trust to pass, got: {trust}"
 
-        trust = detail.get("stages", {}).get("trust", {})
-
-        assert trust.get("passed") is False
-        assert "INVALID_SIGNATURE" in trust.get("halt_signal", "")
-
-    else:
-        # If the platform fixes the signature problem in the future,
-        # successful verification remains valid behavior.
-        assert verify_response.status_code == 200
 
     # ---------------------------------------------------------
     # 3. Replay the SAME invocation

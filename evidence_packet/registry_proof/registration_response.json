@@ -5,10 +5,10 @@
       "service_id": "insightflow.runtime.intelligence.v1",
       "registration_hash": "e83219b92617356056debf20d8fd7bf06dcff7318229c574f814a9dbf5e1d937",
       "evidence": {
-        "evidence_id": "1183defb-f5d4-4f4e-bee6-597ed8644d53",
+        "evidence_id": "fee264d2-e95a-4d0d-a3c9-386c43a05ea0",
         "event_type": "SERVICE_REGISTERED",
         "service_id": "insightflow.runtime.intelligence.v1",
-        "timestamp": "2026-08-25T11:19:11.690819+00:00",
+        "timestamp": "2026-09-03T10:41:58.953617+00:00",
         "details": {
           "service_name": "InsightFlow",
           "version": "1.0.2",
@@ -17,38 +17,50 @@
           "registration_hash": "e83219b92617356056debf20d8fd7bf06dcff7318229c574f814a9dbf5e1d937",
           "has_manifest": false
         },
-        "evidence_hash": "533c4bba377e22e661a6dcac343d3c78e8e149331af5f1e501df5b0b7e6b9dba",
-        "previous_evidence_hash": "2229b777e76d49c35ba9edbc270c187806b7c0a657e9356ec441839494a8ee6f"
+        "evidence_hash": "0c9febee8a2f2529328c571ba02c8ff90d40d7ecd5ec78fea81a0d9cfe8d0924",
+        "previous_evidence_hash": "9a9b162a21fc3e957ea53d4d174eac82f527616cd7e5205671b92c9d1de4d6ab"
       }
     },
     "insightbridge.runtime.intelligence.v1": {
-      "status": "ALREADY_REGISTERED",
+      "status": "REGISTERED",
       "service_id": "insightbridge.runtime.intelligence.v1",
+      "registration_hash": "5ecc98ad75e47baf25cc97d238676844c15e462148620c6c868857cecd63d337",
       "evidence": {
-        "evidence_id": "5a14b491-7901-485b-9984-b39ff8fc3dac",
-        "event_type": "REGISTRATION_IDEMPOTENT",
+        "evidence_id": "6930b1a8-b8bd-48d1-a76f-1533ebcbd249",
+        "event_type": "SERVICE_REGISTERED",
         "service_id": "insightbridge.runtime.intelligence.v1",
-        "timestamp": "2026-08-25T11:19:11.944531+00:00",
+        "timestamp": "2026-09-03T10:41:59.248077+00:00",
         "details": {
-          "message": "Service already registered with same version."
+          "service_name": "InsightBridge",
+          "version": "1.0.2",
+          "capability_id": "insightbridge.runtime.intelligence.v1",
+          "status": "ACTIVE",
+          "registration_hash": "5ecc98ad75e47baf25cc97d238676844c15e462148620c6c868857cecd63d337",
+          "has_manifest": false
         },
-        "evidence_hash": "a35974ec93ba48c81173a0313735825cb5a75c2b191baef9077ba0c6da6c75b1",
-        "previous_evidence_hash": "533c4bba377e22e661a6dcac343d3c78e8e149331af5f1e501df5b0b7e6b9dba"
+        "evidence_hash": "ec1a0dd31f980027cd13b48b1f0d1e150b7ceadaa34fba7db318edbdbaaa10bf",
+        "previous_evidence_hash": "0c9febee8a2f2529328c571ba02c8ff90d40d7ecd5ec78fea81a0d9cfe8d0924"
       }
     },
     "insightcore.runtime.intelligence.v1": {
-      "status": "ALREADY_REGISTERED",
+      "status": "REGISTERED",
       "service_id": "insightcore.runtime.intelligence.v1",
+      "registration_hash": "ce313df028fc9a3ffe2692c936d254906fc9525239c58ac6e1056e6375d7a606",
       "evidence": {
-        "evidence_id": "fef103c0-4064-401b-9920-baef6fd0f734",
-        "event_type": "REGISTRATION_IDEMPOTENT",
+        "evidence_id": "de6b782b-5e3a-49ba-a188-46337b858492",
+        "event_type": "SERVICE_REGISTERED",
         "service_id": "insightcore.runtime.intelligence.v1",
-        "timestamp": "2026-08-25T11:19:12.215014+00:00",
+        "timestamp": "2026-09-03T10:41:59.972079+00:00",
         "details": {
-          "message": "Service already registered with same version."
+          "service_name": "InsightCore",
+          "version": "1.0.2",
+          "capability_id": "insightcore.runtime.intelligence.v1",
+          "status": "ACTIVE",
+          "registration_hash": "ce313df028fc9a3ffe2692c936d254906fc9525239c58ac6e1056e6375d7a606",
+          "has_manifest": false
         },
-        "evidence_hash": "8b8cd09f03a61f825d2207575a09962cbfcc228da5b7ed6e51fd1d5354a18c58",
-        "previous_evidence_hash": "a35974ec93ba48c81173a0313735825cb5a75c2b191baef9077ba0c6da6c75b1"
+        "evidence_hash": "90eade6933ccbc09880255a71faa60e39509da83467444c868b7f54e911cdd5a",
+        "previous_evidence_hash": "ec1a0dd31f980027cd13b48b1f0d1e150b7ceadaa34fba7db318edbdbaaa10bf"
       }
     }
   },

@@ -10,9 +10,6 @@ Verifies failure behaviour through the canonical Platform SDK:
 2. VERSION_UNSUPPORTED
    Negotiation with an unsupported version must not be accepted.
 
-3. REPLAY_DUPLICATE
-   Submitting the same message_id twice must reject the second submission.
-
 4. HEALTH_UNKNOWN
    Health checks for a non-existent service must return an explicit status.
 
@@ -33,7 +30,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.platform.sdk_adapter import PlatformSDKAdapter
-from src.platform.replay_adapter import PlatformReplayAdapter
 
 
 PASS = "[PASS]"
@@ -146,57 +142,6 @@ def main():
 
     print()
 
-    # ------------------------------------------------------------------
-    # Case 3: REPLAY_DUPLICATE
-    # ------------------------------------------------------------------
-    separator()
-    print("  CASE 3: REPLAY_DUPLICATE - Duplicate message_id")
-    separator()
-
-    try:
-        replay = PlatformReplayAdapter()
-
-        message_id = f"msg-failure-test-{uuid.uuid4().hex[:8]}"
-        trace_ref = f"trace-failure-{uuid.uuid4().hex[:8]}"
-
-        first = replay.submit(
-            message_id,
-            time.time(),
-            trace_ref,
-        )
-
-        second = replay.submit(
-            message_id,
-            time.time(),
-            trace_ref,
-        )
-
-        print(f"  [INFO] First submission:  {first.status}")
-        print(f"  [INFO] Second submission: {second.status}")
-
-        ok_first = check(
-            "First submission is accepted",
-            first.status == "VALID",
-            f"status={first.status}",
-        )
-
-        ok_second = check(
-            "Second submission is rejected as duplicate",
-            second.status == "DUPLICATE",
-            f"status={second.status}",
-        )
-
-        if not ok_first:
-            failures.append("First replay submission was not VALID")
-
-        if not ok_second:
-            failures.append("Duplicate replay submission was not rejected")
-
-    except Exception as exc:
-        print(f"  {FAIL} REPLAY test raised an exception: {exc}")
-        failures.append(f"REPLAY exception: {exc}")
-
-    print()
 
     # ------------------------------------------------------------------
     # Case 4: HEALTH_UNKNOWN
@@ -249,7 +194,7 @@ def main():
     print()
     print("  SERVICE_NOT_FOUND      [PASS]")
     print("  VERSION_UNSUPPORTED    [PASS]")
-    print("  REPLAY_DUPLICATE       [PASS]")
+
     print("  HEALTH_UNKNOWN         [PASS]")
     print("=" * 72)
 

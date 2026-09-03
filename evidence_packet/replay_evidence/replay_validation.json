@@ -1,14 +1,106 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "status": "VALID",
-    "invocation_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+    "invocation_id": "6002b782-44eb-43d0-9572-616df80d7097",
     "verification": {
       "http_status": 422,
       "status": "PROCESSED",
-      "invocation_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+      "invocation_id": "6002b782-44eb-43d0-9572-616df80d7097",
       "response": {
         "detail": {
-          "trace_id": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+          "trace_id": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+          "parent_trace_id": null,
+          "flow_status": "HALTED",
+          "stages": {
+            "replay": {
+              "is_valid": true,
+              "status": "VALID",
+              "sequence_number": 3,
+              "verification_hash": "5c3b4d267a5eb2be381a775c321d5f4039596c526cc86484876b99225502992a"
+            },
+            "keshav_analysis": {
+              "status": "COMPLETED",
+              "live": true,
+              "trace_id": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+              "root_cause": null,
+              "resolution_signal": null,
+              "impact_score": 0,
+              "severity": "LOW",
+              "timestamp": "2026-09-03T10:42:52Z"
+            },
+            "trust": {
+              "passed": true,
+              "halt_signal": "",
+              "reason": ""
+            },
+            "execution": {
+              "contract_trace_id": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+              "producer_type": "QUANTUM",
+              "ack": "HALT:INVALID_CONTRACT:payload must be a non-empty dict.",
+              "confidence": 0.99,
+              "runtime_hash": "64fc0faf1ff72d8748fc562438695bfdc0edfa80ab1a0714fef8b17aa776bd4c",
+              "execution_timestamp": "2026-09-03T10:42:53.775016+00:00"
+            }
+          },
+          "halt_reason": "HALT:INVALID_CONTRACT:payload must be a non-empty dict."
+        }
+      }
+    },
+    "lineage": {
+      "status": "FOUND",
+      "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
+      "http_status": 200,
+      "response": {
+        "message_id": "6002b782-44eb-43d0-9572-616df80d7097",
+        "verdict": {
+          "message_id": "6002b782-44eb-43d0-9572-616df80d7097",
+          "sequence_number": 3,
+          "status": "VALID",
+          "reason": "",
+          "lineage_record": {
+            "replay_id": "a900d35c-c9ca-5af0-9e55-80a5850dfe0e",
+            "message_id": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+            "sequence_number": 3,
+            "decision": "VALID",
+            "decision_timestamp": "2026-09-03T10:42:51.829261+00:00",
+            "origin_component": "CanonicalReplayAuthority",
+            "schema_version": "1.0.0",
+            "trace_reference": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+            "parent_reference": "2",
+            "verification_hash": "5c3b4d267a5eb2be381a775c321d5f4039596c526cc86484876b99225502992a"
+          }
+        }
+      }
+    },
+    "verdict": {
+      "message_id": "6002b782-44eb-43d0-9572-616df80d7097",
+      "sequence_number": 3,
+      "status": "VALID",
+      "reason": "",
+      "lineage_record": {
+        "replay_id": "a900d35c-c9ca-5af0-9e55-80a5850dfe0e",
+        "message_id": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+        "sequence_number": 3,
+        "decision": "VALID",
+        "decision_timestamp": "2026-09-03T10:42:51.829261+00:00",
+        "origin_component": "CanonicalReplayAuthority",
+        "schema_version": "1.0.0",
+        "trace_reference": "0baa3bc4-b8c2-4aee-bc1e-3d6693fb4277",
+        "parent_reference": "2",
+        "verification_hash": "5c3b4d267a5eb2be381a775c321d5f4039596c526cc86484876b99225502992a"
+      }
+    }
+  },
+  "insightbridge.runtime.intelligence.v1": {
+    "status": "VALID",
+    "invocation_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
+    "verification": {
+      "http_status": 422,
+      "status": "PROCESSED",
+      "invocation_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
+      "response": {
+        "detail": {
+          "trace_id": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
           "parent_trace_id": null,
           "flow_status": "HALTED",
           "stages": {
@@ -16,83 +108,91 @@
               "is_valid": true,
               "status": "VALID",
               "sequence_number": 4,
-              "verification_hash": "d8f74fce49f28b1284771bf2e719921198419ff52841bc553acf823d34f4f29a"
+              "verification_hash": "589f637bca8831b073f970942d4a0ec0004f7f86475f4fe48b636aeab5809a60"
             },
             "keshav_analysis": {
               "status": "COMPLETED",
               "live": true,
-              "trace_id": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+              "trace_id": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
               "root_cause": null,
               "resolution_signal": null,
               "impact_score": 0,
               "severity": "LOW",
-              "timestamp": "2026-08-25T11:19:18Z"
+              "timestamp": "2026-09-03T10:42:55Z"
             },
             "trust": {
-              "passed": false,
-              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
-              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+              "passed": true,
+              "halt_signal": "",
+              "reason": ""
+            },
+            "execution": {
+              "contract_trace_id": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
+              "producer_type": "QUANTUM",
+              "ack": "HALT:INVALID_CONTRACT:payload must be a non-empty dict.",
+              "confidence": 0.99,
+              "runtime_hash": "64fc0faf1ff72d8748fc562438695bfdc0edfa80ab1a0714fef8b17aa776bd4c",
+              "execution_timestamp": "2026-09-03T10:42:56.768276+00:00"
             }
           },
-          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+          "halt_reason": "HALT:INVALID_CONTRACT:payload must be a non-empty dict."
         }
       }
     },
     "lineage": {
       "status": "FOUND",
-      "trace_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+      "trace_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
       "http_status": 200,
       "response": {
-        "message_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+        "message_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
         "verdict": {
-          "message_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+          "message_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
           "sequence_number": 4,
           "status": "VALID",
           "reason": "",
           "lineage_record": {
-            "replay_id": "e67cc4d3-b963-51d3-b965-9c91d7acf093",
-            "message_id": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+            "replay_id": "726abfb1-8123-53e9-93a6-c04005f69be6",
+            "message_id": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
             "sequence_number": 4,
             "decision": "VALID",
-            "decision_timestamp": "2026-08-25T11:19:18.611968+00:00",
+            "decision_timestamp": "2026-09-03T10:42:54.809147+00:00",
             "origin_component": "CanonicalReplayAuthority",
             "schema_version": "1.0.0",
-            "trace_reference": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+            "trace_reference": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
             "parent_reference": "3",
-            "verification_hash": "d8f74fce49f28b1284771bf2e719921198419ff52841bc553acf823d34f4f29a"
+            "verification_hash": "589f637bca8831b073f970942d4a0ec0004f7f86475f4fe48b636aeab5809a60"
           }
         }
       }
     },
     "verdict": {
-      "message_id": "b6e0d444-4c7b-434f-a554-5f8494009b3f",
+      "message_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
       "sequence_number": 4,
       "status": "VALID",
       "reason": "",
       "lineage_record": {
-        "replay_id": "e67cc4d3-b963-51d3-b965-9c91d7acf093",
-        "message_id": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+        "replay_id": "726abfb1-8123-53e9-93a6-c04005f69be6",
+        "message_id": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
         "sequence_number": 4,
         "decision": "VALID",
-        "decision_timestamp": "2026-08-25T11:19:18.611968+00:00",
+        "decision_timestamp": "2026-09-03T10:42:54.809147+00:00",
         "origin_component": "CanonicalReplayAuthority",
         "schema_version": "1.0.0",
-        "trace_reference": "67d69d1d-9a8e-493f-9dd9-1fa8e263a677",
+        "trace_reference": "957cbae6-e3dc-468e-9f08-2cc0054fd3c3",
         "parent_reference": "3",
-        "verification_hash": "d8f74fce49f28b1284771bf2e719921198419ff52841bc553acf823d34f4f29a"
+        "verification_hash": "589f637bca8831b073f970942d4a0ec0004f7f86475f4fe48b636aeab5809a60"
       }
     }
   },
-  "insightbridge.runtime.intelligence.v1": {
+  "insightcore.runtime.intelligence.v1": {
     "status": "VALID",
-    "invocation_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+    "invocation_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
     "verification": {
       "http_status": 422,
       "status": "PROCESSED",
-      "invocation_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+      "invocation_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
       "response": {
         "detail": {
-          "trace_id": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+          "trace_id": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
           "parent_trace_id": null,
           "flow_status": "HALTED",
           "stages": {
@@ -100,165 +200,79 @@
               "is_valid": true,
               "status": "VALID",
               "sequence_number": 5,
-              "verification_hash": "ede62caa4ca33a2ec102336f53d3b4245bc31972c93a6b9d0dca8acdd904a927"
+              "verification_hash": "0734b7c61db4e90c696feb1a900a0ce8c67872452111731ced67e33a8ef291c6"
             },
             "keshav_analysis": {
               "status": "COMPLETED",
               "live": true,
-              "trace_id": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+              "trace_id": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
               "root_cause": null,
               "resolution_signal": null,
               "impact_score": 0,
               "severity": "LOW",
-              "timestamp": "2026-08-25T11:19:20Z"
+              "timestamp": "2026-09-03T10:42:57Z"
             },
             "trust": {
-              "passed": false,
-              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
-              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
+              "passed": true,
+              "halt_signal": "",
+              "reason": ""
+            },
+            "execution": {
+              "contract_trace_id": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
+              "producer_type": "QUANTUM",
+              "ack": "HALT:INVALID_CONTRACT:payload must be a non-empty dict.",
+              "confidence": 0.99,
+              "runtime_hash": "64fc0faf1ff72d8748fc562438695bfdc0edfa80ab1a0714fef8b17aa776bd4c",
+              "execution_timestamp": "2026-09-03T10:42:59.582933+00:00"
             }
           },
-          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
+          "halt_reason": "HALT:INVALID_CONTRACT:payload must be a non-empty dict."
         }
       }
     },
     "lineage": {
       "status": "FOUND",
-      "trace_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+      "trace_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
       "http_status": 200,
       "response": {
-        "message_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+        "message_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
         "verdict": {
-          "message_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+          "message_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
           "sequence_number": 5,
           "status": "VALID",
           "reason": "",
           "lineage_record": {
-            "replay_id": "74f18382-11c1-5514-8dc9-022ee140d123",
-            "message_id": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+            "replay_id": "963ee3d1-c1ab-5bcd-ab30-7249bb28df6f",
+            "message_id": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
             "sequence_number": 5,
             "decision": "VALID",
-            "decision_timestamp": "2026-08-25T11:19:20.307052+00:00",
+            "decision_timestamp": "2026-09-03T10:42:57.311246+00:00",
             "origin_component": "CanonicalReplayAuthority",
             "schema_version": "1.0.0",
-            "trace_reference": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+            "trace_reference": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
             "parent_reference": "4",
-            "verification_hash": "ede62caa4ca33a2ec102336f53d3b4245bc31972c93a6b9d0dca8acdd904a927"
+            "verification_hash": "0734b7c61db4e90c696feb1a900a0ce8c67872452111731ced67e33a8ef291c6"
           }
         }
       }
     },
     "verdict": {
-      "message_id": "22e8aa63-1670-4e93-ad9e-a1526ee63900",
+      "message_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
       "sequence_number": 5,
       "status": "VALID",
       "reason": "",
       "lineage_record": {
-        "replay_id": "74f18382-11c1-5514-8dc9-022ee140d123",
-        "message_id": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+        "replay_id": "963ee3d1-c1ab-5bcd-ab30-7249bb28df6f",
+        "message_id": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
         "sequence_number": 5,
         "decision": "VALID",
-        "decision_timestamp": "2026-08-25T11:19:20.307052+00:00",
+        "decision_timestamp": "2026-09-03T10:42:57.311246+00:00",
         "origin_component": "CanonicalReplayAuthority",
         "schema_version": "1.0.0",
-        "trace_reference": "64bb8f8a-06f4-4fe7-a4ae-a94685c8c28e",
+        "trace_reference": "bbdf36ae-3b69-4a40-b539-1f3c551f474f",
         "parent_reference": "4",
-        "verification_hash": "ede62caa4ca33a2ec102336f53d3b4245bc31972c93a6b9d0dca8acdd904a927"
+        "verification_hash": "0734b7c61db4e90c696feb1a900a0ce8c67872452111731ced67e33a8ef291c6"
       }
     }
-  },
-  "insightcore.runtime.intelligence.v1": {
-    "status": "VALID",
-    "invocation_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-    "verification": {
-      "http_status": 422,
-      "status": "PROCESSED",
-      "invocation_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-      "response": {
-        "detail": {
-          "trace_id": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-          "parent_trace_id": null,
-          "flow_status": "HALTED",
-          "stages": {
-            "replay": {
-              "is_valid": true,
-              "status": "VALID",
-              "sequence_number": 6,
-              "verification_hash": "024e76e3d65b328936af1185b4675c21a2e2605195b4e89d6c1183836f699883"
-            },
-            "keshav_analysis": {
-              "status": "COMPLETED",
-              "live": true,
-              "trace_id": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-              "root_cause": null,
-              "resolution_signal": null,
-              "impact_score": 0,
-              "severity": "LOW",
-              "timestamp": "2026-08-25T11:19:22Z"
-            },
-            "trust": {
-              "passed": false,
-              "halt_signal": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered",
-              "reason": "ECDSA signature verification failed \u2014 contract may be tampered"
-            }
-          },
-          "halt_reason": "HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered"
-        }
-      }
-    },
-    "lineage": {
-      "status": "FOUND",
-      "trace_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-      "http_status": 200,
-      "response": {
-        "message_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-        "verdict": {
-          "message_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-          "sequence_number": 6,
-          "status": "VALID",
-          "reason": "",
-          "lineage_record": {
-            "replay_id": "e4b70e48-1d6a-5fc5-baa2-946208454475",
-            "message_id": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-            "sequence_number": 6,
-            "decision": "VALID",
-            "decision_timestamp": "2026-08-25T11:19:22.428161+00:00",
-            "origin_component": "CanonicalReplayAuthority",
-            "schema_version": "1.0.0",
-            "trace_reference": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-            "parent_reference": "5",
-            "verification_hash": "024e76e3d65b328936af1185b4675c21a2e2605195b4e89d6c1183836f699883"
-          }
-        }
-      }
-    },
-    "verdict": {
-      "message_id": "856f9528-16d2-4a64-b639-57cbbb32c3e8",
-      "sequence_number": 6,
-      "status": "VALID",
-      "reason": "",
-      "lineage_record": {
-        "replay_id": "e4b70e48-1d6a-5fc5-baa2-946208454475",
-        "message_id": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-        "sequence_number": 6,
-        "decision": "VALID",
-        "decision_timestamp": "2026-08-25T11:19:22.428161+00:00",
-        "origin_component": "CanonicalReplayAuthority",
-        "schema_version": "1.0.0",
-        "trace_reference": "3a386ea5-4017-456b-913e-f4ce3f185b94",
-        "parent_reference": "5",
-        "verification_hash": "024e76e3d65b328936af1185b4675c21a2e2605195b4e89d6c1183836f699883"
-      }
-    }
-  },
-  "submission_1": {
-    "status": "VALID",
-    "sequence": 1,
-    "reason": ""
-  },
-  "submission_2": {
-    "status": "DUPLICATE",
-    "sequence": 0,
-    "reason": "message_id 'msg-live-test-213945ab' has already been processed"
   }
 }
