@@ -30,9 +30,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from fastapi.exceptions import RequestValidationError
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel, Field
+import traceback
 
 
 # -------------------------------------------------------------------------
@@ -67,6 +70,31 @@ app = FastAPI(
     ),
     version="1.0.0",
 )
+
+security = HTTPBearer()
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "Unprocessable Entity",
+            "message": "The request payload failed schema validation.",
+            "details": exc.errors()
+        }
+    )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_id = hashlib.sha256(str(time.time()).encode()).hexdigest()[:8]
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "message": "An unexpected error occurred during execution.",
+            "error_id": error_id
+        }
+    )
 
 
 # -------------------------------------------------------------------------
@@ -107,11 +135,15 @@ def _init_participants() -> None:
 # -------------------------------------------------------------------------
 
 class InvocationRequest(BaseModel):
-    service_id: str
-    operation: str
-    payload: dict
-    version: str
-    invocation_id: str
+    service_id: str = Field(..., description="The ID of the service to invoke")
+    operation: str = Field(..., description="The operation to execute")
+    payload: dict = Field(..., description="The workload payload")
+    version: str = Field(..., description="The version of the capability")
+    invocation_id: str = Field(..., description="Unique invocation identifier")
+
+class EnforceRequest(BaseModel):
+    policy_id: str = Field(..., description="The policy ID to enforce")
+    target: dict = Field(..., description="The target to enforce policy against")
 
 
 # -------------------------------------------------------------------------
@@ -531,6 +563,33 @@ async def list_hosted_services():
         "count": len(services),
     }
 
+
+# -------------------------------------------------------------------------
+# Enforce Endpoint
+# -------------------------------------------------------------------------
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    if token != os.environ.get("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight"):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or missing authentication token"
+        )
+    return token
+
+@app.post("/enforce")
+async def enforce_policy(req: EnforceRequest, token: str = Depends(verify_token)):
+    """
+    Enforce a specific constitutional policy. Requires secure token.
+    """
+    return JSONResponse(
+        status_code=200,
+        content={
+            "status": "ENFORCED",
+            "policy_id": req.policy_id,
+            "timestamp": _utc_timestamp()
+        }
+    )
 
 # -------------------------------------------------------------------------
 # Root

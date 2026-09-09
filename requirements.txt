@@ -3,3 +3,9 @@ fastapi>=0.110.0
 uvicorn[standard]>=0.30.0
 requests>=2.31.0
 pydantic>=2.0.0
+
+# Canonical Platform SDK — installed from QCG_task1 git repository
+# This provides the tantra_platform_sdk package required by src/platform/imports.py
+# Installation: pip install -r requirements.txt
+# Or directly: pip install git+https://github.com/PriteshPatra-BHIV/QCG_task1.git#subdirectory=sdk
+tantra-platform-sdk @ git+https://github.com/PriteshPatra-BHIV/QCG_task1.git#subdirectory=sdk

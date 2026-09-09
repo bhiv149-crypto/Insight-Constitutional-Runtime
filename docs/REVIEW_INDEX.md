@@ -30,5 +30,3 @@ This document maps each assignment requirement to its precise evidence location 
 `GET /qcg/replay/lineage/{invocation_id}` is recorded as HTTP 200 with a `VALID` verdict.
 `POST /qcg/verify` reaches Replay but halts at Trust with HTTP 422 and `INVALID_SIGNATURE`.
 The local `CanonicalReplayAuthority` stub has been **removed**. All replay now routes to LIVE QCG. The separate `/qcg/replay/lineage/{id}` endpoint confirms canonical replay records.
-Telemetry remains a local `TraceStore`; live InsightBridge `/ingest` is a separate
-verified observation. The current pytest result is 27 passed with 3 warnings, not 17/17.

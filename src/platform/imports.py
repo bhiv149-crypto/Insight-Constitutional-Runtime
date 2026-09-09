@@ -75,8 +75,9 @@ from .stubs import (
     PlatformServiceRecord,
     CapabilityManifest,
     OperationContract,
-    TraceStore,
 )
+from .live_trace_store import LiveTraceStore as TraceStore
+
 
 
 # ---------------------------------------------------------------------------
