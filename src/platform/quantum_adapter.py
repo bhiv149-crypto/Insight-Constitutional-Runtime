@@ -40,15 +40,18 @@ class MarineQuantumAdapter:
     ) -> None:
         self.mode = (
             mode
-            or os.getenv("QUANTUM_RUNTIME_MODE", "local")
+            or os.getenv("QUANTUM_RUNTIME_MODE", "LOCAL")
         ).upper()
+
+        default_url = (
+            "https://marine-quantum-runtime-final.onrender.com"
+            if self.mode == "LIVE"
+            else "http://localhost:8000"
+        )
 
         self.base_url = (
             runtime_url
-            or os.getenv(
-                "QUANTUM_RUNTIME_URL",
-                "http://localhost:8000",
-            )
+            or os.getenv("QUANTUM_RUNTIME_URL", default_url)
         ).rstrip("/")
 
         self.api_key = (

@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime, timezone
 
@@ -11,7 +12,7 @@ from src.config.platform_config import (
 class LivePlatformClient:
     """REST client for communicating with the live BHIV Platform."""
 
-    DEFAULT_TIMEOUT = 20
+    DEFAULT_TIMEOUT = int(os.getenv("PLATFORM_TIMEOUT", "45"))
 
     def __init__(self):
         self.registry = PLATFORM_REGISTRY
@@ -197,7 +198,7 @@ class LivePlatformClient:
             response = requests.post(
                 url,
                 json=payload,
-                timeout=10,
+                timeout=self.DEFAULT_TIMEOUT,
             )
 
             print("Status:", response.status_code)

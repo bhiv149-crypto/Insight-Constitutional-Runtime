@@ -17,7 +17,7 @@ def test_quantum_adapter_health():
     adapter = MarineQuantumAdapter()
     health = adapter.health()
     assert health["status"] in ("HEALTHY", "DEGRADED")
-    assert health["mode"] == "LOCAL"
+    assert health["mode"] in ("LOCAL", "LIVE")
     assert "heartbeat" in health
     assert health["heartbeat"].get("heartbeat") == "ALIVE"
 
@@ -52,7 +52,7 @@ def test_quantum_adapter_invocation_quantum_pipeline():
     result = adapter.invoke_capability("quantum_pipeline", payload)
     assert result["status"] == "SUCCESS"
     assert result["capability_id"] == "quantum_pipeline"
-    assert result["runtime_mode"] == "LOCAL"
+    assert result["runtime_mode"] in ("LOCAL", "LIVE")
     assert "invocation_id" in result
     assert "deterministic_hash" in result
     assert "degradation_probability" in result["output"]

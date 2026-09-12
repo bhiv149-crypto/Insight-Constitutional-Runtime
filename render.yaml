@@ -11,3 +11,11 @@ services:
         sync: false
         # Set this to the Render public URL after first deploy.
         # Example: https://insight-constitutional-runtime.onrender.com
+      - key: PLATFORM_BASE_URL
+        value: "https://bhiv-qcg.onrender.com"
+      - key: QUANTUM_RUNTIME_URL
+        value: "https://marine-quantum-runtime-final.onrender.com"
+      - key: QUANTUM_RUNTIME_MODE
+        value: "LIVE"
+      - key: PLATFORM_TIMEOUT
+        value: "45"
