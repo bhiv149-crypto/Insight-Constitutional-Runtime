@@ -2,6 +2,17 @@
 
 All notable changes to the **Insight Constitutional Runtime Integration** project are documented in this file using [Semantic Versioning](https://semver.org/).
 
+## [Documentation Reconciliation] - 2026-09-12
+
+Reconciled Markdown documentation against actual implementation, test results, and live behavior.
+- Corrected ownership claims to accurately reflect Vijay, Dhiraj, Pritesh, and Kanishk.
+- Clarified that InsightFlow, InsightBridge, and InsightCore are structurally integrated but lack functional semantics.
+- Clarified that Quantum execution is local simulated fallback, not live hardware.
+- Clarified that TraceStore is a transient memory stub.
+- Removed duplicate readiness reports and corrected test counts to reflect the current 39 passing tests.
+
+---
+
 ## [Documentation Reconciliation] - 2026-08-19
 
 Reconciled Markdown against the current source, recorded `pytest -v` result, live
@@ -88,7 +99,7 @@ production Quantum, and `/enforce` execution remain unestablished.
 - ⚠ Trust verification (known limitation: HTTP 422)
 - ⚪ Telemetry export (stubbed, awaiting platform contract)
 
-**Production certification**: Not claimed. Execution, discovery, invocation, health, replay lineage, and Trust validation are evidenced; telemetry storage and live Quantum execution remain bounded.
+**Production certification**: Not claimed. Execution, discovery, invocation, health, replay lineage, and Trust validation are evidenced; telemetry storage and local simulated quantum execution remain bounded.
 
 *Note: Shared platform service hardware certification depends on the availability of the shared BHIV Constitutional Runtime services.*
 
@@ -109,4 +120,4 @@ production Quantum, and `/enforce` execution remain unestablished.
 * `REVIEW_PACKET.md` — full rewrite with current quick-status table
 * `docs/FAILURE_AND_FALLBACK_POLICY.md` — full rewrite with resolved/unresolved table
 * `docs/QUANTUM_RUNTIME_ARCHITECTURE.md` — updated current state diagram
-* `docs/AUTHORITY_BOUNDARIES.md` — expanded with current completion per person
+* `docs/AUTHORITY_BOUNDARIES.md` — expanded with current completion per person

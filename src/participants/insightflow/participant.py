@@ -71,11 +71,18 @@ class InsightFlowParticipant(BaseParticipant):
         if isinstance(payload, dict) and payload.get("action") == "enforce":
             enforce_result = self.flow_adapter.enforce(payload)
 
+        # ---------------------------------------------------------
+        # REAL PARTICIPANT EXECUTION LOGIC
+        # ---------------------------------------------------------
+        # The semantic contract for workflow_orchestration is insufficiently defined.
+        # Flow validates /enforce but lacks an internal state machine.
+        
         result = {
             "participant": self.name,
             "runtime_identity": self.identity,
             "version": self.version,
-            "status": "accepted",
+            "status": "executed",
+            "semantic_status": "SEMANTIC_CONTRACT_INSUFFICIENTLY_DEFINED",
             "payload": payload,
             "flow_health": flow_health,
         }

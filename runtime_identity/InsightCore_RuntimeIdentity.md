@@ -1,3 +1,6 @@
+> STATUS: STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED
+> This defines the structural runtime identity. Semantic intelligence behavior is currently a stub.
+
 9# Runtime Identity Card – InsightCore
 
 ## Runtime Participant Information

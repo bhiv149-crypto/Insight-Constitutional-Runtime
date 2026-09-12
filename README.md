@@ -1,6 +1,10 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # Insight Constitutional Runtime
 
-**Status**: 27/27 tests pass · Live platform verified · Quantum execution is local classical simulation
+**Status**: 39/39 tests pass · Live platform structurally verified · Functional semantics not implemented · Quantum execution is local classical simulation
 
 A thin integration layer connecting three Insight Stack participants (`InsightFlow`, `InsightBridge`, `InsightCore`) to the BHIV Constitutional Platform, with an isolated local quantum execution boundary via the Marine Quantum Runtime.
 
@@ -289,7 +293,7 @@ The `quantum_pipeline` capability executes locally via the Marine Quantum Runtim
 
 ### Live cloud quantum provider
 
-No live quantum provider is attached or proven. The provider abstraction exists and is extensible, but:
+No local simulated quantum provider is attached or proven. The provider abstraction exists and is extensible, but:
 - `aer` provider: `qiskit-aer` is not installed
 - `ibm_runtime` provider: requires SDK, credentials, and network egress (not available)
 - `ionq` provider: requires API key and network egress (not available)

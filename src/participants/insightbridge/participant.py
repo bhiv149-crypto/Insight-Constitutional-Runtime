@@ -100,11 +100,18 @@ class InsightBridgeParticipant(BaseParticipant):
                 "payload": payload,
             }
 
+        # ---------------------------------------------------------
+        # REAL PARTICIPANT EXECUTION LOGIC (CLASSICAL BRIDGE)
+        # ---------------------------------------------------------
+        # The semantic contract for classical runtime_bridge event routing
+        # is insufficiently defined. The participant lacks a real internal event bus.
+        
         return {
             "participant": self.name,
             "runtime_identity": self.identity,
             "version": self.version,
-            "status": "accepted",
+            "status": "executed",
+            "semantic_status": "SEMANTIC_CONTRACT_INSUFFICIENTLY_DEFINED",
             "payload": payload,
         }
 

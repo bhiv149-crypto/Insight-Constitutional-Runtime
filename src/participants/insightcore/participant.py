@@ -61,11 +61,18 @@ class InsightCoreParticipant(BaseParticipant):
         Execute InsightCore business logic.
         """
 
+        # ---------------------------------------------------------
+        # REAL PARTICIPANT EXECUTION LOGIC
+        # ---------------------------------------------------------
+        # The semantic contract for intelligence_processing is insufficiently defined.
+        # Core lacks internal intelligence evaluation models and Pydantic schemas.
+
         return {
             "participant": self.name,
             "runtime_identity": self.identity,
             "version": self.version,
-            "status": "accepted",
+            "status": "executed",
+            "semantic_status": "SEMANTIC_CONTRACT_INSUFFICIENTLY_DEFINED",
             "payload": payload,
         }
 

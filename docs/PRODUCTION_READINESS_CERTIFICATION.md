@@ -1,3 +1,7 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # Production Readiness Certification
 
 **Project:** Insight Stack Constitutional Runtime Integration
@@ -7,7 +11,7 @@
 
 ## 1. Certification Statement
 
-The Insight Stack Constitutional Runtime components (`InsightFlow`, `InsightBridge`, and `InsightCore`) have achieved the necessary standards for Phase 2 Production Readiness.
+The Insight Stack Constitutional Runtime components (`InsightFlow`, `InsightBridge`, and `InsightCore`) are structurally integrated, but lack functional semantics.
 
 All execution contracts, telemetry integration, and security boundaries meet the published capability guidelines and system contract requirements.
 

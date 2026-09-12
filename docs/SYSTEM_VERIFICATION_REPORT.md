@@ -1,3 +1,7 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # System Verification Report: Phase 2
 
 **Date:** 2026-09-09

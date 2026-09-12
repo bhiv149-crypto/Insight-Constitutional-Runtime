@@ -1,3 +1,7 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # Handover Guide: Insight Constitutional Runtime
 
 **Assignment:** BHIV-QC-GANESH-01
@@ -11,7 +15,7 @@ The Insight Constitutional Runtime integrates the Insight Stack participants (In
 
 **Current verified state (Phase 2):** 
 - Live platform integration is operational.
-- End-to-End (E2E) verification completed successfully.
+- Structural E2E verification completed successfully. Functional semantics are NOT IMPLEMENTED.
 - Telemetry correctly targets `LiveTraceStore` instead of local memory stubs.
 - Error boundary limits enforce strict validation logic on execution endpoints.
 - **Limitation:** Quantum execution is local classical deterministic simulation. No cloud quantum provider is operational.
@@ -106,7 +110,7 @@ Ensure you are within the root directory of the `Insight_Constitutional_Runtime`
 pytest -v
 ```
 
-**Expected results:** 32 tests passing. This includes core logic, E2E validation, telemetry emission logic, and error boundary assertions.
+**Expected results:** 32 tests pass (39/39 passing)ing. This includes core logic, E2E validation, telemetry emission logic, and error boundary assertions.
 
 ---
 

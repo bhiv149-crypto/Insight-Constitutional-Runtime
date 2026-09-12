@@ -3,7 +3,7 @@
 ## Classification: LOCAL_VERIFIED
 - **Platform Live Status**: LIVE VERIFIED (BHIV / QCG Platform SDK)
 - **Quantum Runtime Status**: LOCAL VERIFIED
-- **Live Quantum Runtime**: NOT AVAILABLE / PENDING (No live cloud endpoint deployed)
+- **local simulated quantum Runtime**: NOT AVAILABLE / PENDING (No live cloud endpoint deployed)
 
 ## Contents
 1. `quantum_local_health.json`: Local Marine Quantum Runtime health and heartbeat proof (`ALIVE` / `HEALTHY`).

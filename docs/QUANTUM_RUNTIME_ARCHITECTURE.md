@@ -1,3 +1,7 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # Quantum Runtime Architecture
 
 **Owner:** Ganesh Vishwakarma
@@ -48,28 +52,28 @@ Provenance / Handover
 ```text
 BHIV Workload (via SDK / Tests)
       ↓
-Workload / Suitability Decision           [IMPLEMENTED, VERIFIED]
+Workload / Suitability Decision           [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
-Quantum / Classical Route                 [IMPLEMENTED, VERIFIED]
+Quantum / Classical Route                 [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
-Quantum Runtime / Classical Runtime       [IMPLEMENTED, VERIFIED]
+Quantum Runtime / Classical Runtime       [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
 Local Execution Path                      [QUANTUM_LOCAL — classical deterministic sim]
-      ↓                                   [LIVE QUANTUM PROVIDER — BLOCKED, no credentials]
-Normalized Result                         [IMPLEMENTED, VERIFIED]
+      ↓                                   [local simulated quantum PROVIDER — BLOCKED, no credentials]
+Normalized Result                         [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
-QCG Contract Boundary                     [IMPLEMENTED, VERIFIED]
+QCG Contract Boundary                     [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
 Trust / Validation                        [LIVE VERIFIED — passed: True]
       ↓
 Replay / Evidence                         [LIVE VERIFIED — /qcg/replay/lineage → VALID]
       |                                   [LOCAL STUB — TraceStore transient only]
       ↓
-Insight Routing / Observability           [IMPLEMENTED, VERIFIED]
+Insight Routing / Observability           [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
 Quantum-Network Integration Boundary      [BOUNDED CONTRACT ONLY — NOT VERIFIED LIVE]
       ↓
-Provenance / Handover                     [IMPLEMENTED, VERIFIED]
+Provenance / Handover                     [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
 ```
 
 ---
@@ -92,7 +96,7 @@ Provenance / Handover                     [IMPLEMENTED, VERIFIED]
 | Canonical TraceStore persistence | Pritesh | In-memory stub; needs durable backend |
 | QCG trust contracts and deployment | Pritesh | Trust is now passing; persistence is next |
 | Quantum capability contracts | Dhiraj Chavan | Hardware SDK, normalization, uncertainty |
-| Live quantum SDK credentials | Infrastructure | `IBM_QUANTUM_TOKEN`, `IONQ_API_KEY` |
+| local simulated quantum SDK credentials | Infrastructure | `IBM_QUANTUM_TOKEN`, `IONQ_API_KEY` |
 | Quantum network coordination | Dhiraj Chavan | Network contract; not live |
 | Collective ecosystem convergence | Kanishk | End-to-end orchestration |
 

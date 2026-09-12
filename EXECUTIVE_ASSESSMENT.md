@@ -1,3 +1,7 @@
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 # Executive Assessment — Insight Constitutional Runtime
 
 **Project:** Insight Constitutional Runtime
@@ -10,7 +14,7 @@
 
 ## Overall Status
 
-Ganesh's bounded scope is **complete and evidence-verified**. All 27 tests pass. The live QCG integration is fully operational including Trust validation. The canonical Platform SDK (`tantra-platform-sdk`) is installed from the official GitHub source.
+Ganesh's integration scope is **structurally verified**. All 39 tests pass. The live QCG integration is fully operational including Trust validation. The canonical Platform SDK (`tantra-platform-sdk`) is installed from the official GitHub source.
 
 ---
 

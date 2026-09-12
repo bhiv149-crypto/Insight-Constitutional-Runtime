@@ -1,91 +1,87 @@
 # Authority Boundaries
 
+> STATUS: CURRENT
+> Last reconciled against code: 2026-09-12
+> Source of truth: Current implementation + tests
+
 **Assignment:** BHIV-QC-GANESH-01
-**Date:** 2026-09-03
+**Date:** 2026-09-12
 
 This document defines who owns what in the collective quantum integration. These boundaries are strict — no team member may silently absorb another member's authority.
 
 ---
 
-## Ganesh — Quantum Runtime Integration & Evidence
+## Vijay — Insight Functional Semantics
 
 **Owns:**
-- Quantum runtime integration via `MarineQuantumAdapter`
-- Provider readiness classification (`QUANTUM_LIVE`, `QUANTUM_LOCAL`, `SIMULATED`, `FALLBACK`)
-- Local/live quantum execution evidence and provenance
-- Platform adapter layer (`src/platform/`) — adapter contracts only
-- Failure-safety verification and test suite
-- E2E integration evidence generation
+- InsightFlow functional semantics and orchestration logic.
+- InsightBridge classical routing and event bus logic.
+- InsightCore intelligence processing semantics.
+- Pydantic models and policies for the Insight Stack endpoints (`/enforce`, etc.).
+
+**Current state:** STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED.
+
+---
+
+## Ganesh — Quantum Runtime Integration & E2E Validation
+
+**Owns:**
+- Quantum runtime integration via `MarineQuantumAdapter`.
+- Provider readiness classification (`QUANTUM_LIVE`, `QUANTUM_LOCAL`, `SIMULATED`, `FALLBACK`).
+- E2E Integration structural evidence and provenance.
+- Platform adapter layer (`src/platform/`) — adapter contracts.
+- E2E integration test suite across the boundaries.
 
 **Does NOT own:**
-- QCG persistence (TraceStore backend)
-- Trust contract implementation
-- Quantum capability contract specification (Dhiraj)
-- Ecosystem-wide orchestration (Kanishk)
-- Live quantum hardware deployment or credentials
-- Platform SDK distribution
+- InsightFlow, InsightBridge, or InsightCore business logic / functional semantics (Vijay).
+- QCG persistence (TraceStore backend) (Pritesh).
+- Quantum capability contract specification (Dhiraj).
+- local simulated quantum hardware deployment or credentials (Infrastructure).
+- Platform SDK distribution (Kanishk).
 
-**Current completion:** ✅ **100% COMPLETE** — all tests pass, trust verified, SDK installed
+**Current completion:** STRUCTURALLY INTEGRATED AND VERIFIED. Functional semantic limitations remain external dependencies.
 
 ---
 
 ## Pritesh — QCG Runtime Contracts, Trust & Persistence
 
 **Owns:**
-- QCG runtime contracts and canonical trust validation
-- Persistent replay evidence and TraceStore backend
-- Deployment and canonical execution infrastructure
-- ECDSA signature implementation and key management
+- QCG runtime contracts and canonical trust validation.
+- transient replay evidence and TraceStore backend.
+- Deployment and canonical execution infrastructure.
+- ECDSA signature implementation and key management.
 
-**What is needed (outstanding):**
-- Upgrade `TraceStore` from in-memory `deque` to a durable backend (SQLite/PostgreSQL)
-- Once deployed, `Insight_Constitutional_Runtime` inherits persistence with zero code changes
-
-**Current state:** Trust stage is **VERIFIED** (`passed: True`). TraceStore persistence is **BLOCKED** (in-memory only).
+**Current state:** Trust stage is **VERIFIED** (`passed: True`). TraceStore persistence is **BLOCKED** (transient/in-memory only).
 
 ---
 
 ## Dhiraj Chavan — Quantum Capability Ownership
 
 **Owns:**
-- Quantum capability/runtime ownership
-- Quantum execution contracts (shots, seed, backend, provider, measurement provenance)
-- Hybrid outputs and result normalization
-- Networking compatibility boundaries
-- Attachment contract for quantum-network participation
+- Quantum capability/runtime ownership.
+- Quantum execution contracts (shots, seed, backend, provider, measurement provenance).
+- Hybrid outputs and result normalization.
+- Networking compatibility boundaries.
 
-**What is needed (outstanding):**
-- Deliver `pip install qiskit qiskit-aer` in target environments
-- Inject `IBM_QUANTUM_TOKEN` / `IONQ_API_KEY` for live hardware
-- Implement the quantum-network coordination contract
-
-**Current state:** Marine Quantum Runtime runs in `QUANTUM_LOCAL` (classical deterministic). Live quantum hardware is `BLOCKED`.
+**Current state:** Marine Quantum Runtime runs in `QUANTUM_LOCAL` (classical deterministic). local simulated quantum hardware is **NOT YET IMPLEMENTED**.
 
 ---
 
-## Kanishk — Collective Orchestration & Ecosystem Integration
+## Kanishk — Collective Orchestration & SDK
 
 **Owns:**
-- Collective runtime convergence
-- Service discovery attachment
-- Capability attachment through canonical invocation
-- End-to-end orchestration
-- Ecosystem integration and SDK distribution
-- `tantra-platform-sdk` package maintenance
+- Service discovery architecture.
+- Platform SDK (`tantra-platform-sdk`) maintenance and distribution.
+- End-to-end orchestration specifications.
 
-**What is needed (outstanding):**
-- Publish updated `tantra-platform-sdk` releases to GitHub (currently at v1.0.0)
-- Connect all layers (Ganesh + Pritesh + Dhiraj) into one executable hybrid runtime
-- Validate end-to-end flow with evidence
-
-**Current state:** SDK is installed from `PriteshPatra-BHIV/QCG_task1` GitHub repo. E2E convergence is `NOT PROVEN`.
+**Current state:** SDK is installed and utilized. QCG discovery and invocation are verified structurally.
 
 ---
 
 ## Authority Rules (Non-Negotiable)
 
-- **Quantum Runtime** may compute; may not govern.
-- **QCG** may validate and execute contracts; may not manufacture quantum results.
-- **Insight** may route and observe; may not become replay or governance authority.
-- **Quantum Network** may coordinate quantum communication; may not silently inherit execution legitimacy.
-- **No team member** may silently absorb another member's responsibility. If ownership is unclear, mark it as `OWNERSHIP REQUIRES CONFIRMATION`.
+- **Insight** (Vijay) may define intelligence and workflows; may not govern replay.
+- **Quantum Runtime** (Dhiraj) may compute; may not govern.
+- **QCG** (Pritesh) may validate and execute contracts; may not manufacture quantum results.
+- **Platform Integration** (Ganesh) may validate E2E flows; may not invent missing business logic or fake success.
+- **No team member** may silently absorb another member's responsibility.

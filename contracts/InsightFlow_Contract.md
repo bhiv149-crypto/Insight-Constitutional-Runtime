@@ -1,3 +1,6 @@
+> STATUS: CONTRACT / NOT YET IMPLEMENTED
+> This document describes intended behavior and is not evidence of current implementation.
+
 # Constitutional Runtime Participant Contract – InsightFlow
 
 ## Participant Information
