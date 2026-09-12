@@ -1,0 +1,13 @@
+{
+    "status": "HEALTHY",
+    "mode": "LIVE",
+    "runtime_url": "https://marine-quantum-runtime-final.onrender.com",
+    "heartbeat": {
+        "heartbeat": "ALIVE"
+    },
+    "api_response": {
+        "status": "ok",
+        "runtime": "marine-quantum-runtime",
+        "version": "1.0.0"
+    }
+}

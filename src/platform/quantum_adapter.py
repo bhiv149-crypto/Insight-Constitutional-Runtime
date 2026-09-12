@@ -75,14 +75,14 @@ class MarineQuantumAdapter:
         fail closed rather than silently using the local runtime.
         """
 
-        if self.mode != "LOCAL":
+        if self.mode not in ("LOCAL", "LIVE"):
             return {
                 "status": "UNAVAILABLE",
                 "mode": self.mode,
                 "runtime_url": self.base_url,
                 "error": (
                     f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
-                    "This adapter supports LOCAL mode only."
+                    "This adapter supports LOCAL and LIVE modes."
                 ),
             }
 
@@ -149,7 +149,7 @@ class MarineQuantumAdapter:
         returns an invalid capability response.
         """
 
-        if self.mode != "LOCAL":
+        if self.mode not in ("LOCAL", "LIVE"):
             logger.error(
                 "Cannot list capabilities in unsupported mode: %s",
                 self.mode,
@@ -239,15 +239,15 @@ class MarineQuantumAdapter:
         """
 
         # ---------------------------------------------------------------
-        # Hard boundary: LOCAL mode only
+        # Supported modes: LOCAL and LIVE
         # ---------------------------------------------------------------
-        if self.mode != "LOCAL":
+        if self.mode not in ("LOCAL", "LIVE"):
             return {
                 "status": "UNAVAILABLE",
                 "capability_id": capability_id,
                 "error": (
                     f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
-                    "This adapter supports LOCAL mode only."
+                    "This adapter supports LOCAL and LIVE modes."
                 ),
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
@@ -273,21 +273,21 @@ class MarineQuantumAdapter:
             # Explicit InsightBridge quantum provenance
             # -----------------------------------------------------------
             if isinstance(result, dict):
-                result["runtime_mode"] = "LOCAL"
+                result["runtime_mode"] = self.mode
                 result["quantum_provider_source"] = "Marine Quantum Runtime"
 
                 if "execution_classification" not in result:
-                    result["execution_classification"] = "QUANTUM_LOCAL"
+                    result["execution_classification"] = f"QUANTUM_{self.mode}"
 
                 # Preserve/enrich nested execution result when present.
                 if isinstance(result.get("result"), dict):
                     inner = result["result"]
 
                     if "execution_classification" not in inner:
-                        inner["execution_classification"] = "QUANTUM_LOCAL"
+                        inner["execution_classification"] = f"QUANTUM_{self.mode}"
 
                     if "provider" not in inner:
-                        inner["provider"] = "local_simulator"
+                        inner["provider"] = "local_simulator" if self.mode == "LOCAL" else "live_provider"
 
             return result
 
@@ -330,19 +330,24 @@ class MarineQuantumAdapter:
                     errors = [error_details]
 
             status = "FAILED"
+            classification = "UNAVAILABLE / BLOCKED"
 
-            if (
-                getattr(exc, "response", None) is not None
-                and exc.response.status_code == 422
-            ):
-                status = "VALIDATION_ERROR"
+            response_obj = getattr(exc, "response", None)
+            if response_obj is not None:
+                if response_obj.status_code == 422:
+                    status = "VALIDATION_ERROR"
+                elif response_obj.status_code in (401, 403):
+                    status = "UNAVAILABLE"
+                    classification = "BLOCKED"
+                    error_details = f"Authentication failed ({response_obj.status_code} Unauthorized)"
+                    errors = [error_details]
 
             return {
                 "status": status,
                 "capability_id": capability_id,
                 "error": error_details,
                 "errors": errors,
-                "runtime_mode": "LOCAL",
+                "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
-                "execution_classification": "UNAVAILABLE / BLOCKED",
+                "execution_classification": classification,
             }

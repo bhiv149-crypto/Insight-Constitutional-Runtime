@@ -1,0 +1,11 @@
+{
+    "status": "UNAVAILABLE",
+    "capability_id": "quantum_pipeline",
+    "error": "Authentication failed (401 Unauthorized)",
+    "errors": [
+        "Authentication failed (401 Unauthorized)"
+    ],
+    "runtime_mode": "LIVE",
+    "quantum_provider_source": "Marine Quantum Runtime",
+    "execution_classification": "BLOCKED"
+}
