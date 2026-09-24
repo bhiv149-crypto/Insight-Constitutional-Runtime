@@ -1,11 +1,12 @@
 """
 Marine Quantum Runtime Adapter
 
-Thin, reversible adapter over the local Marine Quantum Runtime.
+Thin, reversible adapter over the Marine Quantum Runtime.
 
 Purpose:
     Provide an isolated gateway for InsightBridge to discover, query, and
-    invoke Quantum capabilities via HTTP endpoints.
+    invoke Quantum capabilities via HTTP endpoints against the canonical
+    live Marine Quantum Runtime deployment.
     Treats the underlying quantum runtime as an external, immutable service.
 
 Hard Boundaries:
@@ -40,14 +41,10 @@ class MarineQuantumAdapter:
     ) -> None:
         self.mode = (
             mode
-            or os.getenv("QUANTUM_RUNTIME_MODE", "LOCAL")
+            or os.getenv("QUANTUM_RUNTIME_MODE", "LIVE")
         ).upper()
 
-        default_url = (
-            "https://marine-quantum-runtime-final.onrender.com"
-            if self.mode == "LIVE"
-            else "http://localhost:8000"
-        )
+        default_url = "https://marine-quantum-runtime-final.onrender.com"
 
         self.base_url = (
             runtime_url
@@ -56,9 +53,10 @@ class MarineQuantumAdapter:
 
         self.api_key = (
             api_key
+            or os.getenv("Quantum_Runtime_Auth_Key")
             or os.getenv(
                 "QUANTUM_RUNTIME_API_KEY",
-                "dev-insecure-key",
+                "",
             )
         )
 
@@ -74,18 +72,18 @@ class MarineQuantumAdapter:
         """
         Query health from the Marine Quantum Runtime API.
 
-        Only LOCAL mode is supported by this adapter. Unsupported modes
-        fail closed rather than silently using the local runtime.
+        LIVE mode is supported. Unsupported modes
+        fail closed rather than silently falling back.
         """
 
-        if self.mode not in ("LOCAL", "LIVE"):
+        if self.mode != "LIVE":
             return {
                 "status": "UNAVAILABLE",
                 "mode": self.mode,
                 "runtime_url": self.base_url,
                 "error": (
                     f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
-                    "This adapter supports LOCAL and LIVE modes."
+                    "This adapter supports LIVE mode exclusively."
                 ),
             }
 
@@ -152,7 +150,7 @@ class MarineQuantumAdapter:
         returns an invalid capability response.
         """
 
-        if self.mode not in ("LOCAL", "LIVE"):
+        if self.mode != "LIVE":
             logger.error(
                 "Cannot list capabilities in unsupported mode: %s",
                 self.mode,
@@ -235,22 +233,22 @@ class MarineQuantumAdapter:
         payload: Dict[str, Any],
     ) -> Dict[str, Any]:
         """
-        Invoke a capability on the local Marine Quantum Runtime.
+        Invoke a capability on the Marine Quantum Runtime.
 
-        The adapter supports LOCAL mode only. Unsupported runtime modes
-        fail closed without attempting an HTTP request.
+        The adapter supports LIVE mode. Unsupported runtime
+        modes fail closed without attempting an HTTP request.
         """
 
         # ---------------------------------------------------------------
-        # Supported modes: LOCAL and LIVE
+        # Supported mode: LIVE
         # ---------------------------------------------------------------
-        if self.mode not in ("LOCAL", "LIVE"):
+        if self.mode != "LIVE":
             return {
                 "status": "UNAVAILABLE",
                 "capability_id": capability_id,
                 "error": (
                     f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
-                    "This adapter supports LOCAL and LIVE modes."
+                    "This adapter supports LIVE mode exclusively."
                 ),
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
@@ -290,7 +288,7 @@ class MarineQuantumAdapter:
                         inner["execution_classification"] = f"QUANTUM_{self.mode}"
 
                     if "provider" not in inner:
-                        inner["provider"] = "local_simulator" if self.mode == "LOCAL" else "live_provider"
+                        inner["provider"] = "live_provider"
 
             return result
 

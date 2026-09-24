@@ -2,7 +2,7 @@
 
 **Adapter:** `MarineQuantumAdapter`
 **Location:** `src/platform/quantum_adapter.py`
-**Supported Mode:** `QUANTUM_LOCAL` only (live mode returns `UNAVAILABLE`)
+**Supported Mode:** `LIVE` only (local/other modes return `UNAVAILABLE`)
 
 ---
 
@@ -10,9 +10,9 @@
 
 | Variable | Description | Default |
 |---|---|---|
-| `QUANTUM_RUNTIME_MODE` | Execution mode. Only `LOCAL` is currently supported. | `local` |
-| `QUANTUM_RUNTIME_URL` | Base URL of the Marine Quantum Runtime HTTP API. | `http://localhost:8000` |
-| `QUANTUM_RUNTIME_API_KEY` | API key sent as `X-API-Key` header. | `dev-insecure-key` |
+| `QUANTUM_RUNTIME_MODE` | Execution mode. Only `LIVE` is currently supported. | `LIVE` |
+| `QUANTUM_RUNTIME_URL` | Base URL of the Marine Quantum Runtime HTTP API. | `https://marine-quantum-runtime-final.onrender.com` |
+| `Quantum_Runtime_Auth_Key` | API key sent as `X-API-Key` header. | `(None, fails closed)` |
 
 ---
 
@@ -32,7 +32,7 @@ Returns runtime health status.
 }
 ```
 
-The adapter wraps this and stamps `"mode": "LOCAL"` and `"heartbeat": {"heartbeat": "ALIVE"}` in its own health response.
+The adapter wraps this and stamps `"mode": "LIVE"` and `"heartbeat": {"heartbeat": "ALIVE"}` in its own health response.
 
 ---
 
@@ -90,10 +90,10 @@ Invokes a named capability.
 
 | Condition | Adapter Response |
 |---|---|
-| Mode is not `LOCAL` | Returns `UNAVAILABLE` immediately, no HTTP call made |
+| Mode is not `LIVE` | Returns `UNAVAILABLE` immediately, no HTTP call made |
 | Provider unreachable (`ConnectionError`, `Timeout`) | Returns `FAILED` with error details |
 | Provider returns HTTP 422 | Returns `VALIDATION_ERROR` with `errors` list |
-| Successful invocation | Stamps `runtime_mode: LOCAL`, `quantum_provider_source: Marine Quantum Runtime`, `execution_classification: QUANTUM_LOCAL` |
+| Successful invocation | Stamps `runtime_mode: LIVE`, `quantum_provider_source: Marine Quantum Runtime`, `execution_classification: QUANTUM_LIVE` |
 
 ---
 
@@ -103,9 +103,9 @@ The adapter **always** stamps the following on every result it returns:
 
 ```json
 {
-  "runtime_mode": "LOCAL",
+  "runtime_mode": "LIVE",
   "quantum_provider_source": "Marine Quantum Runtime",
-  "execution_classification": "QUANTUM_LOCAL"
+  "execution_classification": "QUANTUM_LIVE"
 }
 ```
 

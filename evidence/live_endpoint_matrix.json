@@ -1,0 +1,154 @@
+[
+  {
+    "endpoint": "/health",
+    "method": "GET",
+    "auth": false,
+    "status": 200,
+    "classification": "VERIFIED LIVE \u2014 UNAUTHENTICATED",
+    "body_summary": "{\"status\": \"ok\", \"runtime\": \"marine-quantum-runtime\", \"version\": \"1.0.0\"}"
+  },
+  {
+    "endpoint": "/openapi.json",
+    "method": "GET",
+    "auth": false,
+    "status": 200,
+    "classification": "VERIFIED LIVE \u2014 UNAUTHENTICATED",
+    "body_summary": "{\"openapi\": \"3.1.0\", \"info\": {\"title\": \"Marine Quantum Runtime API\", \"description\": \"Sovereign Quantum Runtime Capability \\u2014 BHIV Ecosystem\\n\\n**Integration quick-start:** See `/docs` for Swagger UI or `/openapi.json` for the machine-readable spec.\\n\\n**Auth:** Pass your API key as `X-API-Key` h"
+  },
+  {
+    "endpoint": "/health/detailed",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"backends\": [{\"provider_name\": \"local_simulator\", \"backend_name\": \"local_classical_simulator\", \"status\": \"AVAILABLE\", \"reason\": \"stdlib-only, always available, no external dependency\", \"last_checked_seq\": 80}, {\"provider_name\": \"aer\", \"backend_name\": \"aer_simulator\", \"status\": \"AVAILABLE\", \"reason\""
+  },
+  {
+    "endpoint": "/health/providers",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "[{\"provider_name\": \"local_simulator\", \"backend_name\": \"local_classical_simulator\", \"status\": \"AVAILABLE\", \"reason\": \"stdlib-only, always available, no external dependency\", \"last_checked_seq\": 92}, {\"provider_name\": \"aer\", \"backend_name\": \"aer_simulator\", \"status\": \"AVAILABLE\", \"reason\": \"qiskit-aer"
+  },
+  {
+    "endpoint": "/api/v1/capabilities",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "[{\"capability_id\": \"signal\", \"owner\": \"Dhiraj Chavan\", \"version\": \"4.0.0\", \"capability_class\": \"SIGNAL\", \"inputs\": [\"node_id\", \"energy_delta\", \"iterations\", \"confidence\", \"variance\"], \"outputs\": [\"engine_event_version\", \"node_ref\", \"transition\", \"uncertainty_envelope\"], \"dependencies\": [], \"authorit"
+  },
+  {
+    "endpoint": "/api/v1/quantum/providers",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"local_simulator\": {\"backends\": [{\"backend_name\": \"local_classical_simulator\", \"capabilities\": {\"max_qubits\": 24, \"max_shots\": 1000000, \"supports_noise\": false, \"native_gates\": [\"h\", \"x\", \"y\", \"z\", \"cx\", \"cz\", \"swap\", \"rx\", \"ry\", \"rz\"], \"is_simulator\": true, \"is_real_hardware\": false}}], \"health\": "
+  },
+  {
+    "endpoint": "/api/v1/dashboard",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"active_capabilities\": [{\"capability_id\": \"signal\", \"owner\": \"Dhiraj Chavan\", \"version\": \"4.0.0\", \"capability_class\": \"SIGNAL\", \"inputs\": [\"node_id\", \"energy_delta\", \"iterations\", \"confidence\", \"variance\"], \"outputs\": [\"engine_event_version\", \"node_ref\", \"transition\", \"uncertainty_envelope\"], \"depe"
+  },
+  {
+    "endpoint": "/api/v1/queue",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"queue_depth\": 0, \"available_backends\": 2, \"total_backends\": 6, \"source\": \"provider_registry_health\"}"
+  },
+  {
+    "endpoint": "/api/v1/signal",
+    "method": "POST",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"status\": \"SUCCESS\", \"module\": \"signal\", \"execution_id\": \"386ddf156f55e069ac86f460f4d88634079c9b2fc969efafe322371e00073c8c\", \"deterministic_hash\": \"42a8cbd540e0ad222116d84579addc812de32deeaa0563eda291eb3791579b75\", \"duration_ms\": 0.098, \"metrics\": {\"transition\": \"CONVERGED\", \"sigma\": 0.04472136}, \""
+  },
+  {
+    "endpoint": "/api/v1/quantum/execute",
+    "method": "POST",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"status\": \"SUCCESS\", \"result\": {\"provider_name\": \"local_simulator\", \"backend_name\": \"local_classical_simulator\", \"measurement_counts\": {\"00\": 784, \"01\": 125, \"10\": 115}, \"shots_used\": 1024, \"is_simulator\": true, \"seed\": 42, \"execution_time_ms\": 0.044}, \"routing\": {\"attempted\": [{\"provider\": \"local_"
+  },
+  {
+    "endpoint": "/api/v1/capability/signal",
+    "method": "POST",
+    "auth": true,
+    "status": 422,
+    "classification": "422 VALIDATION ERROR",
+    "body_summary": "{\"status\": \"VALIDATION_ERROR\", \"capability_id\": \"signal\", \"invocation_id\": \"98cb922f693466c01fbfa12a25e01869b6f9133346cb8a15cca1e0cf2798d977\", \"errors\": [\"Missing: ['node_id', 'energy_delta', 'iterations', 'confidence', 'variance']\"], \"attachment_check\": {\"valid\": false, \"missing\": [\"node_id\", \"ener"
+  },
+  {
+    "endpoint": "/api/v1/capability/quantum_pipeline",
+    "method": "POST",
+    "auth": true,
+    "status": 422,
+    "classification": "422 VALIDATION ERROR",
+    "body_summary": "{\"status\": \"VALIDATION_ERROR\", \"capability_id\": \"quantum_pipeline\", \"invocation_id\": \"a25dd472e5af7f866a340ccc7120a7a053a7d7f0498e8d02aaad5b61e1d41257\", \"errors\": [\"Missing: ['salinity', 'temperature_celsius', 'pH', 'material_oxidation_potential', 'dissolved_oxygen_mgl', 'current_density_mAcm2']\"], "
+  },
+  {
+    "endpoint": "/api/v1/invoke/signal",
+    "method": "POST",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"status\": \"SUCCESS\", \"module\": \"signal\", \"execution_id\": \"8ae17141ff623ebdab80bc302dc291187599809b39eefcbba1555859e24b75f8\", \"deterministic_hash\": \"63552855423259efbcd27f8b3837dcc0325666a42b3e3340e222b3a50cf0ee86\", \"duration_ms\": 0.062, \"metrics\": {\"transition\": \"SUSPENDED\", \"sigma\": 0.1}, \"payload"
+  },
+  {
+    "endpoint": "/api/v1/governance/authority-matrix",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"capabilities\": {\"signal\": {\"ceiling\": \"STATE_CLASSIFICATION\", \"permitted\": [\"query_registry\", \"get_health\", \"get_dashboard\", \"list_capabilities\", \"execute\", \"emit_signal\", \"classify_state\"], \"denied\": [\"run_quantum_circuit\", \"invoke_qapp\", \"propagate_event\", \"receive_propagation\", \"record_invocati"
+  },
+  {
+    "endpoint": "/api/v1/governance/decision-ledger",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"total_decisions\": 0, \"permits\": 0, \"denials\": 0, \"ledger_hash\": \"0000000000000000000000000000000000000000000000000000000000000000\"}"
+  },
+  {
+    "endpoint": "/api/v1/governance/doctrines",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"all_passed\": true, \"violations\": [], \"results\": [{\"doctrine\": \"NO_DATETIME_NOW\", \"passed\": true, \"version\": \"1.0.0\", \"reason\": \"OK\"}, {\"doctrine\": \"NO_SILENT_FAILURE\", \"passed\": true, \"version\": \"1.0.0\", \"reason\": \"OK\"}, {\"doctrine\": \"NEGATIVE_AUTHORITY_REQUIRED\", \"passed\": true, \"version\": \"1.0.0"
+  },
+  {
+    "endpoint": "/api/v1/governance/replay-stats",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"permits_issued\": 1, \"denials_issued\": 0, \"total_decisions\": 1, \"known_invocations\": 1, \"authority\": \"CanonicalReplayAuthority\", \"status\": \"LIVE\", \"stub\": false}"
+  },
+  {
+    "endpoint": "/api/v1/governance/provenance",
+    "method": "GET",
+    "auth": true,
+    "status": 200,
+    "classification": "AUTHENTICATED SUCCESS",
+    "body_summary": "{\"total_records\": 1, \"status_counts\": {\"SUCCESS\": 1}, \"first_seq\": 1, \"last_seq\": 1, \"log_path\": \"/opt/render/project/src/runtime_history.jsonl\", \"status\": \"OK\", \"stub\": false, \"persistent\": true}"
+  },
+  {
+    "endpoint": "/health/detailed",
+    "method": "GET",
+    "auth": false,
+    "status": 401,
+    "classification": "401 UNAUTHORIZED",
+    "body_summary": "{\"detail\": \"Invalid or missing X-API-Key header\"}"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "test_file": "test_quantum_adapter_live.py",
+    "test_count": 10,
+    "status": "9 PASS, 1 FAIL (Unreachable Test)",
+    "mocks_used": false,
+    "target": "marine-quantum-runtime-final.onrender.com"
+  },
+  {
+    "test_file": "test_quantum_adapter.py",
+    "test_count": 6,
+    "status": "6 PASS",
+    "mocks_used": false,
+    "target": "marine-quantum-runtime-final.onrender.com"
+  },
+  {
+    "test_file": "test_insightbridge_quantum.py",
+    "test_count": 4,
+    "status": "4 PASS",
+    "mocks_used": false,
+    "target": "marine-quantum-runtime-final.onrender.com"
+  }
+]

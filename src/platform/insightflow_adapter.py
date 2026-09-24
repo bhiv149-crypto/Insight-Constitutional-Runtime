@@ -9,16 +9,16 @@ logger = logging.getLogger("insight.platform.insightflow_adapter")
 class InsightFlowAdapter:
     """
     Adapter for Vijay's live InsightFlow service.
-    Exposes enforcement client skeleton.
+    Exposes enforcement client.
 
-    Since /enforce contract is incomplete (request body schema is undocumented),
-    this adapter acts as a client skeleton and marks /enforce execution as BLOCKED.
+    The /enforce request body schema is currently undocumented in OpenAPI,
+    so this adapter forwards the provided payload verbatim.
     """
 
     def __init__(self, base_url: Optional[str] = None):
         self.base_url = (
             base_url
-            or os.getenv("INSIGHT_FLOW_BASE_URL", "https://insight-flow-f5j4.onrender.com")
+            or os.getenv("INSIGHT_FLOW_BASE_URL", "http://163.128.209.18:8122")
         ).rstrip("/")
         self.username = os.getenv("INSIGHT_FLOW_USERNAME")
         self.password = os.getenv("INSIGHT_FLOW_PASSWORD")
@@ -76,20 +76,73 @@ class InsightFlowAdapter:
     def enforce(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """
         Invoke live /enforce.
-        This is currently BLOCKED / CONTRACT INCOMPLETE because the request body
-        and response schemas are undocumented and unavailable.
         """
+        if not self.username or not self.password:
+            return {
+                "status": "BLOCKED",
+                "reason": "CONFIGURATION_BLOCKED",
+                "message": "Missing credentials in environment."
+            }
+
         token = self.login()
-        if not token and (self.username and self.password):
+        if not token:
             return {
                 "status": "BLOCKED",
                 "reason": "AUTHENTICATION_FAILED",
                 "message": "Missing or invalid Bearer token credentials."
             }
 
-        return {
-            "status": "BLOCKED",
-            "reason": "CONTRACT_INCOMPLETE",
-            "message": "Enforce endpoint schema is undocumented/unavailable. Cannot construct request payload.",
-            "service_url": f"{self.base_url}/enforce"
-        }
+        url = f"{self.base_url}/enforce"
+        try:
+            headers = {"Authorization": f"Bearer {token}"}
+            # Forward the provided payload verbatim
+            response = requests.post(url, json=payload, headers=headers, timeout=15)
+            
+            if response.status_code == 422:
+                try:
+                    error_data = response.json()
+                    # FastAPI schema validation errors return a "detail" array
+                    if "detail" in error_data and isinstance(error_data["detail"], list):
+                        return {
+                            "status": "BLOCKED",
+                            "reason": "CONTRACT_BLOCKED",
+                            "message": "Payload schema rejected by server (Validation Error).",
+                            "details": error_data,
+                            "service_url": url
+                        }
+                except ValueError:
+                    pass
+                
+                return {
+                    "status": "FAILED",
+                    "reason": "EXECUTION_FAILED",
+                    "http_status": 422,
+                    "message": "Server returned 422 but not explicitly a schema error.",
+                    "details": response.text,
+                    "service_url": url
+                }
+
+            response.raise_for_status()
+
+            return {
+                "status": "SUCCESS",
+                "reason": "LIVE_EXECUTION",
+                "http_status": response.status_code,
+                "data": response.json() if response.content else {},
+                "service_url": url
+            }
+        except requests.exceptions.HTTPError as exc:
+            return {
+                "status": "FAILED",
+                "reason": "EXECUTION_FAILED",
+                "error": str(exc),
+                "http_status": exc.response.status_code if exc.response else None,
+                "service_url": url
+            }
+        except requests.exceptions.RequestException as exc:
+            return {
+                "status": "FAILED",
+                "reason": "LIVE_RUNTIME_UNAVAILABLE",
+                "error": str(exc),
+                "service_url": url
+            }

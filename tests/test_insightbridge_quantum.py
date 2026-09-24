@@ -10,7 +10,6 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import pytest
-from unittest.mock import patch
 from src.participants.insightbridge.participant import InsightBridgeParticipant
 from src.participants.insightflow.participant import InsightFlowParticipant
 from src.participants.insightcore.participant import InsightCoreParticipant
@@ -43,7 +42,7 @@ def test_insightflow_and_insightcore_unaffected():
 
 
 def test_insightbridge_quantum_forwarding():
-    """Ensure InsightBridge delegates quantum payloads to local Marine Quantum Runtime."""
+    """Ensure InsightBridge delegates quantum payloads to live Marine Quantum Runtime."""
     participant = InsightBridgeParticipant()
     payload = {
         "route": "quantum",
@@ -61,7 +60,7 @@ def test_insightbridge_quantum_forwarding():
 
     assert res["participant"] == "InsightBridge"
     assert res["status"] == "accepted"
-    assert res["quantum_route"] == "DELEGATED_LOCAL_QUANTUM"
+    assert res["quantum_route"] == "DELEGATED_QUANTUM"
     assert res["quantum_capability"] == "quantum_pipeline"
     assert "quantum_result" in res
 

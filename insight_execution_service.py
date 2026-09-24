@@ -570,7 +570,8 @@ async def list_hosted_services():
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
-    if token != os.environ.get("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight"):
+    expected = os.environ.get("INSIGHT_ENFORCE_TOKEN")
+    if not expected or token != expected:
         raise HTTPException(
             status_code=401,
             detail="Invalid or missing authentication token"

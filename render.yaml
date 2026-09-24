@@ -17,5 +17,9 @@ services:
         value: "https://marine-quantum-runtime-final.onrender.com"
       - key: QUANTUM_RUNTIME_MODE
         value: "LIVE"
+      - key: QUANTUM_RUNTIME_API_KEY
+        sync: false
+      - key: Quantum_Runtime_Auth_Key
+        sync: false
       - key: PLATFORM_TIMEOUT
         value: "45"

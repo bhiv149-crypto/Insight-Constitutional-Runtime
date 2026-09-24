@@ -1,0 +1,79 @@
+[
+  {
+    "endpoint": "/health",
+    "method": "GET",
+    "test": "test_live_health_public",
+    "status": 200,
+    "auth": "None",
+    "provider": "N/A",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LIVE_REMOTE_RUNTIME",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "/health/detailed",
+    "method": "GET",
+    "test": "test_live_health_detailed",
+    "status": 200,
+    "auth": "Quantum_Runtime_Auth_Key",
+    "provider": "N/A",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LIVE_REMOTE_RUNTIME",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "/api/v1/capabilities",
+    "method": "GET",
+    "test": "test_live_capabilities",
+    "status": 200,
+    "auth": "Quantum_Runtime_Auth_Key",
+    "provider": "N/A",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LIVE_REMOTE_RUNTIME",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "/api/v1/capability/signal",
+    "method": "POST",
+    "test": "test_live_signal_execution",
+    "status": 200,
+    "auth": "Quantum_Runtime_Auth_Key",
+    "provider": "live_provider",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LOCAL_ALGORITHM_SIMULATION",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "/api/v1/capability/quantum_pipeline",
+    "method": "POST",
+    "test": "test_live_quantum_pipeline",
+    "status": 200,
+    "auth": "Quantum_Runtime_Auth_Key",
+    "provider": "live_provider",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LOCAL_ALGORITHM_SIMULATION",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "/api/v1/quantum/execute",
+    "method": "POST",
+    "test": "test_live_quantum_execute",
+    "status": 200,
+    "auth": "Quantum_Runtime_Auth_Key",
+    "provider": "local_simulator",
+    "execution_mode": "LIVE_REMOTE_RUNTIME",
+    "classification": "LOCAL_ALGORITHM_SIMULATION",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  },
+  {
+    "endpoint": "N/A",
+    "method": "N/A",
+    "test": "test_live_unreachable_runtime_fails_closed",
+    "status": "UNAVAILABLE",
+    "auth": "N/A",
+    "provider": "N/A",
+    "execution_mode": "UNAVAILABLE",
+    "classification": "FAILURE_BEHAVIOR",
+    "evidence_source": "tests/test_quantum_adapter_live.py"
+  }
+]

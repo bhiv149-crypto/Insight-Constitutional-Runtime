@@ -1,0 +1,102 @@
+[
+  {
+    "test_name": "test_live_health_public",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Tested using live_adapter configured with LIVE mode and real Render URL. No mocking libraries used."
+  },
+  {
+    "test_name": "test_live_health_detailed",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Uses explicit 'import requests as req' to contact live URL directly."
+  },
+  {
+    "test_name": "test_live_capabilities",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "live_adapter.list_capabilities() makes an unmocked urllib.request to Render."
+  },
+  {
+    "test_name": "test_live_signal_execution",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Real JSON payload sent to live_adapter.invoke_capability('signal', ...)."
+  },
+  {
+    "test_name": "test_live_quantum_pipeline",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Real JSON payload sent to invoke_capability('quantum_pipeline', ...)."
+  },
+  {
+    "test_name": "test_live_quantum_execute",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Uses explicit 'requests.post' to /api/v1/quantum/execute with real unmocked payload."
+  },
+  {
+    "test_name": "test_live_missing_auth_returns_401",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Explicit 'requests.get' with missing auth header returns 401."
+  },
+  {
+    "test_name": "test_live_invalid_payload_returns_422",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Invoke live_adapter with invalid payload ('bad_field': True) correctly triggers 422 VALIDATION_ERROR."
+  },
+  {
+    "test_name": "test_live_quantum_providers",
+    "file": "tests/test_quantum_adapter_live.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Explicit 'requests.get' against /api/v1/quantum/providers."
+  },
+  {
+    "test_name": "test_quantum_adapter_*",
+    "file": "tests/test_quantum_adapter.py",
+    "result": "PASS",
+    "real_http": true,
+    "target_url": "https://marine-quantum-runtime-final.onrender.com",
+    "mock_detected": false,
+    "classification": "LIVE",
+    "evidence": "Adapter unit tests now hit live URL because dev-insecure-key default was removed, though they do not have skipped decorators for auth."
+  }
+]

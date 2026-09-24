@@ -29,10 +29,13 @@ from __future__ import annotations
 
 import hashlib
 import inspect
+import logging
 from typing import Any, Dict, Optional
 
 from src.platform.imports import TraceStore
 from src.platform.insightbridge_adapter import InsightBridgeAdapter
+
+logger = logging.getLogger("insight.platform.telemetry_adapter")
 
 
 class PlatformTelemetryAdapter:

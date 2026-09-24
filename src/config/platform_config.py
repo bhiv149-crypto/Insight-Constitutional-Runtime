@@ -14,5 +14,8 @@ INSIGHT_BRIDGE_BASE_URL = os.getenv("INSIGHT_BRIDGE_BASE_URL", "https://insightb
 # Dhiraj Marine Quantum Runtime Config
 QUANTUM_RUNTIME_URL = os.getenv("QUANTUM_RUNTIME_URL", "https://marine-quantum-runtime-final.onrender.com")
 QUANTUM_RUNTIME_MODE = os.getenv("QUANTUM_RUNTIME_MODE", "LIVE")
-QUANTUM_RUNTIME_API_KEY = os.getenv("QUANTUM_RUNTIME_API_KEY", "dev-insecure-key")
-PLATFORM_TIMEOUT = int(os.getenv("PLATFORM_TIMEOUT", "45"))
+QUANTUM_RUNTIME_API_KEY = (
+    os.getenv("Quantum_Runtime_Auth_Key")
+    or os.getenv("QUANTUM_RUNTIME_API_KEY", "")
+)
+PLATFORM_TIMEOUT = int(os.getenv("PLATFORM_TIMEOUT", "45"))

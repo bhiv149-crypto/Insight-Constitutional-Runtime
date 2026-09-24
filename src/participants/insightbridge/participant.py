@@ -67,7 +67,7 @@ class InsightBridgeParticipant(BaseParticipant):
         Execute InsightBridge business logic.
 
         If payload requests Quantum execution (via target_capability or
-        route="quantum"), delegates to the local Marine Quantum Runtime
+        route="quantum"), delegates to the Marine Quantum Runtime
         via MarineQuantumAdapter. Otherwise, processes standard bridge payload.
         """
         if isinstance(payload, dict) and (
@@ -94,7 +94,7 @@ class InsightBridgeParticipant(BaseParticipant):
                 "runtime_identity": self.identity,
                 "version": self.version,
                 "status": "accepted",
-                "quantum_route": "DELEGATED_LOCAL_QUANTUM",
+                "quantum_route": "DELEGATED_QUANTUM",
                 "quantum_capability": cap_id,
                 "quantum_result": quantum_result,
                 "payload": payload,
@@ -123,7 +123,7 @@ class InsightBridgeParticipant(BaseParticipant):
 
     def quantum_health(self) -> dict:
         """
-        Query health of the attached local Quantum Runtime.
+        Query health of the attached Quantum Runtime.
         """
         return self.quantum_adapter.health()
 

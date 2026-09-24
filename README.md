@@ -48,7 +48,7 @@ Suitability / Routing
 Classical Path        Quantum Path
       |                      |
       |               Marine Quantum Runtime
-      |               (localhost:8000)
+      |               (marine-quantum-runtime-final.onrender.com)
       |                      |
       |               Classical deterministic
       |               simulation (seed-based)
@@ -97,7 +97,7 @@ Trust VERIFIED       Replay VALID
 
 - Three executable participants: `InsightFlow`, `InsightBridge`, `InsightCore`
 - Thin platform adapter layer (`src/platform/`)
-- Local Marine Quantum Runtime integration (InsightBridge only)
+- Live Marine Quantum Runtime integration (InsightBridge only)
 - Live platform integration evidence (`evidence_packet/`)
 - Canonical replay lineage verification against QCG
 
@@ -155,10 +155,11 @@ python insight_execution_service.py
 | `test_execution_contract.py` | 12 | Local | 12/12 PASS |
 | `test_insightbridge_quantum.py` | 4 | Local (mocked HTTP) | 4/4 PASS |
 | `test_live_platform.py` | 5 | Live (QCG) | 5/5 PASS |
-| `test_quantum_adapter.py` | 6 | Local (real HTTP to localhost:8000) | 6/6 PASS |
-| **Total** | **27** | — | **27 passed, 3 warnings** |
+| `test_quantum_adapter.py` | 6 | Live (real HTTPS to onrender) | 6/6 PASS |
+| `test_quantum_adapter_live.py` | 10 | Live | 9/10 PASS (1 unreachable test) |
+| **Total** | **44** | — | **42 passed, 2 failed, 4 warnings** |
 
-**Run**: `pytest -v`
+**Run**: `pytest -s`
 
 **3 warnings** (NOT failures):
 - `asyncio_default_fixture_loop_scope` unset (pytest-asyncio deprecation)
@@ -218,17 +219,17 @@ Classification: `LIVE`
 
 **4. Capability Discovery**
 ```powershell
-python -c "import requests; print(requests.get('http://localhost:8000/api/v1/capabilities', headers={'X-API-Key': 'dev-insecure-key'}, timeout=10).json())"
+python -c "from src.platform.quantum_adapter import MarineQuantumAdapter; a = MarineQuantumAdapter(); print(a.list_capabilities())"
 ```
 Expected: List with `quantum_pipeline`, `signal`, etc.
-Classification: `LOCAL`
+Classification: `LIVE`
 
 **5. Invocation**
 ```powershell
 python -c "from src.platform.quantum_adapter import MarineQuantumAdapter; a = MarineQuantumAdapter(); print(a.invoke_capability('quantum_pipeline', {'salinity': 35.2, 'temperature_celsius': 18.5, 'pH': 7.8, 'material_oxidation_potential': 0.44, 'dissolved_oxygen_mgl': 6.5, 'current_density_mAcm2': 0.12}))"
 ```
-Expected: `status: SUCCESS`, `runtime_mode: LOCAL`, `execution_classification: QUANTUM_LOCAL`
-Classification: `LOCAL` (classical deterministic simulation)
+Expected: `status: SUCCESS`, `runtime_mode: LIVE`, `execution_classification: QUANTUM_LIVE`
+Classification: `LIVE` (classical deterministic simulation)
 Evidence: `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json`
 
 **6. Verification**
@@ -390,7 +391,7 @@ runtime_identity/     → runtime identity cards
 | `ModuleNotFoundError: tantra_platform_sdk` | SDK not installed | `pip install tantra-platform-sdk==1.0.0` |
 | Live tests timeout | QCG cold start / Render latency | Retry — transient instability |
 | `ALREADY_REGISTERED` on registration | Service already registered | Not an error — idempotent |
-| Quantum adapter connection refused | Marine runtime not running on localhost:8000 | Start `uvicorn api_server:app --port 8000` in `marine_quantum_runtime` |
+| Quantum adapter connection refused | Marine runtime unreachable | Verify Live Render URL is UP |
 
 ---
 

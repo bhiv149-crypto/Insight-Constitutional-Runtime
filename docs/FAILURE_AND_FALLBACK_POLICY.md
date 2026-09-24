@@ -11,14 +11,12 @@ This document describes how the Insight Constitutional Runtime handles failures 
 
 | Scenario | Behaviour | Classification |
 |---|---|---|
-| Marine Quantum Runtime unreachable (localhost:8000 down) | Adapter returns `UNAVAILABLE` status; InsightBridge falls back to classical processing | `FALLBACK` |
+| Marine Quantum Runtime unreachable | Adapter returns `UNAVAILABLE` status; InsightBridge fails closed without silent local fallback | `FAILURE` |
 | Malformed quantum payload (missing/invalid circuit parameters) | Adapter validates attachment schema; rejects with `VALIDATION_ERROR` before dispatch | `LOCAL` |
 | Quantum mode explicitly set to `UNAVAILABLE` | Adapter immediately returns `UNAVAILABLE` without attempting any execution | `LOCAL` |
 | local simulated quantum provider SDK not installed | Runtime reports `CREDENTIALS_REQUIRED` / `UNAVAILABLE`; falls back to local simulator | `FALLBACK` |
 
-**Fallback chain:** `QUANTUM_LIVE` → `QUANTUM_SIMULATED` (AerSimulator) → `QUANTUM_LOCAL` (deterministic stub) → `CLASSICAL`
-
-The local deterministic stub (`classical_deterministic_stub`) is always available, requires no network, and uses stdlib only.
+**Fallback chain:** `DECOMMISSIONED`. The application now strictly points to the Live Marine Quantum Runtime. If the live runtime is unreachable, the request fails closed. There is NO automatic fallback to a local deterministic stub or `localhost:8000`.
 
 ---
 
