@@ -21,12 +21,12 @@ A thin integration layer connecting three Insight Stack participants (`InsightFl
 | Health                           | Verified                        | `LIVE` (Insight service + QCG UP)           |
 | Replay lineage                   | Verified                        | `LIVE` (`GET /qcg/replay/lineage/{id}` → HTTP 200, VALID) |
 | `/qcg/verify`                    | Verified                        | `LIVE` (Replay VALID, Trust `passed: True`) |
-| Quantum execution                | Verified locally                | `QUANTUM_LOCAL` (classical deterministic simulation) |
-| Live cloud quantum provider      | Not attached                    | `BLOCKED` — no credentials (Dhiraj / Infrastructure) |
+| Quantum execution                | Verified live                   | `QUANTUM_SIMULATED` (classical simulation via live Marine Runtime) |
+| Live cloud quantum hardware      | Not attached                    | `BLOCKED` — no credentials (IBM / IonQ) |
 | Telemetry export                 | Verified locally                | `LOCAL` (`TraceStore` stub — owned by Pritesh) |
 | Persistent replay across restart | Not proven                      | `NOT PROVEN` (`TraceStore` is in-memory stub — owned by Pritesh) |
 | Quantum-network execution        | Not proven                      | `NOT PROVEN` (bounded contract only)        |
-| Classical fallback               | Verified                        | `FALLBACK` (local simulator always available) |
+| Classical fallback               | Verified live                   | `FALLBACK` (local simulator always available on live runtime) |
 | Production certification         | Not claimed                     | `NOT CLAIMED`                                |
 
 ---
@@ -51,9 +51,10 @@ Classical Path        Quantum Path
       |               (marine-quantum-runtime-final.onrender.com)
       |                      |
       |               Classical deterministic
-      |               simulation (seed-based)
+      |               simulation via live
+      |               local_simulator backend
       |               execution_classification
-      |               = QUANTUM_LOCAL
+      |               = QUANTUM_LIVE
       |                      |
       +----------+-----------+
                  |
@@ -106,7 +107,7 @@ Trust VERIFIED       Replay VALID
 - The Platform Runtime itself (external — `bhiv-qcg.onrender.com`)
 - The Platform SDK source (external — `tantra-platform-sdk`)
 - Canonical telemetry backend (external — stub only; contract not published)
-- Live cloud quantum deployment (local mode only)
+- Live cloud quantum hardware credentials
 
 ---
 
@@ -229,7 +230,7 @@ Classification: `LIVE`
 python -c "from src.platform.quantum_adapter import MarineQuantumAdapter; a = MarineQuantumAdapter(); print(a.invoke_capability('quantum_pipeline', {'salinity': 35.2, 'temperature_celsius': 18.5, 'pH': 7.8, 'material_oxidation_potential': 0.44, 'dissolved_oxygen_mgl': 6.5, 'current_density_mAcm2': 0.12}))"
 ```
 Expected: `status: SUCCESS`, `runtime_mode: LIVE`, `execution_classification: QUANTUM_LIVE`
-Classification: `LIVE` (classical deterministic simulation)
+Classification: `LIVE_SERVICE` (using quantum simulation)
 Evidence: `evidence_packet/quantum_evidence/quantum_pipeline_invocation.json`
 
 **6. Verification**
@@ -290,14 +291,14 @@ Do not describe `/verify` as "passed" or "successful." The Trust-stage failure i
 
 ### Quantum execution
 
-The `quantum_pipeline` capability executes locally via the Marine Quantum Runtime. The underlying mechanism is a **classical deterministic simulation** (seed-based random distribution). The adapter classifies this as `QUANTUM_LOCAL`, but no quantum hardware or live cloud quantum provider is involved.
+The `quantum_pipeline` capability executes via the deployed Marine Quantum Runtime. The underlying mechanism is a **classical deterministic simulation** (via the `local_simulator` provider). The adapter classifies this as `QUANTUM_LIVE` indicating live reachability, but the execution itself is simulated.
 
-### Live cloud quantum provider
+### Live cloud quantum hardware
 
-No local simulated quantum provider is attached or proven. The provider abstraction exists and is extensible, but:
-- `aer` provider: `qiskit-aer` is not installed
-- `ibm_runtime` provider: requires SDK, credentials, and network egress (not available)
-- `ionq` provider: requires API key and network egress (not available)
+Live quantum hardware providers are not attached. The provider abstraction exists and is extensible on the Marine runtime, but hardware is blocked:
+- `aer` provider: AVAILABLE (qiskit-aer is installed on the runtime)
+- `ibm_runtime` provider: UNAVAILABLE (requires SDK, not installed)
+- `ionq` provider: CREDENTIALS_REQUIRED (requires API key)
 
 ### Telemetry
 
@@ -429,8 +430,8 @@ Evidence proves what happened. It does not prove what was intended.
 
 **27 passed, 3 warnings** (stable local + live run)
 
-- `LIVE` verified: Registration, discovery, SDK invocation, health, replay lineage
-- `LOCAL` verified: Quantum execution (classical deterministic simulation), telemetry (stub)
+- `LIVE` verified: Registration, discovery, SDK invocation, health, replay lineage, quantum API connection
+- `SIMULATED` verified: Quantum execution via deployed simulator, telemetry (stub)
 - `PARTIAL` verified: `/qcg/verify` — Replay VALID, Trust HALTED (HTTP 422, ECDSA)
 - `NOT PROVEN`: Persistent replay across restart, quantum-network execution, live cloud quantum provider
 - `NOT CLAIMED`: Production certification

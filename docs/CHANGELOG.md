@@ -2,6 +2,16 @@
 
 All notable changes to the **Insight Constitutional Runtime Integration** project are documented in this file using [Semantic Versioning](https://semver.org/).
 
+## [Evidence-Based Audit] - 2026-09-26
+
+Reconciled Markdown documentation against exhaustive technical audit of actual implementation, tests, and live behavior.
+- Clarified that `QUANTUM_LOCAL` is actually `QUANTUM_SIMULATED` running on the live `Marine Quantum Runtime` endpoint, not purely local execution.
+- Confirmed the live endpoint uses classical simulation (`local_simulator`) and that real quantum hardware remains BLOCKED due to missing credentials.
+- Verified that the system fails closed securely without silently falling back to a local/stubbed runtime on error.
+- Verified that all remaining "pending" or "mocked" claims for the Quantum Runtime integration have been resolved.
+
+---
+
 ## [Documentation Reconciliation] - 2026-09-12
 
 Reconciled Markdown documentation against actual implementation, test results, and live behavior.

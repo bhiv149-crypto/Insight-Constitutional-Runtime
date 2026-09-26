@@ -58,8 +58,8 @@ Quantum / Classical Route                 [STRUCTURALLY INTEGRATED — FUNCTIONA
       ↓
 Quantum Runtime / Classical Runtime       [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
-Local Execution Path                      [QUANTUM_LOCAL — classical deterministic sim]
-      ↓                                   [local simulated quantum PROVIDER — BLOCKED, no credentials]
+Live Provider Execution Path              [QUANTUM_SIMULATED — classical deterministic sim via live service]
+      ↓                                   [live quantum hardware PROVIDER — BLOCKED, no credentials]
 Normalized Result                         [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
       ↓
 QCG Contract Boundary                     [STRUCTURALLY INTEGRATED — FUNCTIONAL SEMANTICS NOT IMPLEMENTED]
@@ -96,7 +96,7 @@ Provenance / Handover                     [STRUCTURALLY INTEGRATED — FUNCTIONA
 | Canonical TraceStore persistence | Pritesh | In-memory stub; needs durable backend |
 | QCG trust contracts and deployment | Pritesh | Trust is now passing; persistence is next |
 | Quantum capability contracts | Dhiraj Chavan | Hardware SDK, normalization, uncertainty |
-| local simulated quantum SDK credentials | Infrastructure | `IBM_QUANTUM_TOKEN`, `IONQ_API_KEY` |
+| live quantum hardware SDK credentials | Infrastructure | `IBM_QUANTUM_TOKEN`, `IONQ_API_KEY` |
 | Quantum network coordination | Dhiraj Chavan | Network contract; not live |
 | Collective ecosystem convergence | Kanishk | End-to-end orchestration |
 
@@ -106,9 +106,9 @@ Provenance / Handover                     [STRUCTURALLY INTEGRATED — FUNCTIONA
 
 | Classification | Meaning | Current Example |
 |---|---|---|
-| `QUANTUM_LIVE` | Real quantum hardware via cloud API | **BLOCKED** — no credentials |
-| `QUANTUM_SIMULATED` | Qiskit AerSimulator (local) | **BLOCKED** — `qiskit-aer` not installed |
-| `QUANTUM_LOCAL` | Deterministic classical stub (seeds) | **ACTIVE** — Marine Quantum Runtime default |
+| `QUANTUM_LIVE` | Execution dispatched to live Marine Runtime | **ACTIVE** — Reaches deployed runtime |
+| `QUANTUM_SIMULATED` | Real quantum simulation via Aer/Local | **ACTIVE** — `local_simulator` and `aer` are AVAILABLE on live runtime |
+| `QUANTUM_HARDWARE` | Real quantum hardware via cloud API | **BLOCKED** — IBM/IonQ credentials missing on live runtime |
 | `CLASSICAL` | Standard execution path | **ACTIVE** — InsightFlow / InsightCore |
 | `FALLBACK` | Degraded path due to provider failure | **ACTIVE** — when quantum unreachable |
 
