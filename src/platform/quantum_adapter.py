@@ -255,6 +255,17 @@ class MarineQuantumAdapter:
                 "execution_classification": "UNAVAILABLE / BLOCKED",
             }
 
+        if not self.api_key or not self.api_key.strip():
+            return {
+                "status": "UNAVAILABLE",
+                "capability_id": capability_id,
+                "error": "Missing Quantum Runtime API Key. Configure 'Quantum_Runtime_Auth_Key' or 'QUANTUM_RUNTIME_API_KEY'.",
+                "errors": ["Missing Quantum Runtime API Key (authentication credential not configured)"],
+                "runtime_mode": self.mode,
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": "UNAVAILABLE / BLOCKED",
+            }
+
         # Marine API expects:
         # {"payload": payload}
         url = f"{self.base_url}/api/v1/capability/{capability_id}"
@@ -346,6 +357,111 @@ class MarineQuantumAdapter:
             return {
                 "status": status,
                 "capability_id": capability_id,
+                "error": error_details,
+                "errors": errors,
+                "runtime_mode": self.mode,
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": classification,
+            }
+
+    # ------------------------------------------------------------------
+    # Direct Circuit Execution
+    # ------------------------------------------------------------------
+
+    def execute_circuit(
+        self,
+        circuit_payload: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Execute a raw quantum circuit directly on the Marine Quantum Runtime
+        via POST /api/v1/quantum/execute.
+
+        Supported mode: LIVE. Fails closed if credentials or network fail.
+        """
+        if self.mode != "LIVE":
+            return {
+                "status": "UNAVAILABLE",
+                "error": (
+                    f"Unsupported QUANTUM_RUNTIME_MODE: {self.mode}. "
+                    "This adapter supports LIVE mode exclusively."
+                ),
+                "runtime_mode": self.mode,
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": "UNAVAILABLE / BLOCKED",
+            }
+
+        if not self.api_key or not self.api_key.strip():
+            return {
+                "status": "UNAVAILABLE",
+                "error": "Missing Quantum Runtime API Key. Configure 'Quantum_Runtime_Auth_Key' or 'QUANTUM_RUNTIME_API_KEY'.",
+                "errors": ["Missing Quantum Runtime API Key (authentication credential not configured)"],
+                "runtime_mode": self.mode,
+                "quantum_provider_source": "Marine Quantum Runtime",
+                "execution_classification": "UNAVAILABLE / BLOCKED",
+            }
+
+        url = f"{self.base_url}/api/v1/quantum/execute"
+        headers = {
+            **self.headers,
+            "Content-Type": "application/json",
+        }
+
+        try:
+            res = requests.post(
+                url,
+                json=circuit_payload,
+                headers=headers,
+                timeout=30,
+            )
+            res.raise_for_status()
+            result = res.json()
+
+            if isinstance(result, dict):
+                result["runtime_mode"] = self.mode
+                result["quantum_provider_source"] = "Marine Quantum Runtime"
+                if "execution_classification" not in result:
+                    result["execution_classification"] = f"QUANTUM_{self.mode}"
+
+            return result
+
+        except requests.exceptions.RequestException as exc:
+            logger.error("Circuit execution request error: %s", exc)
+            error_details: Any = str(exc)
+            errors: List[Any] = []
+
+            if getattr(exc, "response", None) is not None:
+                try:
+                    error_details = exc.response.json()
+                except Exception:
+                    error_details = exc.response.text
+
+                if isinstance(error_details, dict):
+                    if isinstance(error_details.get("errors"), list):
+                        errors = error_details["errors"]
+                    elif isinstance(error_details.get("detail"), list):
+                        errors = error_details["detail"]
+                    elif isinstance(error_details.get("detail"), dict):
+                        errors = [error_details["detail"]]
+                    else:
+                        errors = [error_details]
+                elif error_details:
+                    errors = [error_details]
+
+            status = "FAILED"
+            classification = "UNAVAILABLE / BLOCKED"
+
+            response_obj = getattr(exc, "response", None)
+            if response_obj is not None:
+                if response_obj.status_code == 422:
+                    status = "VALIDATION_ERROR"
+                elif response_obj.status_code in (401, 403):
+                    status = "UNAVAILABLE"
+                    classification = "BLOCKED"
+                    error_details = f"Authentication failed ({response_obj.status_code} Unauthorized)"
+                    errors = [error_details]
+
+            return {
+                "status": status,
                 "error": error_details,
                 "errors": errors,
                 "runtime_mode": self.mode,

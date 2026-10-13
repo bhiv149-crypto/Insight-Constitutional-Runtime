@@ -4,6 +4,10 @@ import os
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# Ensure test token is present in environment for test run
+os.environ.setdefault("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight")
+os.environ.setdefault("INSIGHT_EXECUTION_TOKEN", "prod-secure-token-insight")
+
 from fastapi.testclient import TestClient
 from insight_execution_service import app
 
@@ -25,7 +29,9 @@ def test_enforce_endpoint_authorized():
 
 def test_invalid_invocation_schema():
     # Missing required fields
-    response = client.post("/api/v1/execute", json={"service_id": "insightflow"})
+    token = os.environ.get("INSIGHT_EXECUTION_TOKEN") or os.environ.get("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight")
+    headers = {"Authorization": f"Bearer {token}"}
+    response = client.post("/api/v1/execute", json={"service_id": "insightflow"}, headers=headers)
     assert response.status_code == 422
     assert "Unprocessable Entity" in response.json()["error"]
 
@@ -38,5 +44,7 @@ def test_live_trace_store_initialization():
 
 @pytest.mark.asyncio
 async def test_global_exception_handler():
-    response = client.post("/api/v1/execute", data="not json")
+    token = os.environ.get("INSIGHT_EXECUTION_TOKEN") or os.environ.get("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight")
+    headers = {"Authorization": f"Bearer {token}"}
+    response = client.post("/api/v1/execute", data="not json", headers=headers)
     assert response.status_code == 422

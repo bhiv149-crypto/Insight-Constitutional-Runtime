@@ -88,7 +88,12 @@ class InsightBridgeParticipant(BaseParticipant):
                     for k, v in payload.items()
                     if k not in ("route", "target_capability", "quantum_capability", "participant", "operation", "version")
                 }
-            quantum_result = self.quantum_adapter.invoke_capability(cap_id, q_payload)
+            # Delegate to circuit execution or capability invocation
+            if cap_id in ("circuit_execution", "quantum_execute") or "gate_sequence" in q_payload:
+                quantum_result = self.quantum_adapter.execute_circuit(q_payload)
+            else:
+                quantum_result = self.quantum_adapter.invoke_capability(cap_id, q_payload)
+
             return {
                 "participant": self.name,
                 "runtime_identity": self.identity,

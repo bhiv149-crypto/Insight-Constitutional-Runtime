@@ -255,11 +255,37 @@ def _dispatch(
 
 
 # -------------------------------------------------------------------------
+# Execution Authentication Dependency
+# -------------------------------------------------------------------------
+
+def verify_execution_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """
+    Enforce service-to-service Bearer token authentication on execution ingress.
+    Fails closed if the configured token is missing or does not match.
+    """
+    token = credentials.credentials
+    expected = (
+        os.environ.get("INSIGHT_EXECUTION_TOKEN")
+        or os.environ.get("INSIGHT_AUTH_TOKEN")
+        or os.environ.get("INSIGHT_ENFORCE_TOKEN")
+    )
+    if not expected or token != expected:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or missing authentication token"
+        )
+    return token
+
+
+# -------------------------------------------------------------------------
 # Canonical execution endpoint
 # -------------------------------------------------------------------------
 
 @app.post("/api/v1/execute")
-async def execute(req: InvocationRequest):
+async def execute(
+    req: InvocationRequest,
+    token: str = Depends(verify_execution_token),
+):
     """
     Canonical Insight capability execution endpoint.
 

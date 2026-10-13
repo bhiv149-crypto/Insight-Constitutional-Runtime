@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 from fastapi.testclient import TestClient
@@ -5,12 +6,16 @@ from fastapi.testclient import TestClient
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+# Set test execution token in environment before importing/running
+TEST_EXECUTION_TOKEN = "test-execution-token-secure-123"
+os.environ["INSIGHT_EXECUTION_TOKEN"] = TEST_EXECUTION_TOKEN
+
 from insight_execution_service import app, _init_participants
 
 # Initialize participants before tests
 _init_participants()
 
-client = TestClient(app)
+client = TestClient(app, headers={"Authorization": f"Bearer {TEST_EXECUTION_TOKEN}"})
 
 def test_1_insightflow_success():
     req = {
@@ -166,6 +171,58 @@ def test_12_response_contract():
     }
     assert expected_keys.issubset(set(data.keys()))
     assert data["trust_method"] == "CLASSICAL"
+
+def test_13_unauthenticated_request_rejected():
+    """Verify that execution requests without authorization header are rejected with HTTP 401 or 403."""
+    unauth_client = TestClient(app)
+    req = {
+        "service_id": "insightflow.runtime.intelligence.v1",
+        "operation": "execute",
+        "payload": {"test": True},
+        "version": "1.0.2",
+        "invocation_id": "test-id-unauth"
+    }
+    resp = unauth_client.post("/api/v1/execute", json=req)
+    assert resp.status_code in (401, 403)
+
+def test_14_invalid_token_rejected():
+    """Verify that execution requests with an invalid token are rejected with HTTP 401."""
+    bad_client = TestClient(app, headers={"Authorization": "Bearer invalid-wrong-token-xyz"})
+    req = {
+        "service_id": "insightflow.runtime.intelligence.v1",
+        "operation": "execute",
+        "payload": {"test": True},
+        "version": "1.0.2",
+        "invocation_id": "test-id-bad-auth"
+    }
+    resp = bad_client.post("/api/v1/execute", json=req)
+    assert resp.status_code == 401
+    assert "Invalid or missing authentication token" in resp.json().get("detail", "")
+
+def test_15_circuit_execution_route():
+    """Verify InsightBridge correctly dispatches quantum circuit payloads to execute_circuit."""
+    req = {
+        "service_id": "insightbridge.runtime.intelligence.v1",
+        "operation": "execute",
+        "payload": {
+            "route": "quantum",
+            "quantum_capability": "quantum_execute",
+            "quantum_payload": {
+                "num_qubits": 2,
+                "gate_sequence": [{"gate": "h", "qubits": [0]}, {"gate": "cx", "qubits": [0, 1]}],
+                "shots": 100
+            }
+        },
+        "version": "1.0.2",
+        "invocation_id": "test-id-circuit-1"
+    }
+    resp = client.post("/api/v1/execute", json=req)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "SUCCESS"
+    assert data["response"]["quantum_route"] == "DELEGATED_QUANTUM"
+    assert data["response"]["quantum_capability"] == "quantum_execute"
+    assert "quantum_result" in data["response"]
 
 if __name__ == "__main__":
     import pytest
