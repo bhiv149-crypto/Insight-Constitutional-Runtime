@@ -85,3 +85,92 @@ def test_insightbridge_health():
     
     # Gateway health is dynamic, so we just ensure it exists
     assert "gateway_health" in health
+
+
+
+def test_cryptographic_provenance_anchoring_blk_arc_003():
+    """Verify cryptographic provenance anchoring emits SHA-256 execution_digest and nonce."""
+    from src.platform.quantum_adapter import MarineQuantumAdapter, compute_execution_digest
+
+    payload = {"gate_sequence": [{"gate": "h", "qubits": [0]}], "shots": 100}
+    expected_digest = compute_execution_digest(payload["gate_sequence"])
+    assert len(expected_digest) == 64
+
+    adapter = MarineQuantumAdapter(mode="remote_cluster")
+    res = adapter.execute_circuit(payload)
+    assert res["status"] == "UNAVAILABLE"
+    assert res["execution_digest"] == expected_digest
+    assert "provenance_nonce" in res
+    assert len(res["provenance_nonce"]) == 32
+
+
+
+def test_provenance_digest_key_order_independence():
+    """Verify compute_execution_digest is independent of dictionary key insertion order."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    payload1 = {"shots": 1024, "domain": "VANA", "parameters": {"gamma": 0.5, "beta": 0.8}}
+    payload2 = {"domain": "VANA", "parameters": {"beta": 0.8, "gamma": 0.5}, "shots": 1024}
+    digest1 = compute_execution_digest(payload1)
+    digest2 = compute_execution_digest(payload2)
+
+    assert digest1 == digest2
+    assert len(digest1) == 64
+
+
+def test_provenance_digest_gate_sequence_order_sensitivity():
+    """Verify compute_execution_digest is strictly sensitive to gate execution sequence order."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    seq_ab = [{"gate": "h", "qubit": 0}, {"gate": "cx", "qubits": [0, 1]}]
+    seq_ba = [{"gate": "cx", "qubits": [0, 1]}, {"gate": "h", "qubit": 0}]
+    digest_ab = compute_execution_digest(seq_ab)
+    digest_ba = compute_execution_digest(seq_ba)
+
+    assert digest_ab != digest_ba
+
+
+def test_provenance_digest_different_payloads():
+    """Verify distinct execution payloads produce distinct SHA-256 digests."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    d1 = compute_execution_digest({"salinity": 35.0})
+    d2 = compute_execution_digest({"salinity": 35.1})
+    assert d1 != d2
+
+
+def test_provenance_digest_empty_payloads():
+    """Verify empty dict, empty list, and None produce valid distinct digests."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    d_dict = compute_execution_digest({})
+    d_list = compute_execution_digest([])
+    d_none = compute_execution_digest(None)
+
+    assert len(d_dict) == 64
+    assert len(d_list) == 64
+    assert len(d_none) == 64
+    assert d_dict != d_list
+    assert d_dict != d_none
+
+
+def test_provenance_digest_unsupported_value_handling():
+    """Verify NaN and unsupported types fall back safely to deterministic invalid digests."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    d_nan1 = compute_execution_digest({"value": float("nan")})
+    d_nan2 = compute_execution_digest({"value": float("nan")})
+    assert len(d_nan1) == 64
+    assert d_nan1 == d_nan2  # Deterministic handling
+
+    d_obj = compute_execution_digest({"obj": object()})
+    assert len(d_obj) == 64
+
+
+def test_provenance_digest_reproducibility():
+    """Verify compute_execution_digest is 100% reproducible over repeated evaluations."""
+    from src.platform.quantum_adapter import compute_execution_digest
+
+    payload = {"circuit_id": "test-circ-001", "shots": 500, "gates": [{"gate": "x", "qubit": 1}]}
+    digests = {compute_execution_digest(payload) for _ in range(100)}
+    assert len(digests) == 1

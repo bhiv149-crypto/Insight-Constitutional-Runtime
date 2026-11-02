@@ -17,9 +17,57 @@ Hard Boundaries:
 
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
+import math
 import os
+import uuid
 from typing import Any, Dict, List, Optional
+
+
+def canonicalize_quantum_payload(payload: Any) -> str:
+    """
+    Canonicalize and validate a quantum execution payload for deterministic SHA-256 hashing (BLK-ARC-003).
+
+    Rules:
+        - Dictionaries: Keys recursively sorted alphabetically.
+        - Sequences (lists/tuples): Element order strictly preserved (gate causality).
+        - Floats: Finite checks (rejects NaN/Inf) and rounded to 12 decimals to eliminate jitter.
+        - Primitives (int, str, bool, None): Preserved as standard JSON primitives.
+        - Unsupported/Ambiguous types: Raises TypeError or ValueError.
+    """
+    if payload is None:
+        return "null"
+
+    def _normalize(obj: Any) -> Any:
+        if isinstance(obj, dict):
+            return {str(k): _normalize(v) for k, v in sorted(obj.items())}
+        elif isinstance(obj, (list, tuple)):
+            return [_normalize(item) for item in obj]
+        elif isinstance(obj, float):
+            if math.isnan(obj) or math.isinf(obj):
+                raise ValueError(f"Non-canonical float value in quantum payload: {obj}")
+            return round(obj, 12) if abs(obj) > 1e-12 else 0.0
+        elif isinstance(obj, (int, str, bool)):
+            return obj
+        else:
+            raise TypeError(f"Unsupported non-serializable payload type: {type(obj).__name__}")
+
+    normalized = _normalize(payload)
+    return json.dumps(normalized, separators=(",", ":"), ensure_ascii=True)
+
+
+def compute_execution_digest(payload: Any) -> str:
+    """
+    Compute a deterministic canonical SHA-256 digest of dispatched quantum payloads
+    or gate sequences for cryptographic provenance anchoring (BLK-ARC-003).
+    """
+    try:
+        canonical_str = canonicalize_quantum_payload(payload)
+    except (TypeError, ValueError) as exc:
+        canonical_str = f"INVALID_PAYLOAD:{type(payload).__name__}:{str(exc)}"
+    return hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()
 
 import requests
 
@@ -238,6 +286,8 @@ class MarineQuantumAdapter:
         The adapter supports LIVE mode. Unsupported runtime
         modes fail closed without attempting an HTTP request.
         """
+        digest = compute_execution_digest(payload)
+        nonce = uuid.uuid4().hex
 
         # ---------------------------------------------------------------
         # Supported mode: LIVE
@@ -253,6 +303,8 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": "UNAVAILABLE / BLOCKED",
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
 
         if not self.api_key or not self.api_key.strip():
@@ -264,6 +316,8 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": "UNAVAILABLE / BLOCKED",
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
 
         # Marine API expects:
@@ -287,6 +341,8 @@ class MarineQuantumAdapter:
             if isinstance(result, dict):
                 result["runtime_mode"] = self.mode
                 result["quantum_provider_source"] = "Marine Quantum Runtime"
+                result["execution_digest"] = digest
+                result["provenance_nonce"] = nonce
 
                 if "execution_classification" not in result:
                     result["execution_classification"] = f"QUANTUM_{self.mode}"
@@ -300,6 +356,9 @@ class MarineQuantumAdapter:
 
                     if "provider" not in inner:
                         inner["provider"] = "live_provider"
+
+                    inner["execution_digest"] = digest
+                    inner["provenance_nonce"] = nonce
 
             return result
 
@@ -362,6 +421,8 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": classification,
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
 
     # ------------------------------------------------------------------
@@ -378,6 +439,10 @@ class MarineQuantumAdapter:
 
         Supported mode: LIVE. Fails closed if credentials or network fail.
         """
+        gate_input = circuit_payload.get("gate_sequence", circuit_payload)
+        digest = compute_execution_digest(gate_input)
+        nonce = uuid.uuid4().hex
+
         if self.mode != "LIVE":
             return {
                 "status": "UNAVAILABLE",
@@ -388,6 +453,8 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": "UNAVAILABLE / BLOCKED",
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
 
         if not self.api_key or not self.api_key.strip():
@@ -398,6 +465,8 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": "UNAVAILABLE / BLOCKED",
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
 
         url = f"{self.base_url}/api/v1/quantum/execute"
@@ -419,6 +488,8 @@ class MarineQuantumAdapter:
             if isinstance(result, dict):
                 result["runtime_mode"] = self.mode
                 result["quantum_provider_source"] = "Marine Quantum Runtime"
+                result["execution_digest"] = digest
+                result["provenance_nonce"] = nonce
                 if "execution_classification" not in result:
                     result["execution_classification"] = f"QUANTUM_{self.mode}"
 
@@ -467,4 +538,6 @@ class MarineQuantumAdapter:
                 "runtime_mode": self.mode,
                 "quantum_provider_source": "Marine Quantum Runtime",
                 "execution_classification": classification,
+                "execution_digest": digest,
+                "provenance_nonce": nonce,
             }
