@@ -45,7 +45,7 @@ class QuantumWorkloadIdentity:
     Independent of runtime execution attempt or timestamp.
     """
     workload_id: str
-    domain: str                 # VANA | MARINE | UCCIS | AIAIC
+    domain: str                 # VANA | MARINE | UCCIS | AIAIC | BIOQUANTUM
     problem_id: str
     algorithm: str              # QAOA | VQE
     qubits_required: int
