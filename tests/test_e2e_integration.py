@@ -42,8 +42,7 @@ def test_live_trace_store_initialization():
     assert info["provider"] == "LiveTraceStore"
     assert "telemetry" in info["adapter"].lower()
 
-@pytest.mark.asyncio
-async def test_global_exception_handler():
+def test_global_exception_handler():
     token = os.environ.get("INSIGHT_EXECUTION_TOKEN") or os.environ.get("INSIGHT_ENFORCE_TOKEN", "prod-secure-token-insight")
     headers = {"Authorization": f"Bearer {token}"}
     response = client.post("/api/v1/execute", data="not json", headers=headers)

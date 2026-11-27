@@ -1,7 +1,7 @@
 import pytest
 import requests
 import os
-from src.platform.insightflow_adapter import InsightFlowAdapter
+from src.platform.insight_workflow_adapter import InsightWorkflowAdapter
 
 # ---------------------------------------------------------
 # InsightFlow LIVE Integration Verification
@@ -9,7 +9,7 @@ from src.platform.insightflow_adapter import InsightFlowAdapter
 # Target: http://163.128.209.18:8122
 # Rule: NO MOCKS. REAL HTTP.
 
-adapter = InsightFlowAdapter()
+adapter = InsightWorkflowAdapter()
 
 def test_insightflow_live_health():
     """Verify live health endpoint."""
@@ -71,7 +71,7 @@ def test_insightflow_live_openapi_identity_discrepancy():
 
 def test_insightflow_live_enforce_authenticated():
     """Verify authenticated live execution of /enforce."""
-    test_adapter = InsightFlowAdapter()
+    test_adapter = InsightWorkflowAdapter()
     
     # Must load credentials from environment
     if not test_adapter.username or not test_adapter.password:
