@@ -22,6 +22,7 @@ It does NOT:
 """
 
 import hashlib
+import hmac
 import json
 import os
 import sys
@@ -269,7 +270,7 @@ def verify_execution_token(credentials: HTTPAuthorizationCredentials = Depends(s
         or os.environ.get("INSIGHT_AUTH_TOKEN")
         or os.environ.get("INSIGHT_ENFORCE_TOKEN")
     )
-    if not expected or token != expected:
+    if not expected or not hmac.compare_digest(token, expected):
         raise HTTPException(
             status_code=401,
             detail="Invalid or missing authentication token"
@@ -410,9 +411,26 @@ async def execute(
                 ),
             )
 
-        # Genuine successful execution
+        # Check downstream execution status — never mask failures as SUCCESS
         if not isinstance(result, dict):
             result = {"result": result}
+
+        downstream_status = str(result.get("status", "")).upper()
+        if downstream_status in ("FAILED", "UNAVAILABLE", "BLOCKED", "DENIED", "UNSUPPORTED"):
+            http_code = 503 if downstream_status == "UNAVAILABLE" else 403 if downstream_status == "DENIED" else 400
+            return JSONResponse(
+                status_code=http_code,
+                content=_make_response(
+                    invocation_id=invocation_id,
+                    service_id=req.service_id,
+                    operation=req.operation,
+                    status=downstream_status,
+                    response=result,
+                    duration_ms=duration_ms,
+                    request_payload=request_payload,
+                    error=result.get("error") or f"Downstream participant returned {downstream_status}",
+                ),
+            )
 
         return JSONResponse(
             status_code=200,
@@ -597,7 +615,7 @@ async def list_hosted_services():
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
     expected = os.environ.get("INSIGHT_ENFORCE_TOKEN")
-    if not expected or token != expected:
+    if not expected or not hmac.compare_digest(token, expected):
         raise HTTPException(
             status_code=401,
             detail="Invalid or missing authentication token"

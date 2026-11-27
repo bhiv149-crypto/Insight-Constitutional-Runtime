@@ -217,12 +217,20 @@ def test_15_circuit_execution_route():
         "invocation_id": "test-id-circuit-1"
     }
     resp = client.post("/api/v1/execute", json=req)
-    assert resp.status_code == 200
     data = resp.json()
-    assert data["status"] == "SUCCESS"
     assert data["response"]["quantum_route"] == "DELEGATED_QUANTUM"
     assert data["response"]["quantum_capability"] == "quantum_execute"
     assert "quantum_result" in data["response"]
+    q_status = data["response"]["quantum_result"].get("status", "UNAVAILABLE")
+    if q_status in ("SUCCESS", "COMPLETED"):
+        assert resp.status_code == 200
+        assert data["status"] == "SUCCESS"
+    elif q_status == "UNAVAILABLE":
+        assert resp.status_code == 503
+        assert data["status"] == "UNAVAILABLE"
+    else:
+        assert resp.status_code == 400
+        assert data["status"] == q_status
 
 if __name__ == "__main__":
     import pytest

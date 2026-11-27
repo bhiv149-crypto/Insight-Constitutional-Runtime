@@ -74,7 +74,11 @@ class TestInsightBridgeBioQuantum:
         # Execute through participant
         res = bridge.execute(payload)
         assert res["participant"] == "InsightBridge"
-        assert res["status"] == "accepted"
         assert res["quantum_route"] == "DELEGATED_QUANTUM"
         assert res["quantum_capability"] == "quantum_pipeline"
+        q_status = res["quantum_result"]["status"]
+        if q_status in ("SUCCESS", "COMPLETED"):
+            assert res["status"] == "accepted"
+        else:
+            assert res["status"] == q_status
 

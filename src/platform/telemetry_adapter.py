@@ -33,7 +33,7 @@ import logging
 from typing import Any, Dict, Optional
 
 from src.platform.imports import TraceStore
-from src.platform.insightbridge_adapter import InsightBridgeAdapter
+from src.platform.insight_gateway_adapter import InsightGatewayAdapter as InsightBridgeAdapter
 
 logger = logging.getLogger("insight.platform.telemetry_adapter")
 

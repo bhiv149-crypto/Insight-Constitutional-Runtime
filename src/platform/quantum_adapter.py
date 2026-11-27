@@ -400,18 +400,9 @@ class MarineQuantumAdapter:
                 elif error_details:
                     errors = [error_details]
 
-            status = "FAILED"
-            classification = "UNAVAILABLE / BLOCKED"
-
-            response_obj = getattr(exc, "response", None)
-            if response_obj is not None:
-                if response_obj.status_code == 422:
-                    status = "VALIDATION_ERROR"
-                elif response_obj.status_code in (401, 403):
-                    status = "UNAVAILABLE"
-                    classification = "BLOCKED"
-                    error_details = f"Authentication failed ({response_obj.status_code} Unauthorized)"
-                    errors = [error_details]
+            status, classification, error_details, errors = self._classify_request_exception(
+                exc, error_details, errors
+            )
 
             return {
                 "status": status,
@@ -424,6 +415,23 @@ class MarineQuantumAdapter:
                 "execution_digest": digest,
                 "provenance_nonce": nonce,
             }
+
+    @staticmethod
+    def _classify_request_exception(
+        exc: requests.exceptions.RequestException,
+        error_details: Any,
+        errors: List[Any],
+    ) -> tuple[str, str, Any, List[Any]]:
+        """Classify transport/HTTP errors truthfully: network/5xx/auth -> UNAVAILABLE, 422 -> VALIDATION_ERROR."""
+        response_obj = getattr(exc, "response", None)
+        if response_obj is None or response_obj.status_code >= 500:
+            return "UNAVAILABLE", "UNAVAILABLE / BLOCKED", error_details, errors
+        if response_obj.status_code == 422:
+            return "VALIDATION_ERROR", "UNAVAILABLE / BLOCKED", error_details, errors
+        if response_obj.status_code in (401, 403):
+            msg = f"Authentication failed ({response_obj.status_code} Unauthorized)"
+            return "UNAVAILABLE", "BLOCKED", msg, [msg]
+        return "FAILED", "UNAVAILABLE / BLOCKED", error_details, errors
 
     # ------------------------------------------------------------------
     # Direct Circuit Execution
@@ -518,18 +526,9 @@ class MarineQuantumAdapter:
                 elif error_details:
                     errors = [error_details]
 
-            status = "FAILED"
-            classification = "UNAVAILABLE / BLOCKED"
-
-            response_obj = getattr(exc, "response", None)
-            if response_obj is not None:
-                if response_obj.status_code == 422:
-                    status = "VALIDATION_ERROR"
-                elif response_obj.status_code in (401, 403):
-                    status = "UNAVAILABLE"
-                    classification = "BLOCKED"
-                    error_details = f"Authentication failed ({response_obj.status_code} Unauthorized)"
-                    errors = [error_details]
+            status, classification, error_details, errors = self._classify_request_exception(
+                exc, error_details, errors
+            )
 
             return {
                 "status": status,
