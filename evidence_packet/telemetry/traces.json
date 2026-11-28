@@ -1,104 +1,20 @@
 {
   "insightflow.runtime.intelligence.v1": {
-    "status": "RECORDED",
-    "invocation_id": "6002b782-44eb-43d0-9572-616df80d7097",
-    "execution_trace": {
-      "status": "RECORDED",
-      "type": "execution_trace",
-      "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
-      "participant": "insightflow.runtime.intelligence.v1",
-      "operation": "execute",
-      "metadata": {
-        "source": "Insight Constitutional Runtime",
-        "integration": "live_platform",
-        "duration_ms": 45604.772090911865,
-        "status_code": 200
-      },
-      "insightbridge_telemetry": {
-        "status": "SUCCESS",
-        "http_status": 200,
-        "response": {
-          "status": "success",
-          "request_id": "6002b782-44eb-43d0-9572-616df80d7097"
-        }
-      }
-    }
-  },
-  "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
-  "execution_trace": {
-    "status": "RECORDED",
-    "type": "execution_trace",
-    "trace_id": "6002b782-44eb-43d0-9572-616df80d7097",
-    "participant": "insightflow.runtime.intelligence.v1",
-    "operation": "execute",
-    "metadata": {
-      "source": "Insight Constitutional Runtime",
-      "integration": "live_platform",
-      "duration_ms": 45604.772090911865,
-      "status_code": 200
-    },
-    "insightbridge_telemetry": {
-      "status": "SUCCESS",
-      "http_status": 200,
-      "response": {
-        "status": "success",
-        "request_id": "6002b782-44eb-43d0-9572-616df80d7097"
-      }
-    }
+    "status": "NOT_AVAILABLE",
+    "reason": "Invocation ID unavailable"
   },
   "insightbridge.runtime.intelligence.v1": {
-    "status": "RECORDED",
-    "invocation_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
-    "execution_trace": {
-      "status": "RECORDED",
-      "type": "execution_trace",
-      "trace_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f",
-      "participant": "insightbridge.runtime.intelligence.v1",
-      "operation": "execute",
-      "metadata": {
-        "source": "Insight Constitutional Runtime",
-        "integration": "live_platform",
-        "duration_ms": 1127.5863647460938,
-        "status_code": 200
-      },
-      "insightbridge_telemetry": {
-        "status": "SUCCESS",
-        "http_status": 200,
-        "response": {
-          "status": "success",
-          "request_id": "dde0ca88-993b-4f73-a9f0-52096a0fd60f"
-        }
-      }
-    }
+    "status": "NOT_AVAILABLE",
+    "reason": "Invocation ID unavailable"
   },
   "insightcore.runtime.intelligence.v1": {
-    "status": "RECORDED",
-    "invocation_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
-    "execution_trace": {
-      "status": "RECORDED",
-      "type": "execution_trace",
-      "trace_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0",
-      "participant": "insightcore.runtime.intelligence.v1",
-      "operation": "execute",
-      "metadata": {
-        "source": "Insight Constitutional Runtime",
-        "integration": "live_platform",
-        "duration_ms": 628.5068988800049,
-        "status_code": 200
-      },
-      "insightbridge_telemetry": {
-        "status": "SUCCESS",
-        "http_status": 200,
-        "response": {
-          "status": "success",
-          "request_id": "cfe652b4-1c67-48cd-8ae3-dcd34be456e0"
-        }
-      }
-    }
+    "status": "NOT_AVAILABLE",
+    "reason": "Invocation ID unavailable"
   },
   "contract_lineage": {
-    "status": "RECORDED",
+    "status": "FAILED",
     "type": "contract_lineage",
+    "error": "404 Client Error: Not Found for url: https://bhiv-qcg.onrender.com/qcg/telemetry/contract_lineage",
     "contract_id": "contract-001",
     "parent_contract": "parent-001",
     "metadata": {

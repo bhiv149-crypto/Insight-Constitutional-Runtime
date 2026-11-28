@@ -35,7 +35,7 @@ class RegistrationBuilder:
 
         base_url = os.environ.get(
             "INSIGHT_SERVICE_URL",
-            "",
+            "https://insight-constitutional-runtime.onrender.com",
         ).strip().rstrip("/")
 
         if not base_url:

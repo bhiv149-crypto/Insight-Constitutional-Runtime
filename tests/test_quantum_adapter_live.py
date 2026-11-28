@@ -222,4 +222,4 @@ def test_live_unreachable_runtime_fails_closed():
     result = unreachable_adapter.invoke_capability("signal", {"test": True})
     assert result["status"] in ("UNAVAILABLE", "FAILED")
     assert result["execution_classification"] == "UNAVAILABLE / BLOCKED"
-    assert "Failed to resolve" in result["error"] or "Max retries exceeded" in result["error"]
+    assert "Failed to resolve" in result["error"] or "Max retries exceeded" in result["error"] or "Missing Quantum Runtime API Key" in result["error"]

@@ -9,10 +9,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import os
 import pytest
 from dotenv import load_dotenv
 
 load_dotenv(PROJECT_ROOT / ".env")
+
+HAS_KEY = bool(os.getenv("Quantum_Runtime_Auth_Key") or os.getenv("QUANTUM_RUNTIME_API_KEY"))
 
 from src.platform.quantum_adapter import MarineQuantumAdapter
 
@@ -26,6 +29,7 @@ def test_quantum_adapter_health():
     assert health["heartbeat"].get("heartbeat") == "ALIVE"
 
 
+@pytest.mark.skipif(not HAS_KEY, reason="Quantum_Runtime_Auth_Key not set — live tests cannot authenticate")
 def test_quantum_adapter_list_capabilities():
     adapter = MarineQuantumAdapter()
     caps = adapter.list_capabilities()
@@ -35,6 +39,7 @@ def test_quantum_adapter_list_capabilities():
     assert "signal" in cap_ids
 
 
+@pytest.mark.skipif(not HAS_KEY, reason="Quantum_Runtime_Auth_Key not set — live tests cannot authenticate")
 def test_quantum_adapter_discover_capability():
     adapter = MarineQuantumAdapter()
     descriptor = adapter.discover_capability("quantum_pipeline")
@@ -43,6 +48,7 @@ def test_quantum_adapter_discover_capability():
     assert descriptor["authority_ceiling"] == "QUANTUM_EXECUTION"
 
 
+@pytest.mark.skipif(not HAS_KEY, reason="Quantum_Runtime_Auth_Key not set — live tests cannot authenticate")
 def test_quantum_adapter_invocation_quantum_pipeline():
     adapter = MarineQuantumAdapter()
     payload = {
@@ -64,6 +70,7 @@ def test_quantum_adapter_invocation_quantum_pipeline():
     assert det_event.get("risk_level") in ("ELEVATED", "NORMAL", "HIGH", "CRITICAL")
 
 
+@pytest.mark.skipif(not HAS_KEY, reason="Quantum_Runtime_Auth_Key not set — live tests cannot authenticate")
 def test_quantum_adapter_malformed_payload():
     adapter = MarineQuantumAdapter()
     # Salinity out of range [0.0, 50.0]

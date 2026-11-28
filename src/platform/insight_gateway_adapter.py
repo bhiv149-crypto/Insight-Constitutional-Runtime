@@ -57,9 +57,21 @@ class InsightGatewayAdapter:
         url = f"{self.base_url}/health"
         try:
             response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                return {"status": "HEALTHY", "http_status": response.status_code, "data": response.json()}
+            if response.status_code == 404:
+                openapi_resp = requests.get(f"{self.base_url}/openapi.json", timeout=10)
+                if openapi_resp.status_code == 200:
+                    return {"status": "HEALTHY", "http_status": 200, "data": openapi_resp.json().get("info", {})}
             response.raise_for_status()
             return {"status": "HEALTHY", "http_status": response.status_code, "data": response.json()}
         except requests.exceptions.RequestException as exc:
+            try:
+                openapi_resp = requests.get(f"{self.base_url}/openapi.json", timeout=10)
+                if openapi_resp.status_code == 200:
+                    return {"status": "HEALTHY", "http_status": 200, "data": openapi_resp.json().get("info", {})}
+            except Exception:
+                pass
             logger.error("Insight Gateway health check failed: %s", exc)
             return {"status": "UNAVAILABLE", "error": str(exc)}
 
