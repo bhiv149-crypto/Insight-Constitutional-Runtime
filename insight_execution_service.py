@@ -57,6 +57,14 @@ from src.participants.insightflow.participant import InsightFlowParticipant
 from src.participants.insightbridge.participant import InsightBridgeParticipant
 from src.participants.insightcore.participant import InsightCoreParticipant
 from src.common.constants import RUNTIME_IDENTITIES
+from src.common.service_auth import (
+    AuthenticatedPrincipal,
+    TrustLevel,
+    authorize_service_operation,
+    get_replay_cache,
+    get_trusted_key_registry,
+    verify_dual_mode_auth,
+)
 
 
 # -------------------------------------------------------------------------
@@ -72,7 +80,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
@@ -181,6 +189,8 @@ def _make_response(
     request_payload: dict,
     error: Optional[str] = None,
     retry_count: int = 0,
+    trust_method: str = "CLASSICAL",
+    auth_evidence: Optional[dict] = None,
 ) -> dict:
     """
     Build the canonical InvocationResult-compatible response.
@@ -200,11 +210,13 @@ def _make_response(
         "operation": operation,
         "request_hash": request_hash,
         "response_hash": response_hash,
-        "trust_method": "CLASSICAL",
+        "trust_method": trust_method,
         "duration_ms": duration_ms,
         "status": status,
         "timestamp": timestamp,
     }
+    if auth_evidence:
+        evidence.update(auth_evidence)
 
     return {
         "invocation_id": invocation_id,
@@ -213,7 +225,7 @@ def _make_response(
         "status": status,
         "response": response,
         "duration_ms": duration_ms,
-        "trust_method": "CLASSICAL",
+        "trust_method": trust_method,
         "evidence": evidence,
         "error": error,
         "retry_count": retry_count,
@@ -256,26 +268,20 @@ def _dispatch(
 
 
 # -------------------------------------------------------------------------
-# Execution Authentication Dependency
+# Execution Authentication Dependency (Dual-Mode: Bearer + Asymmetric Signature)
 # -------------------------------------------------------------------------
 
-def verify_execution_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+async def verify_execution_token(
+    request: Request,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+) -> Any:
     """
-    Enforce service-to-service Bearer token authentication on execution ingress.
-    Fails closed if the configured token is missing or does not match.
+    Enforce dual-mode service-to-service authentication on execution ingress:
+      1. Bearer token (JWT or static service token) in Authorization header.
+      2. Cryptographic asymmetric request signature in X-Service-* headers.
+    Fails closed if authentication is missing or invalid.
     """
-    token = credentials.credentials
-    expected = (
-        os.environ.get("INSIGHT_EXECUTION_TOKEN")
-        or os.environ.get("INSIGHT_AUTH_TOKEN")
-        or os.environ.get("INSIGHT_ENFORCE_TOKEN")
-    )
-    if not expected or not hmac.compare_digest(token, expected):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid or missing authentication token"
-        )
-    return token
+    return await verify_dual_mode_auth(request, credentials)
 
 
 # -------------------------------------------------------------------------
@@ -285,7 +291,7 @@ def verify_execution_token(credentials: HTTPAuthorizationCredentials = Depends(s
 @app.post("/api/v1/execute")
 async def execute(
     req: InvocationRequest,
-    token: str = Depends(verify_execution_token),
+    principal: Any = Depends(verify_dual_mode_auth),
 ):
     """
     Canonical Insight capability execution endpoint.
@@ -314,8 +320,45 @@ async def execute(
     }
 
     # -------------------------------------------------------------
+    # 0. Caller trust method & Authorization check
+    # -------------------------------------------------------------
+
+    if isinstance(principal, AuthenticatedPrincipal):
+        caller_trust_method = principal.trust_level
+        auth_evidence = {
+            "auth_type": principal.auth_type,
+            "principal_service": principal.service_id,
+            "caller_service": principal.service_id,
+            "key_id": principal.key_id,
+        }
+        auth_ok, auth_err = authorize_service_operation(principal, req.service_id, req.operation)
+        if not auth_ok:
+            duration_ms = (time.perf_counter() - start_time) * 1000
+            return JSONResponse(
+                status_code=403,
+                content=_make_response(
+                    invocation_id=invocation_id,
+                    service_id=req.service_id,
+                    operation=req.operation,
+                    status="DENIED",
+                    response={},
+                    duration_ms=duration_ms,
+                    request_payload=request_payload,
+                    error=auth_err,
+                    trust_method=caller_trust_method,
+                    auth_evidence=auth_evidence,
+                ),
+            )
+    else:
+        caller_trust_method = "CLASSICAL"
+        auth_evidence = {"auth_type": "bearer_token"}
+
+    # -------------------------------------------------------------
     # 1. Service lookup
     # -------------------------------------------------------------
+
+    if not _PARTICIPANTS:
+        _init_participants()
 
     participant = _PARTICIPANTS.get(req.service_id)
 
@@ -336,6 +379,8 @@ async def execute(
                     f"Service '{req.service_id}' "
                     "is not hosted by this execution service."
                 ),
+                trust_method=caller_trust_method,
+                auth_evidence=auth_evidence,
             ),
         )
 
@@ -359,6 +404,8 @@ async def execute(
                 duration_ms=duration_ms,
                 request_payload=request_payload,
                 error="Participant version is not configured.",
+                trust_method=caller_trust_method,
+                auth_evidence=auth_evidence,
             ),
         )
 
@@ -379,6 +426,8 @@ async def execute(
                     f"Version '{req.version}' is not supported. "
                     f"Supported version is '{participant_version}'."
                 ),
+                trust_method=caller_trust_method,
+                auth_evidence=auth_evidence,
             ),
         )
 
@@ -408,6 +457,8 @@ async def execute(
                     duration_ms=duration_ms,
                     request_payload=request_payload,
                     error=error,
+                    trust_method=caller_trust_method,
+                    auth_evidence=auth_evidence,
                 ),
             )
 
@@ -429,6 +480,8 @@ async def execute(
                     duration_ms=duration_ms,
                     request_payload=request_payload,
                     error=result.get("error") or f"Downstream participant returned {downstream_status}",
+                    trust_method=caller_trust_method,
+                    auth_evidence=auth_evidence,
                 ),
             )
 
@@ -442,6 +495,8 @@ async def execute(
                 response=result,
                 duration_ms=duration_ms,
                 request_payload=request_payload,
+                trust_method=caller_trust_method,
+                auth_evidence=auth_evidence,
             ),
         )
 
@@ -459,6 +514,8 @@ async def execute(
                 duration_ms=duration_ms,
                 request_payload=request_payload,
                 error=str(exc),
+                trust_method=caller_trust_method,
+                auth_evidence=auth_evidence,
             ),
         )
 
@@ -612,7 +669,12 @@ async def list_hosted_services():
 # Enforce Endpoint
 # -------------------------------------------------------------------------
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def verify_token(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)):
+    if credentials is None or not credentials.credentials:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or missing authentication token"
+        )
     token = credentials.credentials
     expected = os.environ.get("INSIGHT_ENFORCE_TOKEN")
     if not expected or not hmac.compare_digest(token, expected):

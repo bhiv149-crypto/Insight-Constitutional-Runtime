@@ -1,26 +1,17 @@
 {
   "insightflow.runtime.intelligence.v1": {
     "service_id": "insightflow.runtime.intelligence.v1",
-    "status": "UP",
-    "version": "1.0.2",
-    "uptime_seconds": 0.0,
-    "dependencies": {},
-    "timestamp": "2026-09-03T10:42:49.962887+00:00"
+    "status": "UNREACHABLE",
+    "error": "Canonical PlatformCapabilitySDK is unavailable. Install the official Platform Runtime SDK dependency before attempting live runtime integration."
   },
   "insightbridge.runtime.intelligence.v1": {
     "service_id": "insightbridge.runtime.intelligence.v1",
-    "status": "UP",
-    "version": "1.0.2",
-    "uptime_seconds": 0.0,
-    "dependencies": {},
-    "timestamp": "2026-09-03T10:42:50.229956+00:00"
+    "status": "UNREACHABLE",
+    "error": "Canonical PlatformCapabilitySDK is unavailable. Install the official Platform Runtime SDK dependency before attempting live runtime integration."
   },
   "insightcore.runtime.intelligence.v1": {
     "service_id": "insightcore.runtime.intelligence.v1",
-    "status": "UP",
-    "version": "1.0.2",
-    "uptime_seconds": 0.0,
-    "dependencies": {},
-    "timestamp": "2026-09-03T10:42:50.491182+00:00"
+    "status": "UNREACHABLE",
+    "error": "Canonical PlatformCapabilitySDK is unavailable. Install the official Platform Runtime SDK dependency before attempting live runtime integration."
   }
 }

@@ -17,7 +17,7 @@ import os
 
 REGISTRATION_MODE = os.getenv(
     "INSIGHT_PLATFORM_REGISTRATION_MODE",
-    "MANUAL",
+    "AUTO",
 ).strip().upper()
 
 

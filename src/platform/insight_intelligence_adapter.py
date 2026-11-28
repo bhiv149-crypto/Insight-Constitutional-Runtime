@@ -40,9 +40,21 @@ class InsightIntelligenceAdapter:
         url = f"{self.base_url}/health"
         try:
             resp = requests.get(url, timeout=5)
+            if resp.status_code == 200:
+                return {"status": "HEALTHY", "http_status": resp.status_code, "data": resp.json()}
+            if resp.status_code == 404:
+                openapi_resp = requests.get(f"{self.base_url}/openapi.json", timeout=5)
+                if openapi_resp.status_code == 200:
+                    return {"status": "HEALTHY", "http_status": 200, "data": openapi_resp.json().get("info", {})}
             resp.raise_for_status()
             return {"status": "HEALTHY", "http_status": resp.status_code, "data": resp.json()}
         except requests.exceptions.RequestException as exc:
+            try:
+                openapi_resp = requests.get(f"{self.base_url}/openapi.json", timeout=5)
+                if openapi_resp.status_code == 200:
+                    return {"status": "HEALTHY", "http_status": 200, "data": openapi_resp.json().get("info", {})}
+            except Exception:
+                pass
             logger.error("Insight Intelligence Engine health check failed: %s", exc)
             return {"status": "UNAVAILABLE", "error": str(exc)}
 
